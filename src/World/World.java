@@ -129,7 +129,6 @@ public class World implements Serializable{
                 if(!Double.isFinite(c.getEnergy())){
                     System.out.println("ERROR GATE ID 8 WORLD");
                     WorldConstants.Settings.ticksPerSec=0;
-                    throw new InterruptedException();
                 }
                 executorService.submit(() -> {
                     try {

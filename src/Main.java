@@ -48,7 +48,7 @@ public class Main {
                             worldPointer.world.tick(executorService);
                         } catch (InterruptedException e) {
                             executorService.shutdownNow();
-                            Thread.currentThread().interrupt();
+                            Thread.currentThread().interrupt();;
                         }
                         try {
                             if (WorldConstants.Settings.ticksPerSec > 0)
