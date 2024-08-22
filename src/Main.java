@@ -9,15 +9,11 @@ import globalGenomes.globalNodes;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
@@ -30,7 +26,7 @@ public class Main {
         setupImages();
 
         worldPointer worldPointer = new worldPointer();
-        MainMenu mm = new MainMenu(worldPointer);
+        new MainMenu(worldPointer);
         while(true) {
             if (worldPointer.world != null && worldPointer.world.exists) {
                 ExecutorService executorService = Executors.newFixedThreadPool(WorldConstants.Settings.maxThread);
@@ -90,7 +86,7 @@ public class Main {
         try{ImageConstants.bush = ImageIO.read(new File("resources/bush.png"));}catch(Exception e){e.printStackTrace();}
         try{ImageConstants.bird = ImageIO.read(new File("resources/bird.png"));}catch(Exception e){e.printStackTrace();}
         try{ImageConstants.corpse = ImageIO.read(new File("resources/deadbird.png"));}catch(Exception e){e.printStackTrace();}
-        try{ImageConstants.egg = ImageIO.read(new File("resources/egg.png")).getScaledInstance((int) CreatureConstants.Reproduce.eggSize,(int) CreatureConstants.Reproduce.eggSize,Image.SCALE_SMOOTH);}catch(Exception e){e.printStackTrace();}
+        try{ImageConstants.egg = ImageIO.read(new File("resources/egg.png")).getScaledInstance(CreatureConstants.Reproduce.eggSize, CreatureConstants.Reproduce.eggSize,Image.SCALE_SMOOTH);}catch(Exception e){e.printStackTrace();}
         try{ImageConstants.menuBackground = ImageIO.read(new File("resources/Menu Background.png")).getScaledInstance(WindowConstants.menuWidth,WindowConstants.menuHeight,Image.SCALE_SMOOTH);}catch(Exception e){e.printStackTrace();}
         try{ImageConstants.titleCard = ImageIO.read(new File("resources/Title Card.png")).getScaledInstance(WindowConstants.titleWidth,WindowConstants.titleHeight,Image.SCALE_SMOOTH);}catch(Exception e){e.printStackTrace();}
         try{ImageConstants.button = ImageIO.read(new File("resources/Button.png"));}catch(Exception e){e.printStackTrace();}
