@@ -45,7 +45,7 @@ public class Main {
                     if (WorldConstants.Settings.ticksPerSec != 0) {
                         long timeStarted = System.currentTimeMillis();
                         try {
-                            worldPointer.world.tick(executorService);
+                            worldPointer.world.tick(executorService);;
                         } catch (InterruptedException e) {
                             executorService.shutdownNow();
                             Thread.currentThread().interrupt();
