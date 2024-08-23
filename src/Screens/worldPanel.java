@@ -244,12 +244,12 @@ public class worldPanel extends JPanel {
             Rectangle temp = c.getEatingHitbox();
             if (temp != null) g2d.drawRect(temp.x, temp.y, temp.width, temp.height);
             g2d.fillRect(c.getCoord().x - 2, c.getCoord().y - 2, 4, 4);
-            Point[] visionRay = c.getVisionRay();
+            int[] visionRay = c.getVisionRay();
             Point Ccoord = c.getCoord();
-            g2d.drawLine(visionRay[0].x,visionRay[0].y,visionRay[2].x,visionRay[2].y);
-            g2d.drawLine(visionRay[1].x,visionRay[1].y,visionRay[2].x,visionRay[2].y);
-            g2d.drawLine(visionRay[0].x,visionRay[0].y, Ccoord.x, Ccoord.y);
-            g2d.drawLine(visionRay[1].x,visionRay[1].y, Ccoord.x, Ccoord.y);
+            g2d.drawLine(visionRay[0],visionRay[1],visionRay[2],visionRay[3]);
+            g2d.drawLine(visionRay[2],visionRay[3],visionRay[4],visionRay[5]);
+            g2d.drawLine(visionRay[0],visionRay[1], Ccoord.x, Ccoord.y);
+            g2d.drawLine(visionRay[2],visionRay[3], Ccoord.x, Ccoord.y);
         }
 
         if (selected instanceof Creature && c.equals(selected)) {

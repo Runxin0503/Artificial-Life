@@ -13,6 +13,7 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Creature extends Movable implements Serializable {
     private int maturity,visionAvailable;
@@ -27,6 +28,7 @@ public class Creature extends Movable implements Serializable {
     private boolean seekingMate=false,starving=false,eating=false;
     private Entity[] rayHits;
     private int[] rayHitCounts;
+    private ArrayList<Line2D> allRays;
     public boolean isPlayer = false,isSelected = false;
 
     //see,smell,hear,touch,taste. if no see, smell & hear better
@@ -78,7 +80,7 @@ public class Creature extends Movable implements Serializable {
         setCoord(parentOne.getCoord());
     }
 
-    public void tick(ArrayList<ArrayList<ArrayList<Entity>>> vision, ArrayList<ArrayList<ArrayList<Entity>>> interaction, double[] output,World world) {
+    public void tick(List<ArrayList<ArrayList<Entity>>> vision, ArrayList<ArrayList<ArrayList<Entity>>> interaction, double[] output,World world) {
         if(!Double.isFinite(energy))System.out.println("ERROR GATE ID 10"+this);
         deltaEnergy = -baseEnergyCost / WorldConstants.Settings.ticksToSecond;
 
@@ -146,32 +148,30 @@ public class Creature extends Movable implements Serializable {
         else seekingMate=false;
     }
 
-    private void see(ArrayList<ArrayList<ArrayList<Entity>>> nearbyEntities,ArrayList<Creature> boids){
+    private void see(List<ArrayList<ArrayList<Entity>>> nearbyEntities,ArrayList<Creature> boids){
         double[] distance = new double[4];
         rayHits = new Entity[]{null, null, null, null};
         rayHitCounts = new int[4];
         //Nearest Edible Plant Info | Nearest Edible Entity Info | Nearest Inedible Entity Info
-        ArrayList<Line2D> allRays = new ArrayList<Line2D>();
+        allRays.clear();
         for(double i=0;i<genome.visionRayCount;i++){
             //direction-CreatureConstants.visionConeAngle/2;i<=direction+CreatureConstants.visionConeAngle/2;i+=CreatureConstants.visionConeAngle/(CreatureConstants.visionRayCount-1)
             double angle = direction+genome.visionConeAngle*(-0.5+i*1/(genome.visionRayCount-1));
-            ArrayList<Line2D> rays = new ArrayList<Line2D>();
-            rays.add(new Line2D.Double(x,y,(int)Math.round(x+Math.cos(angle)*visionAvailable),(int)Math.round(y+Math.sin(angle)*visionAvailable)));
-            while(!WorldConstants.worldBorder.contains(rays.get(rays.size()-1).getP2())){
-                Line2D lineBefore = rays.get(rays.size()-1);
+            allRays.add(new Line2D.Double(x,y,(int)Math.round(x+Math.cos(angle)*visionAvailable),(int)Math.round(y+Math.sin(angle)*visionAvailable)));
+            while(!WorldConstants.worldBorder.contains(allRays.get(allRays.size()-1).getP2())){
+                Line2D lineBefore = allRays.get(allRays.size()-1);
                 if(WorldConstants.leftVisionBox.contains(lineBefore.getP2())){
-                    rays.add(new Line2D.Double(lineBefore.getX1()+WorldConstants.xBound,lineBefore.getY1(),lineBefore.getX2()+WorldConstants.xBound,lineBefore.getY2()));
+                    allRays.add(new Line2D.Double(lineBefore.getX1()+WorldConstants.xBound,lineBefore.getY1(),lineBefore.getX2()+WorldConstants.xBound,lineBefore.getY2()));
                 }else if(WorldConstants.rightVisionBox.contains(lineBefore.getP2())){
-                    rays.add(new Line2D.Double(lineBefore.getX1()-WorldConstants.xBound,lineBefore.getY1(),lineBefore.getX2()-WorldConstants.xBound,lineBefore.getY2()));
+                    allRays.add(new Line2D.Double(lineBefore.getX1()-WorldConstants.xBound,lineBefore.getY1(),lineBefore.getX2()-WorldConstants.xBound,lineBefore.getY2()));
                 }else if(WorldConstants.topVisionBox.contains(lineBefore.getP2())){
-                    rays.add(new Line2D.Double(lineBefore.getX1(),lineBefore.getY1()+WorldConstants.yBound,lineBefore.getX2(),lineBefore.getY2()+WorldConstants.yBound));
+                    allRays.add(new Line2D.Double(lineBefore.getX1(),lineBefore.getY1()+WorldConstants.yBound,lineBefore.getX2(),lineBefore.getY2()+WorldConstants.yBound));
                 }else if(WorldConstants.bottomVisionBox.contains(lineBefore.getP2())){
-                    rays.add(new Line2D.Double(lineBefore.getX1(),lineBefore.getY1()-WorldConstants.yBound,lineBefore.getX2(),lineBefore.getY2()-WorldConstants.yBound));
+                    allRays.add(new Line2D.Double(lineBefore.getX1(),lineBefore.getY1()-WorldConstants.yBound,lineBefore.getX2(),lineBefore.getY2()-WorldConstants.yBound));
                 }else{
                     System.out.println("Exception Occurred. Raycasting end point at "+lineBefore.getX2()+","+lineBefore.getY2());
                 }
             }
-            allRays.addAll(rays);
         }
         for (ArrayList<ArrayList<Entity>> types : nearbyEntities)for(ArrayList<Entity> grid : types) for(Entity e : grid) if(!e.equals(this)){
             int id;
@@ -508,11 +508,11 @@ public class Creature extends Movable implements Serializable {
         if(eating)return new Rectangle((int) Math.round(x + Math.cos(direction) * size * 2/3 - size / 3), (int) Math.round(y + Math.sin(direction) * size * 2/3 - size / 3), (int) (size * 2/3), (int) (size * 2/3));
         return null;
     }
-    public Point[] getVisionRay(){
+    public int[] getVisionRay(){
         double visionConeAngle = genome.visionConeAngle;
-        return new Point[]{new Point((int)Math.round(x+Math.cos(direction-visionConeAngle*0.5)*visionAvailable),(int)Math.round(y+Math.sin(direction-visionConeAngle*0.5)*visionAvailable)),
-                new Point((int)Math.round(x+Math.cos(direction+visionConeAngle*0.5)*visionAvailable),(int)Math.round(y+Math.sin(direction+visionConeAngle*0.5)*visionAvailable)),
-                new Point((int)Math.round(x+Math.cos(direction)*visionAvailable),(int)Math.round(y+Math.sin(direction)*visionAvailable))};
+        return new int[]{(int)Math.round(x+Math.cos(direction-visionConeAngle*0.5)*visionAvailable),(int)Math.round(y+Math.sin(direction-visionConeAngle*0.5)*visionAvailable),
+                (int)Math.round(x+Math.cos(direction+visionConeAngle*0.5)*visionAvailable),(int)Math.round(y+Math.sin(direction+visionConeAngle*0.5)*visionAvailable),
+                (int)Math.round(x+Math.cos(direction)*visionAvailable),(int)Math.round(y+Math.sin(direction)*visionAvailable)};
     }
     @Override
     public double getEnergyIfConsumed() {

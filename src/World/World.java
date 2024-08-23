@@ -6,6 +6,7 @@ import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.*;
 
 import Constants.Constants.*;
@@ -280,25 +281,21 @@ public class World implements Serializable{
         if(a != null) return a;
         else return p;
     }
-    public ArrayList<ArrayList<ArrayList<Entity>>> getVisibleGrids(Creature c){
-        ArrayList<ArrayList<ArrayList<Entity>>> intersectedGrids = new ArrayList<ArrayList<ArrayList<Entity>>>();
-        Point[] visionPoints = c.getVisionRay();
+    public List<ArrayList<ArrayList<Entity>>> getVisibleGrids(Creature c){
+        int[] visionPoints = c.getVisionRay();
 
         int minX=c.getCoord().x,maxX=minX,minY=c.getCoord().y,maxY=minY;
 
-        for(Point visionPoint : visionPoints){
-            if(visionPoint.x<minX) minX=visionPoint.x;
-            else if(visionPoint.x>maxX) maxX=visionPoint.x;
-            if(visionPoint.y<minY) minY=visionPoint.y;
-            else if(visionPoint.y>maxY) maxY=visionPoint.y;
+        for(int i=0;i<visionPoints.length;i+=2){
+            if(visionPoints[i]<minX) minX=visionPoints[i];
+            else if(visionPoints[i]>maxX) maxX=visionPoints[i];
+            if(visionPoints[i+1]<minY) minY=visionPoints[i+1];
+            else if(visionPoints[i+1]>maxY) maxY=visionPoints[i+1];
         }
 //        System.out.println(minX+","+maxX+","+minY+","+maxY+"\t\tORIGIN");
         Rectangle visionBoundingBox = new Rectangle(minX,minY,maxX-minX,maxY-minY);
-        intersectedGrids.add(Plants.get(visionBoundingBox));
-        intersectedGrids.add(Animals.get(visionBoundingBox));
 //        System.out.println("\n\n");
-
-        return intersectedGrids;
+        return List.of(Plants.get(visionBoundingBox),Animals.get(visionBoundingBox));
     }
     public ArrayList<ArrayList<ArrayList<Entity>>> getPhysicsGrids(Entity e){
         ArrayList<ArrayList<ArrayList<Entity>>> intersectedGrids = new ArrayList<ArrayList<ArrayList<Entity>>>();
