@@ -39,9 +39,7 @@ public class Bush extends Immovable implements Serializable {
         queuedBerryEating.sort((o1, o2) -> (int) (100 * (o1.getSize() - o2.getSize())));
         while(!berries.isEmpty()&&!queuedBerryEating.isEmpty()){
             Creature c = queuedBerryEating.remove(queuedBerryEating.size()-1);
-            if(c.getPlantMass()+BushConstants.energy/CreatureConstants.Stomach.plantMassToEnergy>c.getStomachSize())continue;
-            berries.remove(berries.size()-1);
-            c.addPlantMass(BushConstants.energy/CreatureConstants.Stomach.plantMassToEnergy);
+            if(c.addPlantMass(BushConstants.energy/CreatureConstants.Stomach.plantMassToEnergy)) berries.remove(berries.size()-1);
         }
         queuedBerryEating.clear();
     }

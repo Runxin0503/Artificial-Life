@@ -365,14 +365,14 @@ public class Constants implements Serializable{
         }
         public Vector2D min(double min){
             if(min==0) return this;
-            if(Math.abs(x)<Math.abs(min))this.x=min*(x<0?-1:1);
-            if(Math.abs(y)<Math.abs(min))this.y=min*(y<0?-1:1);
+            if(Math.abs(x)<Math.abs(min))this.x= x<0?-min:min;
+            if(Math.abs(y)<Math.abs(min))this.y= y<0?-min:min;
             return this;
         }
         public Vector2D max(double max){
             if(max==0) return this;
-            if(Math.abs(x)>Math.abs(max))this.x= max;
-            if(Math.abs(y)>Math.abs(max))this.y= max;
+            if(Math.abs(x)>max)this.x= x<0?-max:max;
+            if(Math.abs(y)>max)this.y= y<0?-max:max;
             return this;
         }
         @Override

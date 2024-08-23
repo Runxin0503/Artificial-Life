@@ -112,7 +112,7 @@ public class CreatureGenome {
         this.strength = Math.min(Combat.sizeToMaxStrength(maxSize),strength+Combat.biteStrengthIncrease);
     }
     public void damageArmourIncrease(){
-        this.armour = Math.min(Combat.sizeToMaxArmour(maxSize),armour+Combat.damageArmourIncrease);
+        this.armour = Math.min(Combat.sizeToMaxArmour(maxSize), armour + Combat.damageArmourIncrease);
     }
     public double getVisionRange(){return Math.toDegrees(visionConeAngle);}
     public double getReproductionCost() {

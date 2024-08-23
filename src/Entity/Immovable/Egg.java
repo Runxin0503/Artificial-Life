@@ -47,11 +47,9 @@ public class Egg extends Immovable implements Serializable {
     }
     @Override
     public void creatureInteract(Creature c) {
-        if(!isEaten){
+        //if it hasn't been eaten already and the creature has space for the egg's meat-mass : delete itself
+        if(!isEaten && !c.addMeatMass(getEnergyIfConsumed() / CreatureConstants.Stomach.meatMassToEnergy))
             isEaten = true;
-            double energyIfConsumed = getEnergyIfConsumed();
-            c.addMeatMass(energyIfConsumed / CreatureConstants.Stomach.meatMassToEnergy);
-        }
     }
 
     @Override

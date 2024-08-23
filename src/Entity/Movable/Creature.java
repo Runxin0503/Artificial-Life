@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class Creature extends Movable implements Serializable {
     private int maturity,visionAvailable;
     private double direction,angularSpeed,maxAngularSpeed,maxSpeed;
-    private double health,energy,deltaEnergy;
+    private double health,energy,deltaEnergy,deltaHealth;
     private double plantMass,meatMass,stomachFluid;
     private double forceAvailable,strengthAvailable,armourAvailable;
     private double baseEnergyCost,maxEnergy,maxHealth,stomachSize;
@@ -78,7 +78,7 @@ public class Creature extends Movable implements Serializable {
         setCoord(parentOne.getCoord());
     }
 
-    public void tick(ArrayList<ArrayList<ArrayList<Entity>>> vision,ArrayList<ArrayList<ArrayList<Entity>>> interaction,double[] output, World world) {
+    public void tick(ArrayList<ArrayList<ArrayList<Entity>>> vision, ArrayList<ArrayList<ArrayList<Entity>>> interaction, double[] output,World world) {
         if(!Double.isFinite(energy))System.out.println("ERROR GATE ID 10"+this);
         deltaEnergy = -baseEnergyCost / WorldConstants.Settings.ticksToSecond;
 
@@ -142,7 +142,7 @@ public class Creature extends Movable implements Serializable {
         }
 
         //try to reproduce
-        if(brain.output[4]<=1&&brain.output[4] > 0.5/Reproduce.scalesWithMaturity(genome.minSize,genome.maxSize,size)) tryReproduce(world,rayHits);
+        if(output[4]<=1&&output[4] > 0.5) tryReproduce(world,rayHits);
         else seekingMate=false;
     }
 
@@ -204,7 +204,10 @@ public class Creature extends Movable implements Serializable {
     }
     public void thinkThonk(){
         if(!Double.isFinite(energy))System.out.println("ERROR GATE BRAIN step 1"+this);
-        if (isPlayer) brain.output = PlayerGenome.getOutput();
+        if (isPlayer) {
+            brain.output = PlayerGenome.getOutput();
+            return;
+        }
 
         //input: Nearest Creature Info | Nearest Bush Info | Nearest Corpse Info | Nearest Egg Info | Velocity & Position | Energy | Health | Size | metabolism | strength | Stomach % | starving | clock
         double[] input = new double[NeuralNet.inputNum];
@@ -349,8 +352,8 @@ public class Creature extends Movable implements Serializable {
         Vector2D perpendicular = speed.subtract(parallel);
 
         speed = parallel.multiply(1 - Physics.frictionParallel / WorldConstants.Settings.ticksToSecond).add(perpendicular.multiply(1 - Physics.frictionPerpendicular / WorldConstants.Settings.ticksToSecond)).max(WorldConstants.Settings.maxSpeed);
-        if(speed.x<1)speed.x=0;
-        if(speed.y<1)speed.y=0;
+        if(Math.abs(speed.x)<0.1)speed.x=0;
+        if(Math.abs(speed.y)<0.1)speed.y=0;
 
         angularSpeed *= (1-Physics.frictionAngular/WorldConstants.Settings.ticksToSecond);
     }
@@ -453,18 +456,23 @@ public class Creature extends Movable implements Serializable {
     @Override
     public void creatureInteract(Creature c){
         if(!Double.isFinite(energy))System.out.println("ERROR GATE ID 11"+this);
-        double damageDealt = Math.max(0,Math.min(health,c.getDamage()-armourAvailable));
-        this.energy -= Math.min(10,damageDealt/armourAvailable);
-        this.health -= damageDealt;
-        genome.damageArmourIncrease();
-        if(c.meatMass + damageDealt/Stomach.meatMassToEnergy > c.stomachSize){
-            if(c.health+damageDealt<c.maxHealth){
-                c.health+=damageDealt;
-            }else{
-                c.energy+=damageDealt;
+        synchronized (this){
+            double damageDealt = Math.max(0, Math.min(health, c.getDamage() - armourAvailable));
+            this.energy -= damageDealt / Math.max(1, armourAvailable);
+            if (!Double.isFinite(damageDealt / Math.max(1, armourAvailable)))
+                System.out.println("ERROR GATE ID 15" + this);
+            if (!Double.isFinite(armourAvailable)) System.out.println("ERROR GATE ID 13" + this);
+            if (!Double.isFinite(damageDealt)) System.out.println("ERROR GATE ID 14" + this);
+            this.health -= damageDealt;
+            genome.damageArmourIncrease();
+            //if adding meat to stomach failed : turn damage-dealt into healing
+            if (!c.addMeatMass(damageDealt / Stomach.meatMassToEnergy)) {
+                if (c.health + damageDealt < c.maxHealth) {
+                    c.deltaHealth += damageDealt;
+                } else {
+                    c.deltaEnergy += damageDealt;
+                }
             }
-        }else{
-            c.addMeatMass(damageDealt/Stomach.meatMassToEnergy);
         }
         if(!Double.isFinite(energy))System.out.println("ERROR GATE ID 12"+this);
     }
@@ -475,22 +483,20 @@ public class Creature extends Movable implements Serializable {
     @Override
     public void damage(double damage){
         if(damage-armourAvailable<3)return;
-        health -= damage-armourAvailable;
-        genome.damageArmourIncrease();
+        synchronized (this){
+            health -= damage - armourAvailable;
+            genome.damageArmourIncrease();
+        }
     }
-    public void addPlantMass(double mass){
+    public boolean addPlantMass(double mass){
+        if(plantMass+mass+meatMass>stomachSize)return false;
         plantMass += mass;
-        if(plantMass+meatMass>stomachSize){
-            health -= (plantMass+meatMass-stomachSize)*Stomach.overeatDmgPerct;
-            plantMass=stomachSize-meatMass;
-        }
+        return true;
     }
-    public void addMeatMass(double mass){
+    public boolean addMeatMass(double mass){
+        if(plantMass+mass+meatMass>stomachSize)return false;
         meatMass += mass;
-        if(plantMass+meatMass>stomachSize){
-            health -= (plantMass+meatMass-stomachSize)*Stomach.overeatDmgPerct;
-            meatMass=stomachSize-plantMass;
-        }
+        return true;
     }
 
 

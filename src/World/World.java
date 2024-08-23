@@ -1,17 +1,13 @@
 package World;
 
 import Entity.Entity;
-import Entity.Immovable.Immovable;
-import Entity.Movable.Movable;
 import Menu.MainMenu;
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.*;
 
-import Constants.Constants;
 import Constants.Constants.*;
 import Entity.Immovable.Bush;
 import Entity.Immovable.Egg;

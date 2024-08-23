@@ -36,9 +36,7 @@ public class Corpse extends Movable implements Serializable {
         while(energy>0&&!queuedQuestionableMunching.isEmpty()){
             Creature c = queuedQuestionableMunching.remove(queuedQuestionableMunching.size()-1);
             double damageDealt = Math.min(energy,c.getDamage());
-            if(c.getMeatMass()+damageDealt/CreatureConstants.Stomach.meatMassToEnergy > c.getStomachSize())continue;
-            c.addMeatMass(damageDealt/CreatureConstants.Stomach.meatMassToEnergy);
-            setEnergy(energy-damageDealt);
+            if(c.addMeatMass(damageDealt/CreatureConstants.Stomach.meatMassToEnergy)) setEnergy(energy-damageDealt);
         }
         queuedQuestionableMunching.clear();
     }
