@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class Creature extends Movable implements Serializable {
     private int maturity,visionAvailable;
     private double direction,angularSpeed,maxAngularSpeed,maxSpeed;
-    private double health,energy,deltaEnergy,deltaHealth;
+    private double health,energy,deltaEnergy;
     private double plantMass,meatMass,stomachFluid;
     private double forceAvailable,strengthAvailable,armourAvailable;
     private double baseEnergyCost,maxEnergy,maxHealth,stomachSize;
@@ -422,7 +422,7 @@ public class Creature extends Movable implements Serializable {
         seekingMate=true;
         if(energy<genome.getReproductionCost()*0.9) return;
         Creature offspring = this.mate(this);
-        double cost = offspring.health + offspring.energy+(offspring.size-Reproduce.babySize)*offspring.genome.armourMultiplier;
+        double cost = offspring.getEnergyIfConsumed();
 //        System.out.println("Predicted Cost: "+getReproductionCost()+"\t\t\t\t\t\tActual Cost: "+cost+"\t\t\t\t\t\tThreshold: "+cost*1.1);
         if(!Double.isFinite(cost))System.out.println("ERROR GATE ID 1"+this);
         if(cost*1.1<energy){
@@ -468,9 +468,9 @@ public class Creature extends Movable implements Serializable {
             //if adding meat to stomach failed : turn damage-dealt into healing
             if (!c.addMeatMass(damageDealt / Stomach.meatMassToEnergy)) {
                 if (c.health + damageDealt < c.maxHealth) {
-                    c.deltaHealth += damageDealt;
+                    c.health += damageDealt;
                 } else {
-                    c.deltaEnergy += damageDealt;
+                    c.energy += damageDealt;
                 }
             }
         }
