@@ -28,7 +28,7 @@ public class Creature extends Movable implements Serializable {
     private boolean seekingMate=false,starving=false,eating=false;
     private Entity[] rayHits;
     private int[] rayHitCounts;
-    private ArrayList<Line2D> allRays;
+    private final ArrayList<Line2D> allRays = new ArrayList<Line2D>();
     public boolean isPlayer = false,isSelected = false;
 
     //see,smell,hear,touch,taste. if no see, smell & hear better
@@ -77,7 +77,7 @@ public class Creature extends Movable implements Serializable {
         this.stomachFluid = 0;
         this.energy = maxEnergy*(parentOne.genome.offspringInvestment + parentTwo.genome.offspringInvestment);
         this.health = maxHealth;
-        setCoord(parentOne.getCoord());
+        setCoord(parentOne.getX(),parentOne.getY());
     }
 
     public void tick(List<ArrayList<ArrayList<Entity>>> vision, ArrayList<ArrayList<ArrayList<Entity>>> interaction, double[] output,World world) {
@@ -184,17 +184,18 @@ public class Creature extends Movable implements Serializable {
             }
             if(rayHits[id]!=null&&rayHits[id].equals(e))continue;
             for(Line2D ray : allRays){
-                if(e.getCoord().distance(x,y)<Combat.sensingDistance||(e.getBoundingBox().intersectsLine(ray)||e.getBoundingBox().contains(x,y))){
+                double dist = Equations.dist(x,y,e.getX(),e.getY());
+                if(dist<Combat.sensingDistance||(e.getBoundingBox().intersectsLine(ray)||e.getBoundingBox().contains(x,y))){
                     if(e instanceof Creature && !boids.contains((Creature)e)) boids.add((Creature)e);
                     if(rayHits[id]!=null){
-                        if(distance[id]>e.getCoord().distance(x,y)){
-                            distance[id]=e.getCoord().distance(x,y);
+                        if(distance[id]>dist){
+                            distance[id]=dist;
                             rayHits[id]=e;
                         }
                     }
                     else{
                         rayHits[id]=e;
-                        distance[id] = e.getCoord().distance(x,y);
+                        distance[id] = dist;
                     }
                     rayHitCounts[id]++;
                     break;
@@ -214,7 +215,7 @@ public class Creature extends Movable implements Serializable {
         if(rayHits[0] != null){
             input[0] = Equations.distFromRect(boundingBox,rayHits[0].getBoundingBox())-1;
             input[1] = ((Movable)rayHits[0]).getVelocity();
-            double objAngle = (Math.atan2((rayHits[0].getCoord().y-y),(rayHits[0].getCoord().x-x))+Math.PI*2)%(Math.PI*2);
+            double objAngle = (Math.atan2((rayHits[0].getY()-y),(rayHits[0].getX()-x))+Math.PI*2)%(Math.PI*2);
             input[2] = (direction - objAngle)/(Math.PI*2);
             input[3] = (objAngle - direction)/(Math.PI*2);
             input[4] = rayHits[0].getEnergyIfConsumed();
@@ -223,7 +224,7 @@ public class Creature extends Movable implements Serializable {
         }
         if(rayHits[1] != null){
             input[7] = Equations.distFromRect(boundingBox,rayHits[1].getBoundingBox())-1;
-            double objAngle = (Math.atan2((rayHits[1].getCoord().y-y),(rayHits[1].getCoord().x-x))+Math.PI*2)%(Math.PI*2);
+            double objAngle = (Math.atan2((rayHits[1].getY()-y),(rayHits[1].getX()-x))+Math.PI*2)%(Math.PI*2);
             input[8] = (direction - objAngle)/(Math.PI*2);
             input[9] = (objAngle - direction)/(Math.PI*2);
             input[10] = rayHits[1].getEnergyIfConsumed();
@@ -233,7 +234,7 @@ public class Creature extends Movable implements Serializable {
         if(rayHits[2] != null){
             input[13] = Equations.distFromRect(boundingBox,rayHits[2].getBoundingBox())-1;
             if(input[13]<size*1.5)input[13]=-1;
-            double objAngle = (Math.atan2((rayHits[2].getCoord().y-y),(rayHits[2].getCoord().x-x))+Math.PI*2)%(Math.PI*2);
+            double objAngle = (Math.atan2((rayHits[2].getY()-y),(rayHits[2].getX()-x))+Math.PI*2)%(Math.PI*2);
             input[14] = (direction - objAngle)/(Math.PI*2);
             input[15] = (objAngle - direction)/(Math.PI*2);
             input[16] = rayHits[2].getEnergyIfConsumed();
@@ -242,7 +243,7 @@ public class Creature extends Movable implements Serializable {
         }
         if(rayHits[3] != null){
             input[19] = Equations.distFromRect(boundingBox,rayHits[3].getBoundingBox())-1;
-            double objAngle = (Math.atan2((rayHits[3].getCoord().y-y),(rayHits[3].getCoord().x-x))+Math.PI*2)%(Math.PI*2);
+            double objAngle = (Math.atan2((rayHits[3].getY()-y),(rayHits[3].getX()-x))+Math.PI*2)%(Math.PI*2);
             input[20] = (direction - objAngle)/(Math.PI*2);
             input[21] = (objAngle - direction)/(Math.PI*2);
             input[22] = rayHits[3].getEnergyIfConsumed();

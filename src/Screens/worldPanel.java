@@ -225,7 +225,7 @@ public class worldPanel extends JPanel {
         g2d.drawImage(bush.getImage(),x,y,this);
         if (WorldConstants.Settings.devMode){
             g2d.drawRect(bush.getBoundingBox().x,bush.getBoundingBox().y,bush.getBoundingBox().width,bush.getBoundingBox().height);
-            g2d.fillRect(bush.getCoord().x-2,bush.getCoord().y-2,4,4);
+            g2d.fillRect(bush.getX()-2,bush.getY()-2,4,4);
         }
         ArrayList<Point> berries = bush.getBerries();
         for (Point berry : berries) g2d.drawImage(ImageConstants.berries, x + berry.x, y + berry.y, this);
@@ -236,20 +236,18 @@ public class worldPanel extends JPanel {
         }
     }
     private void drawCreature(Creature c,Graphics2D g2d){
-        int x = c.getBoundingBox().x;
-        int y = c.getBoundingBox().y;
-        g2d.drawImage(c.getImage(), x, y, this);
+        g2d.drawImage(c.getImage(), c.getBoundingBox().x, c.getBoundingBox().y, this);
         if (WorldConstants.Settings.devMode) {
             g2d.drawRect(c.getBoundingBox().x, c.getBoundingBox().y, c.getBoundingBox().width, c.getBoundingBox().height);
             Rectangle temp = c.getEatingHitbox();
             if (temp != null) g2d.drawRect(temp.x, temp.y, temp.width, temp.height);
-            g2d.fillRect(c.getCoord().x - 2, c.getCoord().y - 2, 4, 4);
+            g2d.fillRect(c.getX() - 2, c.getY() - 2, 4, 4);
             int[] visionRay = c.getVisionRay();
-            Point Ccoord = c.getCoord();
+            int x = c.getX(),y = c.getY();
             g2d.drawLine(visionRay[0],visionRay[1],visionRay[2],visionRay[3]);
             g2d.drawLine(visionRay[2],visionRay[3],visionRay[4],visionRay[5]);
-            g2d.drawLine(visionRay[0],visionRay[1], Ccoord.x, Ccoord.y);
-            g2d.drawLine(visionRay[2],visionRay[3], Ccoord.x, Ccoord.y);
+            g2d.drawLine(visionRay[0],visionRay[1],x,y);
+            g2d.drawLine(visionRay[2],visionRay[3],x,y);
         }
 
         if (selected instanceof Creature && c.equals(selected)) {
@@ -264,7 +262,7 @@ public class worldPanel extends JPanel {
         g2d.drawImage(c.getImage(),x,y,this);
         if (WorldConstants.Settings.devMode){
             g2d.drawRect(c.getBoundingBox().x,c.getBoundingBox().y,c.getBoundingBox().width,c.getBoundingBox().height);
-            g2d.fillRect(c.getCoord().x-2,c.getCoord().y-2,4,4);
+            g2d.fillRect(c.getX()-2,c.getY()-2,4,4);
         }
         if(selected instanceof Corpse && c.equals(selected)){
             g2d.setColor(Color.red);
@@ -278,7 +276,7 @@ public class worldPanel extends JPanel {
         g2d.drawImage(egg.getImage(),x,y,this);
         if (WorldConstants.Settings.devMode){
             g2d.drawRect(x,y,egg.getBoundingBox().width,egg.getBoundingBox().height);
-            g2d.fillRect(egg.getCoord().x-2,egg.getCoord().y-2,4,4);
+            g2d.fillRect(egg.getX()-2,egg.getY()-2,4,4);
         }
         if(selected instanceof Egg && egg.equals(selected)){
             g2d.setColor(Color.red);
@@ -313,8 +311,8 @@ public class worldPanel extends JPanel {
             return;
         }
         double width = getWidth();
-        translateX = (width / 2.0) - (selected.getCoord().x * zoomFactor);
-        translateY = (getHeight() / 2.0) - (selected.getCoord().y * zoomFactor);
+        translateX = (width / 2.0) - (selected.getX() * zoomFactor);
+        translateY = (getHeight() / 2.0) - (selected.getY() * zoomFactor);
     }
     private void createContextMenu() {
         contextMenu = new PopupMenu();

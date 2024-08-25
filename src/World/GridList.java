@@ -88,6 +88,6 @@ public class GridList implements Serializable {
         return y / GRID_HEIGHT * GRID_NUM_X + x / GRID_WIDTH;
     }
     private int getID(Entity e){
-        return getID(e.getCoord().x,e.getCoord().y);
+        return getID(e.getX(),e.getY());
     }
 }

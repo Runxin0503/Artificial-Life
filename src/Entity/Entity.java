@@ -20,9 +20,11 @@ public abstract class Entity implements Serializable{
         this(x,y);
         setSize(size,image);
     }
-
-    public Point getCoord(){
-        return new Point((int)Math.round(x),(int)Math.round(y));
+    public int getX(){
+        return (int)Math.round(x);
+    }
+    public int getY(){
+        return (int)Math.round(y);
     }
     public void setCoord(Point point){setCoord(point.x,point.y);}
     public void setCoord(double newX,double newY){

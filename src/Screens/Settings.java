@@ -101,7 +101,7 @@ public class Settings extends JDialog {
                 Point coord = new Point((int) (Math.random() * bushBoundx + bushMaxWidth), (int) (Math.random() * bushBoundy + bushMaxHeight));
                 boolean tooClose = false;
                 for(Bush b : world.Bushes){
-                    if(b.getCoord().distance(coord)<WorldConstants.WorldGen.bushRadius){
+                    if(coord.distance(b.getX(),b.getY())<WorldConstants.WorldGen.bushRadius){
                         tooClose = true;
                         break;
                     }
