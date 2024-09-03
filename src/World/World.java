@@ -46,7 +46,7 @@ public class World implements Serializable{
             Point coord = new Point((int) (Math.random() * bushBoundx + BushConstants.initialMaxSize), (int) (Math.random() * bushBoundy + BushConstants.initialMaxSize));
             boolean tooClose = false;
             for(Bush b : Bushes){
-                if(coord.distance(b.getX(),b.getY())<WorldConstants.WorldGen.bushRadius){
+                if(b.getCoord().distance(coord)<WorldConstants.WorldGen.bushRadius){
                     tooClose = true;
                     break;
                 }
@@ -236,8 +236,8 @@ public class World implements Serializable{
         }
     }
     private void purge(){
-        for(Creature c : Creatures) if(c.getX()==0&&c.getY()==0) remove.add(c);
-        for(Corpse c : Corpses) if(c.getX()==0&&c.getY()==0) remove.add(c);
+        for(Creature c : Creatures) if(c.getCoord().x==0&&c.getCoord().y==0) remove.add(c);
+        for(Corpse c : Corpses) if(c.getCoord().x==0&&c.getCoord().y==0) remove.add(c);
     }
 
     private void sortIntoGrid(boolean plant,boolean animal,ExecutorService executorService){
@@ -284,7 +284,7 @@ public class World implements Serializable{
     public List<ArrayList<ArrayList<Entity>>> getVisibleGrids(Creature c){
         int[] visionPoints = c.getVisionRay();
 
-        int minX=c.getX(),maxX=minX,minY=c.getY(),maxY=minY;
+        int minX=c.getCoord().x,maxX=minX,minY=c.getCoord().y,maxY=minY;
 
         for(int i=0;i<visionPoints.length;i+=2){
             if(visionPoints[i]<minX) minX=visionPoints[i];
@@ -292,13 +292,15 @@ public class World implements Serializable{
             if(visionPoints[i+1]<minY) minY=visionPoints[i+1];
             else if(visionPoints[i+1]>maxY) maxY=visionPoints[i+1];
         }
+//        System.out.println(minX+","+maxX+","+minY+","+maxY+"\t\tORIGIN");
         Rectangle visionBoundingBox = new Rectangle(minX,minY,maxX-minX,maxY-minY);
+//        System.out.println("\n\n");
         return List.of(Plants.get(visionBoundingBox),Animals.get(visionBoundingBox));
     }
     public ArrayList<ArrayList<ArrayList<Entity>>> getPhysicsGrids(Entity e){
         ArrayList<ArrayList<ArrayList<Entity>>> intersectedGrids = new ArrayList<ArrayList<ArrayList<Entity>>>();
 
-        int x=e.getX(),y=e.getY();
+        int x=e.getCoord().x,y=e.getCoord().y;
         intersectedGrids.add(Plants.getNeighborGrids(x,y));
         intersectedGrids.add(Animals.getNeighborGrids(x,y));
 

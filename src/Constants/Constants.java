@@ -129,8 +129,8 @@ public class Constants implements Serializable{
                 return Equations.sigmoid(0.35,1,4.2,0.5,(size-minSize)/(maxSize-minSize));}
         }
         public static class Stomach{
-            public static final double plantDigestionRate = 0.175;
-            public static final double meatDigestionRate = 0.4;
+            public static final double plantDigestionRate = 0.125;
+            public static final double meatDigestionRate = 0.8;
             public static final double stomachSizeToMaxStomachFluid = 0.4;
             public static final double overeatDmgPerct = 0.5;
             public static final double maxStomachSize = 250;
@@ -293,6 +293,25 @@ public class Constants implements Serializable{
 //            double temp = Math.abs(angle1 - angle2) % (Math.PI*2);
 //            return temp>(Math.PI)?Math.PI*2-temp:temp;
         }
+        public static boolean angleSignPositive(double a,double b){
+            // Normalize the angles to be within [0, 360) degrees
+            double fullRad = Math.PI*2;
+            a = (a % fullRad + fullRad) % fullRad;
+            b = (b % fullRad + fullRad) % fullRad;
+
+            // Calculate the difference
+            double difference = b - a;
+
+            // Normalize the difference to the range (-180, 180]
+            if (difference > Math.PI) {
+                difference -= fullRad;
+            } else if (difference <= -Math.PI) {
+                difference += fullRad;
+            }
+
+            // Return true for positive direction, false for negative direction
+            return difference > 0;
+        }
         public static double distFromRect(Rectangle a, Rectangle b){
             int x1=a.x,y1=a.y,x1b=x1+a.width,y1b=y1+a.height,x2=b.x,y2=b.y,x2b=x2+b.width,y2b=y2+b.height;
             boolean left = x2b < x1;
@@ -320,10 +339,6 @@ public class Constants implements Serializable{
                 // Rectangles intersect
                 return 0;
             }
-        }
-        public static double dist(double x,double y,double x2,double y2){
-            double dx=x-x2,dy=y-y2;
-            return Math.sqrt(dx*dx+dy*dy);
         }
     }
     public static class Vector2D{

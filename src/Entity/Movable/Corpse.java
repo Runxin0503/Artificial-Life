@@ -13,7 +13,7 @@ public class Corpse extends Movable implements Serializable {
     private final ArrayList<Creature> queuedQuestionableMunching;
 
     public Corpse(Creature c){
-        super(c.getX(),c.getY(),c.getSize(),ImageConstants.corpse);
+        super(c.getCoord().x,c.getCoord().y,c.getSize(),ImageConstants.corpse);
         this.initialEnergy = c.getEnergyIfConsumed();
         this.energy = initialEnergy;
         this.speed = c.speed;

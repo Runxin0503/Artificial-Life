@@ -24,11 +24,9 @@ public abstract class Entity implements Serializable{
         this(x,y);
         setSize(size,image);
     }
-    public int getX(){
-        return (int)Math.round(x);
-    }
-    public int getY(){
-        return (int)Math.round(y);
+
+    public Point getCoord(){
+        return new Point((int)Math.round(x),(int)Math.round(y));
     }
     public boolean isBoundingBoxChange(){
         if(boundingBoxChange){
