@@ -3,15 +3,19 @@ package Entity;
 import Constants.Constants.*;
 import Entity.Movable.Creature;
 import Entity.Movable.Movable;
+import World.GridList;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
+import java.util.List;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public abstract class Entity implements Serializable{
-    protected Rectangle boundingBox=new Rectangle();
+    protected final Rectangle boundingBox=new Rectangle();
     private transient Image image;
+    private transient final List<GridList.Grid> occupiedGrids = new ArrayList<>();
+    protected transient boolean boundingBoxChange = true;
+    protected final Rectangle prevBoundingBox=new Rectangle(-1,-1);
     protected double size=0,x,y;
     public Entity(double x,double y){
         setCoord(x,y);
@@ -26,7 +30,14 @@ public abstract class Entity implements Serializable{
     public int getY(){
         return (int)Math.round(y);
     }
-    public void setCoord(Point point){setCoord(point.x,point.y);}
+    public boolean isBoundingBoxChange(){
+        if(boundingBoxChange){
+            boundingBoxChange=false;
+            return true;
+        }
+        return false;
+    }
+    public List<GridList.Grid> getOccupiedGrids(){return occupiedGrids;}
     public void setCoord(double newX,double newY){
         this.x = newX;
         this.y = newY;
@@ -39,7 +50,7 @@ public abstract class Entity implements Serializable{
     public void setSize(double newSize,Image newImage){
         int tempSizeRound = (int)Math.round(newSize);
         if((int)Math.round(size)!=tempSizeRound){
-            boundingBox = new Rectangle((int)x-tempSizeRound/2,(int)y-tempSizeRound/2,tempSizeRound,tempSizeRound);
+            boundingBox.setRect((int)x-tempSizeRound/2,(int)y-tempSizeRound/2,tempSizeRound,tempSizeRound);
             image = newImage.getScaledInstance(boundingBox.width,boundingBox.height,ImageConstants.ResizeConstant);
         }
         this.size = newSize;

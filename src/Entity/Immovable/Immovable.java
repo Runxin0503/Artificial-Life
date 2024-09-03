@@ -16,19 +16,4 @@ public abstract class Immovable extends Entity implements Serializable {
     public Immovable(double x, double y, double size, Image image){
         super(x,y,size,image);
     }
-
-    @Override
-    public abstract Constants.Vector2D collision(Movable m);
-
-    @Override
-    public abstract void damage(double damage);
-
-    @Override
-    public abstract double getMass();
-
-    @Override
-    public abstract double getEnergyIfConsumed();
-
-    @Override
-    public abstract void creatureInteract(Creature c);
 }

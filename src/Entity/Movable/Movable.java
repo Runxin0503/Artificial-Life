@@ -20,6 +20,7 @@ public abstract class Movable extends Entity implements Serializable {
 
     public void updatePos(){
         setCoord(x + speed.x / WorldConstants.Settings.ticksToSecond,y + speed.y / WorldConstants.Settings.ticksToSecond);
+        if(speed.x!=0||speed.y!=0)boundingBoxChange=true;
     }
     public void friction(){
         speed.multiply(1-Physics.frictionPerpendicular/size/ WorldConstants.Settings.ticksToSecond)
@@ -65,15 +66,4 @@ public abstract class Movable extends Entity implements Serializable {
         }
         speed.add(deltaSpeed);
     }
-    @Override
-    public abstract void damage(double damage);
-
-    @Override
-    public abstract double getMass();
-
-    @Override
-    public abstract double getEnergyIfConsumed();
-
-    @Override
-    public abstract void creatureInteract(Creature c);
 }

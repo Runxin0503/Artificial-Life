@@ -7,33 +7,38 @@ import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.HashMap;
 
 public class GridList implements Serializable {
-    private final HashMap<Integer, ArrayList<Entity>> grid = new HashMap<>();
-    private final int[] NEIGHBOR_OFFSETS;
-    private final int GRID_NUM_X,GRID_NUM_Y,GRID_WIDTH,GRID_HEIGHT;
-    public GridList(int maxWidth, int maxHeight){
-        GRID_WIDTH=maxWidth+1;
-        GRID_HEIGHT=maxHeight+1;
-        GRID_NUM_X= (int)Math.ceil((double)WorldConstants.xBound/GRID_WIDTH);
-        GRID_NUM_Y= (int)Math.ceil((double)WorldConstants.yBound/GRID_HEIGHT);
-        NEIGHBOR_OFFSETS = new int[]{
-                -GRID_NUM_X -1,-GRID_NUM_X,-GRID_NUM_X +1,
-                -1,0,1,
-                GRID_NUM_X -1, GRID_NUM_X, GRID_NUM_X +1
-        };
+    private final List<Grid> grids = new ArrayList<Grid>();
+    public GridList(){
+        for(int x = 0; x <WorldConstants.xBound; x +=WorldConstants.GridWidth)
+            for(int y = 0; y <WorldConstants.yBound; y +=WorldConstants.GridHeight)
+                grids.add(new Grid(x,y));
     }
 
-    @SafeVarargs//ExecutorService executorService,
+    @SafeVarargs
     public final void sort(ArrayList<? extends Entity>... AllEntities){
-        grid.clear();
-        for(ArrayList<? extends Entity> Entities : AllEntities) for(Entity e : Entities){
-//            executorService.submit(()->{
-                int id = getID(e);
-                if(grid.containsKey(id)) grid.get(id).add(e);
-                else grid.put(id,new ArrayList<Entity>(List.of(e)));
-//            });
+        for(ArrayList<? extends Entity> entities : AllEntities)
+            for(Entity e : entities){
+                if(e.isBoundingBoxChange()){
+
+                }
+            }
+    }
+
+    private void sort(Rectangle prevBoundingBox,Rectangle newBoundingBox){
+        int prevMinX,prevMaxX,prevMinY,prevMaxY;
+        int newMinX,newMaxX,newMinY,newMaxY;
+
+        for(int y=prevMinY;y<newMinY;y++){
+            for(int x=prevMinX;x<=prevMaxX;x++){
+                //remove
+            }
+        }
+        for(int x=newMaxX;x<prevMaxX;x++){
+            for(int y=prevMaxY;y<prevMinY;y++){
+                //remove
+            }
         }
     }
 
@@ -89,5 +94,15 @@ public class GridList implements Serializable {
     }
     private int getID(Entity e){
         return getID(e.getX(),e.getY());
+    }
+
+    public class Grid implements Serializable{
+        private final Rectangle boundingBox;
+        private final ArrayList<Entity> containedEntity = new ArrayList<Entity>();
+        public Grid(int x,int y){
+            this.boundingBox = new Rectangle(x,y,WorldConstants.GridWidth,WorldConstants.GridHeight);
+        }
+
+        
     }
 }

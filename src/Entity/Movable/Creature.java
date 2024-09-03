@@ -420,31 +420,11 @@ public class Creature extends Movable implements Serializable {
         return nutrientsGained;
     }
     private void tryReproduce(World world,Entity[] rayHits){
-        seekingMate=true;
-        if(energy<genome.getReproductionCost()*0.9) return;
+        if(energy<genome.getReproductionCost()*1.1) return;
         Creature offspring = this.mate(this);
-        double cost = offspring.getEnergyIfConsumed();
-//        System.out.println("Predicted Cost: "+getReproductionCost()+"\t\t\t\t\t\tActual Cost: "+cost+"\t\t\t\t\t\tThreshold: "+cost*1.1);
-        if(!Double.isFinite(cost))System.out.println("ERROR GATE ID 1"+this);
-        if(cost*1.1<energy){
-            energy-=cost;
-            world.add.add(new Egg(offspring,x-Math.cos(direction)*(size+genome.minSize/2),y-Math.sin(direction)*(size+genome.minSize/2)));
-            seekingMate=false;
-                return;
-//            double interactionDistance = CreatureConstants.interactionDistance * (int)Math.round(1+size/maxSize);
-//            for(ArrayList<Entity> grid : nearbyEntities) for(Entity e : grid) if((e instanceof Creature)&&!e.equals(this)&&(e.getCoord().distance(x,y)<interactionDistance)){
-//                energy -= CreatureConstants.Energy.breedingEnergyCost;
-//                world.add.add(new Egg(((Creature)e).mate(this)));
-//                if(!data.containsKey("baby birthed"))data.put("baby birthed",1);
-//                else data.replace("baby birthed",(int)data.get("baby birthed")+1);
-//                seekingMate=false;
-//                return;
-//            }
-        }
-//            else{
-//                minSize = Math.max(Reproduce.minSize,minSize*0.9);
-//                armour = Math.max(Combat.minArmour,armour*0.9);
-//            }
+        energy-=offspring.getEnergyIfConsumed();
+        world.add.add(new Egg(offspring,x-Math.cos(direction)*(size+genome.minSize/2),y-Math.sin(direction)*(size+genome.minSize/2)));
+        seekingMate=false;
     }
     private void death(World world){
         health=Double.isFinite(health)?Math.max(0,health):0;
@@ -570,6 +550,7 @@ public class Creature extends Movable implements Serializable {
     public void setNN(NN newNN){brain = newNN;}
     @Override
     public void setSize(double newSize,Image image) {
+        if(Math.round(newSize)!=Math.round(size)) boundingBoxChange=true;
         super.setSize(Math.min(genome.maxSize,newSize),ImageConstants.getRotation(direction));
     }
     @Override
