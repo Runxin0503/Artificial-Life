@@ -35,14 +35,26 @@ public class Settings extends JDialog {
         gbc.gridx=0;
         gbc.gridy=0;
 
-        addButton("Skip 5 Minutes",()->{world.fastForward(WorldConstants.Settings.ticksToSecond*60*5);},gbc);
+        addButton("Skip 5 Minutes",()->{
+            System.err.println("Functionality no longer supported");
+//            world.fastForward(WorldConstants.Settings.ticksToSecond*60*5);
+            },gbc);
         gbc.gridx++;
-        addButton("Skip 30 Minutes",()->{world.fastForward(WorldConstants.Settings.ticksToSecond*60*30);},gbc);
+        addButton("Skip 30 Minutes",()->{
+            System.err.println("Functionality no longer supported");
+//            world.fastForward(WorldConstants.Settings.ticksToSecond*60*30);
+            },gbc);
         gbc.gridx=0;
         gbc.gridy++;
-        addButton("Skip 1 Hour",()->{world.fastForward(WorldConstants.Settings.ticksToSecond*3600);},gbc);
+        addButton("Skip 1 Hour",()->{
+            System.err.println("Functionality no longer supported");
+//            world.fastForward(WorldConstants.Settings.ticksToSecond*3600);
+            },gbc);
         gbc.gridx++;
-        addButton("Skip 1 Day",()->{world.fastForward(WorldConstants.Settings.ticksToSecond*3600*24);},gbc);
+        addButton("Skip 1 Day",()->{
+            System.err.println("Functionality no longer supported");
+//            world.fastForward(WorldConstants.Settings.ticksToSecond*3600*24);
+            },gbc);
         gbc.gridx=0;
 
         gbc.gridy++;
@@ -101,7 +113,7 @@ public class Settings extends JDialog {
                 Point coord = new Point((int) (Math.random() * bushBoundx + bushMaxWidth), (int) (Math.random() * bushBoundy + bushMaxHeight));
                 boolean tooClose = false;
                 for(Bush b : world.Bushes){
-                    if(b.getCoord().distance(coord)<WorldConstants.WorldGen.bushRadius){
+                    if(coord.distance(b.getX(),b.getY())<WorldConstants.WorldGen.bushRadius){
                         tooClose = true;
                         break;
                     }

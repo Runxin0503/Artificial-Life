@@ -4,6 +4,7 @@ import Constants.Constants;
 import Entity.*;
 import Entity.Movable.Creature;
 import Entity.Movable.Movable;
+import World.GridList.Grid;
 
 import java.awt.*;
 import java.awt.geom.Point2D;

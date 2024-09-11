@@ -17,7 +17,7 @@ public class NN implements Serializable {
     public ArrayList<node> nodes;
     public transient globalInnovations globalInnovations;
     public transient globalNodes globalNodes;
-    public double[] output;
+    public double[] output=new double[NeuralNet.outputNum];
     private int[] countedInputs;
 
     public NN(){

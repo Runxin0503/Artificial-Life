@@ -20,7 +20,7 @@ public class Egg extends Immovable implements Serializable {
         this.incubationTime = c.getGenome().incubationTime;
     }
     public Egg(Creature c){
-        this(c,c.getCoord().x,c.getCoord().y);
+        this(c,c.getX(),c.getY());
     }
     public void tick(World world){
         if(isEaten) world.remove.add(this);

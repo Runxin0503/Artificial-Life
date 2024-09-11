@@ -13,9 +13,9 @@ import java.util.ArrayList;
 public abstract class Entity implements Serializable{
     protected final Rectangle boundingBox=new Rectangle();
     private transient Image image;
-    private transient final List<GridList.Grid> occupiedGrids = new ArrayList<>();
+    private final Rectangle prevBoundingBox = new Rectangle();
     protected transient boolean boundingBoxChange = true;
-    protected final Rectangle prevBoundingBox=new Rectangle(-1,-1);
+    private transient final List<GridList.Grid> occupiedGrids = new ArrayList<>();
     protected double size=0,x,y;
     public Entity(double x,double y){
         setCoord(x,y);
@@ -25,17 +25,22 @@ public abstract class Entity implements Serializable{
         setSize(size,image);
     }
 
-    public Point getCoord(){
-        return new Point((int)Math.round(x),(int)Math.round(y));
+    public int getX(){return (int)Math.round(x);}
+    public int getY(){return (int)Math.round(y);}
+
+    public List<GridList.Grid> getOccupiedGrids() {
+        return occupiedGrids;
     }
-    public boolean isBoundingBoxChange(){
-        if(boundingBoxChange){
-            boundingBoxChange=false;
+    public Rectangle getPrevBoundingBox() {
+        return prevBoundingBox;
+    }
+    public boolean isBoundingBoxChange() {
+        if (boundingBoxChange) {
+            boundingBoxChange = false;
             return true;
         }
         return false;
     }
-    public List<GridList.Grid> getOccupiedGrids(){return occupiedGrids;}
     public void setCoord(double newX,double newY){
         this.x = newX;
         this.y = newY;

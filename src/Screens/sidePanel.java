@@ -40,7 +40,7 @@ public class sidePanel extends JPanel {
 
         gbc.gridx=0;
         gbc.gridy++;
-        addLabel(()->"Coordinate   "+c.getCoord().x+","+c.getCoord().y,gbc);
+        addLabel(()->"Coordinate   "+c.getX()+","+c.getY(),gbc);
         gbc.gridy++;
         addLabel(()->"Velocity   "+(int)(c.getVelocity()*100)/100.0,gbc);
         gbc.gridy++;
@@ -84,7 +84,7 @@ public class sidePanel extends JPanel {
 
         gbc.gridx=0;
         gbc.gridy++;
-        addLabel(()->"Coordinate   "+c.getCoord().x+","+c.getCoord().y,gbc);
+        addLabel(()->"Coordinate   "+c.getX()+","+c.getY(),gbc);
         gbc.gridy++;
         addLabel(()->"Force   "+(int)(c.getForce()*100)/100.0,gbc);
         gbc.gridy++;
@@ -126,7 +126,7 @@ public class sidePanel extends JPanel {
         gbc.gridy++;
         addLabel(()->"isPlayer - "+c.isPlayer,gbc);
         gbc.gridy++;
-        addButton("Mate",()->world.Eggs.add(new Egg(c.mate(c),c.getCoord().x-Math.cos(c.getRotation())*c.getSize()+g.minSize/2,c.getCoord().y-Math.sin(c.getRotation())*(c.getSize()+g.minSize/2))),gbc);
+        addButton("Mate",()->world.Eggs.add(new Egg(c.mate(c),c.getX()-Math.cos(c.getRotation())*c.getSize()+g.minSize/2,c.getY()-Math.sin(c.getRotation())*(c.getSize()+g.minSize/2))),gbc);
         gbc.gridy++;
         addButton("Death",()->c.setHealth(-100),gbc);
     }
