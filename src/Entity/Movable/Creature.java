@@ -16,11 +16,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Creature extends Movable implements Serializable {
-    private int maturity, visionAvailable=Vision.minVisionDistance;
+    private int maturity, visionAvailable = Vision.minVisionDistance;
     private double direction, angularSpeed, maxAngularSpeed, maxSpeed;
     private double health, energy, deltaEnergy;
     private double plantMass, meatMass, stomachFluid;
-    private double forceAvailable=1, strengthAvailable=1, armourAvailable=1;
+    private double forceAvailable = 1, strengthAvailable = 1, armourAvailable = 1;
     private double baseEnergyCost, maxEnergy, maxHealth, stomachSize;
     private int internalClockCountdown = 0;
     private NN brain;
@@ -148,7 +148,7 @@ public class Creature extends Movable implements Serializable {
             //direction-CreatureConstants.visionConeAngle/2;i<=direction+CreatureConstants.visionConeAngle/2;i+=CreatureConstants.visionConeAngle/(CreatureConstants.visionRayCount-1)
             double angle = direction + genome.visionConeAngle * (-0.5 + i * 1 / (genome.visionRayCount - 1));
             ArrayList<Line2D> rays = new ArrayList<Line2D>();
-            rays.add(new Line2D.Double(x, y,x + Math.cos(angle) * visionAvailable,y + Math.sin(angle) * visionAvailable));
+            rays.add(new Line2D.Double(x, y, x + Math.cos(angle) * visionAvailable, y + Math.sin(angle) * visionAvailable));
             while (!WorldConstants.worldBorder.contains(rays.get(rays.size() - 1).getP2())) {
                 Line2D lineBefore = rays.get(rays.size() - 1);
                 if (WorldConstants.leftVisionBox.contains(lineBefore.getP2())) {
@@ -166,8 +166,8 @@ public class Creature extends Movable implements Serializable {
             allRays.addAll(rays);
         }
 
+        GridList.get(allRays, allVisionGrids);
         for (Line2D ray : allRays) {
-            GridList.get(ray, allVisionGrids);
             for (Grid grid : allVisionGrids)
                 for (Entity e : grid.getContainedEntities())
                     if (e != this) {
@@ -597,7 +597,9 @@ public class Creature extends Movable implements Serializable {
         return report;
     }
 
-    public ArrayList<Grid> getAllVisionGrids(){return allVisionGrids;}
+    public ArrayList<Grid> getAllVisionGrids() {
+        return allVisionGrids;
+    }
 
     public void setNN(NN newNN) {
         brain = newNN;

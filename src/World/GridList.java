@@ -69,7 +69,7 @@ public class GridList implements Serializable {
             for (int x = newMinX; x < newMaxX; x++) {
                 if (flipper && x >= prevMinX && x < prevMaxX) x += xDiff;
                 else {
-                    if(x+y*GRID_NUM_X>grids.size())System.out.println(x+","+y);
+                    if (x + y * GRID_NUM_X > grids.size()) System.out.println(x + "," + y);
                     Grid temp = grids.get(x + y * GRID_NUM_X);
                     temp.add(e);
                     e.getOccupiedGrids().add(temp);
@@ -80,8 +80,8 @@ public class GridList implements Serializable {
 
     public static Entity get(int x, int y) {
         ArrayList<Entity> contained = grids.get(getID(x, y)).getContainedEntities();
-        for(int i=contained.size()-1;i>=0;i--){
-            if(!contained.get(i).getBoundingBox().contains(x,y)){
+        for (int i = contained.size() - 1; i >= 0; i--) {
+            if (!contained.get(i).getBoundingBox().contains(x, y)) {
                 contained.remove(i);
             }
         }
@@ -116,36 +116,39 @@ public class GridList implements Serializable {
         return contained;
     }
 
-    public static void get(Line2D ray, ArrayList<Grid> allVisionGrids) {
+    public static void get(ArrayList<Line2D> rays, ArrayList<Grid> allVisionGrids) {
         allVisionGrids.clear();
-        int x1 = (int) ray.getX1() / GRID_WIDTH, x2 = (int) ray.getX2() / GRID_WIDTH, y1 = (int) ray.getY1() / GRID_HEIGHT, y2 = (int) ray.getY2() / GRID_HEIGHT;
-        int dx = Math.abs(x2 - x1);
-        int dy = Math.abs(y2 - y1);
-        int sx = (x1 < x2) ? 1 : -1;
-        int sy = (y1 < y2) ? 1 : -1;
-        int err = dx - dy;
 
-        while (true) {
-            if (y1 < GRID_NUM_Y && y1 >= 0 && x1 < GRID_NUM_X && x1 >= 0)
-                allVisionGrids.add(grids.get(y1 * GRID_NUM_X + x1));
-            if (x1 == x2 && y1 == y2) break;
-            int e2 = 2 * err;
+        for (Line2D ray : rays) {
+            int x1 = (int) ray.getX1() / GRID_WIDTH, x2 = (int) ray.getX2() / GRID_WIDTH, y1 = (int) ray.getY1() / GRID_HEIGHT, y2 = (int) ray.getY2() / GRID_HEIGHT;
+            int dx = Math.abs(x2 - x1);
+            int dy = Math.abs(y2 - y1);
+            int sx = (x1 < x2) ? 1 : -1;
+            int sy = (y1 < y2) ? 1 : -1;
+            int err = dx - dy;
 
-            if (e2 > -dy) {
-                err -= dy;
-                x1 += sx;
-            } else if (e2 < dx) {
-                err += dx;
-                y1 += sy;
-            } else {
-                // If the error term indicates a preference for diagonal movement,
-                // choose the direction with the larger distance to the next grid line
-                if (dx > dy) {
+            while (true) {
+                if (y1 < GRID_NUM_Y && y1 >= 0 && x1 < GRID_NUM_X && x1 >= 0)
+                    allVisionGrids.add(grids.get(y1 * GRID_NUM_X + x1));
+                if (x1 == x2 && y1 == y2) break;
+                int e2 = 2 * err;
+
+                if (e2 > -dy) {
+                    err -= dy;
                     x1 += sx;
-                } else {
+                } else if (e2 < dx) {
+                    err += dx;
                     y1 += sy;
+                } else {
+                    // If the error term indicates a preference for diagonal movement,
+                    // choose the direction with the larger distance to the next grid line
+                    if (dx > dy) {
+                        x1 += sx;
+                    } else {
+                        y1 += sy;
+                    }
+                    err += (dx - dy);
                 }
-                err += (dx - dy);
             }
         }
     }

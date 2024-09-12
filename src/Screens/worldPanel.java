@@ -214,7 +214,6 @@ public class worldPanel extends JPanel {
                 }
                 creatureLatch.await(); // Wait for all physics tasks to complete
             }
-
         } catch (InterruptedException e) {
             executorService.shutdownNow();
             Thread.currentThread().interrupt();
@@ -222,7 +221,7 @@ public class worldPanel extends JPanel {
 
         g2d.drawRect(0, 0, WorldConstants.xBound, WorldConstants.yBound);
         //TODO: Implement Grid Debug Visual Tool
-        if(WorldConstants.Settings.devMode){
+        if (WorldConstants.Settings.devMode) {
             for (int y = 0; y < WorldConstants.yBound; y += WorldConstants.GridHeight)
                 g2d.drawLine(0, y, WorldConstants.xBound, y);
 
@@ -237,9 +236,9 @@ public class worldPanel extends JPanel {
 //                System.out.println(selected.getOccupiedGrids());
 
                 //TODO: Fix this part so it shows ALL vision Grids
-                if(selected instanceof Creature){
+                if (selected instanceof Creature) {
                     g2d.setColor(WorldConstants.semiTransparentGreen);
-                    for(Grid grid : ((Creature)selected).getAllVisionGrids()){
+                    for (Grid grid : ((Creature) selected).getAllVisionGrids()) {
                         g2d.fillRect(grid.x * WorldConstants.GridWidth, grid.y * WorldConstants.GridHeight, WorldConstants.GridWidth, WorldConstants.GridHeight);
                     }
                 }

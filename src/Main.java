@@ -27,7 +27,7 @@ public class Main {
 
         worldPointer worldPointer = new worldPointer();
         ExecutorService executorService = Constants.Constants.createThreadPool(WorldConstants.Settings.maxThread);
-        new MainMenu(worldPointer,executorService);
+        new MainMenu(worldPointer, executorService);
         while (true) {
             if (worldPointer.world != null && worldPointer.world.exists) {
 
