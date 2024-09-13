@@ -2,6 +2,10 @@ package World;
 
 import Constants.Constants.*;
 import Entity.Entity;
+import Entity.Immovable.Bush;
+import Entity.Immovable.Egg;
+import Entity.Movable.Corpse;
+import Entity.Movable.Creature;
 import Entity.Movable.Movable;
 
 import java.awt.*;
@@ -24,6 +28,17 @@ public class GridList implements Serializable {
         for (int y = 0; y < WorldConstants.yBound; y += WorldConstants.GridHeight)
             for (int x = 0; x < WorldConstants.xBound; x += WorldConstants.GridWidth)
                 grids.add(new Grid(x / WorldConstants.GridWidth, y / WorldConstants.GridHeight));
+    }
+
+    public static void remove(Entity remove){
+        int minX = Math.max(0, remove.getBoundingBox().x / GRID_WIDTH), maxX = Math.min(GRID_NUM_X, (int) Math.ceil(remove.getBoundingBox().getMaxX() / GRID_WIDTH));
+        int minY = Math.max(0, remove.getBoundingBox().y / GRID_HEIGHT), maxY = Math.min(GRID_NUM_Y, (int) Math.ceil(remove.getBoundingBox().getMaxY() / GRID_HEIGHT));
+
+        for(int x = minX; x <= maxX; x++){
+            for(int y = minY; y <= maxY; y++){
+                if (y < GRID_NUM_Y && y >= 0 && x < GRID_NUM_X && x >= 0) grids.get(x + y * GRID_NUM_X).getContainedEntities().remove(remove);
+            }
+        }
     }
 
     @SafeVarargs
@@ -63,23 +78,24 @@ public class GridList implements Serializable {
                 }
             }
         }
-
         for (int y = newMinY; y < newMaxY; y++) {
             flipper = y >= prevMinY && y < prevMaxY;
             for (int x = newMinX; x < newMaxX; x++) {
                 if (flipper && x >= prevMinX && x < prevMaxX) x += xDiff;
                 else {
-                    if (x + y * GRID_NUM_X > grids.size()) System.out.println(x + "," + y);
                     Grid temp = grids.get(x + y * GRID_NUM_X);
                     temp.add(e);
                     e.getOccupiedGrids().add(temp);
                 }
             }
         }
+        if(e instanceof Bush){
+            int test = 2 + 1;
+        }
     }
 
     public static Entity get(int x, int y) {
-        ArrayList<Entity> contained = grids.get(getID(x, y)).getContainedEntities();
+        ArrayList<Entity> contained = new ArrayList<>(grids.get(getID(x, y)).getContainedEntities());
         for (int i = contained.size() - 1; i >= 0; i--) {
             if (!contained.get(i).getBoundingBox().contains(x, y)) {
                 contained.remove(i);
@@ -116,9 +132,8 @@ public class GridList implements Serializable {
         return contained;
     }
 
-    public static void get(ArrayList<Line2D> rays, ArrayList<Grid> allVisionGrids) {
-        allVisionGrids.clear();
-
+    public static void get(ArrayList<Line2D> rays, Creature c, Entity[] rayHits, int[] rayHitCounts, ArrayList<Creature> boids) {
+        double[] distance = new double[4];
         for (Line2D ray : rays) {
             int x1 = (int) ray.getX1() / GRID_WIDTH, x2 = (int) ray.getX2() / GRID_WIDTH, y1 = (int) ray.getY1() / GRID_HEIGHT, y2 = (int) ray.getY2() / GRID_HEIGHT;
             int dx = Math.abs(x2 - x1);
@@ -127,10 +142,38 @@ public class GridList implements Serializable {
             int sy = (y1 < y2) ? 1 : -1;
             int err = dx - dy;
 
+            boolean seen = false;
             while (true) {
                 if (y1 < GRID_NUM_Y && y1 >= 0 && x1 < GRID_NUM_X && x1 >= 0)
-                    allVisionGrids.add(grids.get(y1 * GRID_NUM_X + x1));
-                if (x1 == x2 && y1 == y2) break;
+                    for (Entity e : grids.get(x1 + y1 * GRID_NUM_X).getContainedEntities())
+                        if (e != c) {
+                            seen=true;
+                            int id;
+                            switch (e) {
+                                case Creature creature -> id = 0;
+                                case Bush bush -> id = 1;
+                                case Corpse corpse -> id = 2;
+                                case Egg egg -> id = 3;
+                                case null, default -> id = -1;
+                            }
+                            if (rayHits[id] != null && rayHits[id].equals(e)) continue;
+                            double dist = Equations.dist(c.getX(), c.getY(), e.getX(), e.getY());
+                            if (dist < CreatureConstants.Combat.sensingDistance || (e.getBoundingBox().intersectsLine(ray) || e.getBoundingBox().contains(c.getX(), c.getY()))) {
+                                if (e instanceof Creature && !boids.contains((Creature) e)) boids.add((Creature) e);
+                                if (rayHits[id] != null) {
+                                    if (distance[id] > Equations.dist(c.getX(), c.getY(), e.getX(), e.getY())) {
+                                        distance[id] = dist;
+                                        rayHits[id] = e;
+                                    }
+                                } else {
+                                    rayHits[id] = e;
+                                    distance[id] = dist;
+                                }
+                                rayHitCounts[id]++;
+                                break;
+                            }
+                        }
+                if ((x1 == x2 && y1 == y2) || seen) break;
                 int e2 = 2 * err;
 
                 if (e2 > -dy) {

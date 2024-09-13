@@ -14,19 +14,21 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
     //    public static void main(String[] args){
 //        System.out.println(Double.NaN < 0);
 //    }
+    private static final ExecutorService executorService = Constants.Constants.createThreadPool(WorldConstants.Settings.maxThread);
     public static void main(String[] args) {
         World.globalNodes = new globalNodes();
         World.globalInnovations = new globalInnovations(World.globalNodes);
         setupImages();
 
         worldPointer worldPointer = new worldPointer();
-        ExecutorService executorService = Constants.Constants.createThreadPool(WorldConstants.Settings.maxThread);
+
         new MainMenu(worldPointer, executorService);
         while (true) {
             if (worldPointer.world != null && worldPointer.world.exists) {
@@ -68,15 +70,6 @@ public class Main {
                     }
                 }
                 timer.stop();
-                executorService.shutdown();
-                try {
-                    if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
-                        executorService.shutdownNow();
-                    }
-                } catch (InterruptedException e) {
-                    executorService.shutdownNow();
-                    Thread.currentThread().interrupt();
-                }
             } else {
                 try {
                     Thread.sleep(1000);

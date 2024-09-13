@@ -2,6 +2,7 @@ package Constants;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.concurrent.*;
 
@@ -232,7 +233,7 @@ public class Constants implements Serializable {
             public static final double maxGrowthWeight = 0.1;
             public static final double minGrowthBias = 0;
             public static final double maxGrowthBias = 4000;
-            private static final double maxEnergy = 200;
+            private static final double maxEnergy = 300;
 
             public static double herbivoryAffinityFormula(double dietValue) {
                 return Equations.sigmoid(-0.2, 1, 11, 0.5, dietValue);
@@ -261,7 +262,7 @@ public class Constants implements Serializable {
 
         public static class start {
             public static final double minSize = 20;
-            public static final double sizeDiff = 0.3;
+            public static final double sizeDiff = 0.4;
             public static final double maxSize = 40;
             public static final double minForce = Movement.sizeToMaxForce(minSize);
             public static final double maxForce = Movement.sizeToMaxForce(maxSize);
@@ -390,7 +391,7 @@ public class Constants implements Serializable {
         }
     }
 
-    public static class Vector2D {
+    public static class Vector2D implements Serializable {
         public double x, y;
 
         public Vector2D(double x, double y) {

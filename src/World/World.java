@@ -28,12 +28,12 @@ public class World implements Serializable {
     public transient ArrayList<Entity> remove = new ArrayList<Entity>(), add = new ArrayList<Entity>(), exceptionAvoidance = new ArrayList<Entity>();
     public transient ZoomableWindow window;
     public long day = 0, hour = 0, minute = 0, second = 0, tick = 0;
-    public transient boolean exists = false;
+    public transient boolean exists;
     public transient String name;
     public double tickRate = 1;
     private ArrayList<Long> tickRates = new ArrayList<Long>();
 
-    public World(MainMenu mm, String name, ExecutorService executorService) {
+    public World(MainMenu mm, String name, ExecutorService executorService) throws InterruptedException {
         this.name = name;
         this.window = new ZoomableWindow(this, mm);
         this.window.setVisible(true);
@@ -73,11 +73,12 @@ public class World implements Serializable {
         oos.close();
     }
 
-    public static World read(MainMenu mm, File file, ExecutorService executorService) throws IOException, ClassNotFoundException {
+    public static World read(MainMenu mm, File file, ExecutorService executorService) throws IOException, ClassNotFoundException, InterruptedException {
         ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
         World world = (World) ois.readObject();
         System.out.println("World has been deserialized from " + file.getName());
         world.name = file.getParentFile().getName();
+        GridList.reset();
         for (Creature c : world.Creatures) c.reload(ImageConstants.bird);
         for (Corpse c : world.Corpses) c.reload(ImageConstants.corpse);
         for (Bush b : world.Bushes) b.reload(ImageConstants.bush);
@@ -119,7 +120,7 @@ public class World implements Serializable {
                 Eggs.add(new Egg(new Creature((int) (Math.random() * WorldConstants.xBound), (int) (Math.random() * WorldConstants.yBound))));
         }
 
-        if (!Creatures.isEmpty() && !Corpses.isEmpty()) {
+        if (!Creatures.isEmpty() || !Corpses.isEmpty()) {
             CountDownLatch stashLatch = new CountDownLatch(Creatures.size() + Corpses.size());
             for (Creature c : Creatures)
                 executorService.submit(() -> {
@@ -203,6 +204,7 @@ public class World implements Serializable {
         boolean bushChange = false;
         for (int i = remove.size() - 1; i >= 0; i--) {
             Entity e = remove.remove(i);
+            GridList.remove(e);
             switch (e) {
                 case Corpse corpse -> Corpses.remove(corpse);
                 case Creature creature -> Creatures.remove(creature);
@@ -224,7 +226,7 @@ public class World implements Serializable {
                     bushChange = true;
                     Bushes.add(bush);
                 }
-                case null, default -> throw new RuntimeException("unknown or null Object in World.remove");
+                case null, default -> throw new RuntimeException("unknown or null Object in World.add");
             }
         }
 
@@ -260,19 +262,14 @@ public class World implements Serializable {
         for (Corpse c : Corpses) if (c.getX() == 0 && c.getY() == 0) remove.add(c);
     }
 
-    private void sortIntoGrid(boolean plant, boolean animal, ExecutorService executorService) {
+    private void sortIntoGrid(boolean plant, boolean animal, ExecutorService executorService) throws InterruptedException{
         CountDownLatch sortLatch = new CountDownLatch((plant ? Bushes.size() : 0) + (animal ? Creatures.size() + Eggs.size() + Corpses.size() : 0));
         if (plant) GridList.sort(executorService, sortLatch, Bushes);
         if (animal) GridList.sort(executorService, sortLatch, Creatures, Eggs, Corpses);
-        try {
-            sortLatch.await();
-        } catch (InterruptedException e) {
-            executorService.shutdownNow();
-            Thread.currentThread().interrupt();
-        }
+        sortLatch.await();
     }
 
-    private void sortIntoGrid(ExecutorService executorService) {
+    private void sortIntoGrid(ExecutorService executorService) throws InterruptedException{
         sortIntoGrid(true, true, executorService);
     }
 

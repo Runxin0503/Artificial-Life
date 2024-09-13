@@ -1,5 +1,6 @@
 package Entity.Immovable;
 
+import java.awt.*;
 import java.io.Serializable;
 
 import Constants.Constants.*;
@@ -67,6 +68,12 @@ public class Egg extends Immovable implements Serializable {
     public void damage(double damage){
         if(c.getHealth()<damage)isEaten = true;
         else c.setHealth(c.getHealth()-damage);
+    }
+
+    @Override
+    public void reload(Image newImage){
+        super.reload(newImage);
+        c.reload(ImageConstants.egg);
     }
 
     @Override

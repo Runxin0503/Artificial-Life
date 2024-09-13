@@ -236,12 +236,12 @@ public class worldPanel extends JPanel {
 //                System.out.println(selected.getOccupiedGrids());
 
                 //TODO: Fix this part so it shows ALL vision Grids
-                if (selected instanceof Creature) {
-                    g2d.setColor(WorldConstants.semiTransparentGreen);
-                    for (Grid grid : ((Creature) selected).getAllVisionGrids()) {
-                        g2d.fillRect(grid.x * WorldConstants.GridWidth, grid.y * WorldConstants.GridHeight, WorldConstants.GridWidth, WorldConstants.GridHeight);
-                    }
-                }
+//                if (selected instanceof Creature) {
+//                    g2d.setColor(WorldConstants.semiTransparentGreen);
+//                    for (Grid grid : ((Creature) selected).getAllVisionGrids()) {
+//                        g2d.fillRect(grid.x * WorldConstants.GridWidth, grid.y * WorldConstants.GridHeight, WorldConstants.GridWidth, WorldConstants.GridHeight);
+//                    }
+//                }
                 g2d.setColor(Color.black);
             }
         }

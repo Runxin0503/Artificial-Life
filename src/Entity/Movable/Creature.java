@@ -28,8 +28,7 @@ public class Creature extends Movable implements Serializable {
     private boolean seekingMate = false, starving = false, eating = false;
     private Entity[] rayHits = new Entity[4];
     private int[] rayHitCounts = new int[4];
-    private transient final ArrayList<Line2D> allRays = new ArrayList<>();
-    private final ArrayList<GridList.Grid> allVisionGrids = new ArrayList<>();
+    private transient ArrayList<Line2D> allRays = new ArrayList<>();
     public boolean isPlayer = false, isSelected = false;
 
     //see,smell,hear,touch,taste. if no see, smell & hear better
@@ -78,7 +77,7 @@ public class Creature extends Movable implements Serializable {
         this.meatMass = 0;
         this.stomachFluid = 0;
         this.energy = maxEnergy * (parentOne.genome.offspringInvestment + parentTwo.genome.offspringInvestment);
-        this.health = maxHealth;
+        this.health = maxHealth * (parentOne.genome.offspringInvestment + parentTwo.genome.offspringInvestment);
         setCoord(parentOne.getX(), parentOne.getY());
     }
 
@@ -139,7 +138,6 @@ public class Creature extends Movable implements Serializable {
     }
 
     private void see(ArrayList<Creature> boids) {
-        double[] distance = new double[4];
         Entity[] currentRayHits = new Entity[4];
         int[] currentRayHitCounts = new int[4];
         //Nearest Edible Plant Info | Nearest Edible Entity Info | Nearest Inedible Entity Info
@@ -166,37 +164,8 @@ public class Creature extends Movable implements Serializable {
             allRays.addAll(rays);
         }
 
-        GridList.get(allRays, allVisionGrids);
-        for (Line2D ray : allRays) {
-            for (Grid grid : allVisionGrids)
-                for (Entity e : grid.getContainedEntities())
-                    if (e != this) {
-                        int id;
-                        switch (e) {
-                            case Creature creature -> id = 0;
-                            case Bush bush -> id = 1;
-                            case Corpse corpse -> id = 2;
-                            case Egg egg -> id = 3;
-                            default -> id = -1;
-                        }
-                        if (currentRayHits[id] != null && currentRayHits[id].equals(e)) continue;
-                        double dist = Equations.dist(x, y, e.getX(), e.getY());
-                        if (dist < Combat.sensingDistance || (e.getBoundingBox().intersectsLine(ray) || e.getBoundingBox().contains(x, y))) {
-                            if (e instanceof Creature && !boids.contains((Creature) e)) boids.add((Creature) e);
-                            if (currentRayHits[id] != null) {
-                                if (distance[id] > Equations.dist(x, y, e.getX(), e.getY())) {
-                                    distance[id] = dist;
-                                    currentRayHits[id] = e;
-                                }
-                            } else {
-                                currentRayHits[id] = e;
-                                distance[id] = dist;
-                            }
-                            currentRayHitCounts[id]++;
-                            break;
-                        }
-                    }
-        }
+        GridList.get(allRays,this,currentRayHits,currentRayHitCounts,boids);
+
         rayHits = currentRayHits;
         rayHitCounts = currentRayHitCounts;
     }
@@ -209,42 +178,43 @@ public class Creature extends Movable implements Serializable {
 
         //input: Nearest Creature Info | Nearest Bush Info | Nearest Corpse Info | Nearest Egg Info | Velocity & Position | Energy | Health | Size | metabolism | strength | Stomach % | starving | clock
         double[] input = new double[NeuralNet.inputNum];
-        if (rayHits[0] != null) {
-            input[0] = Equations.distFromRect(boundingBox, rayHits[0].getBoundingBox()) - 1;
-            input[1] = ((Movable) rayHits[0]).getVelocity();
-            double objAngle = (Math.atan2((rayHits[0].getY() - y), (rayHits[0].getX() - x)) + Math.PI * 2) % (Math.PI * 2);
+        Entity zero=rayHits[0],one=rayHits[1],two=rayHits[2],three=rayHits[3];
+        if (zero != null) {
+            input[0] = Equations.distFromRect(boundingBox, zero.getBoundingBox()) - 1;
+            input[1] = ((Movable) zero).getVelocity();
+            double objAngle = (Math.atan2((zero.getY() - y), (zero.getX() - x)) + Math.PI * 2) % (Math.PI * 2);
             input[2] = (direction - objAngle) / (Math.PI * 2);
             input[3] = (objAngle - direction) / (Math.PI * 2);
-            input[4] = rayHits[0].getEnergyIfConsumed();
-            input[5] = ((Creature) rayHits[0]).getHealth() / Math.max(0.01, ((Creature) rayHits[0]).getArmour() - getDamage());
+            input[4] = zero.getEnergyIfConsumed();
+            input[5] = ((Creature) zero).getHealth() / Math.max(0.01, ((Creature) zero).getArmour() - getDamage());
             input[6] = rayHitCounts[0];
         }
-        if (rayHits[1] != null) {
-            input[7] = Equations.distFromRect(boundingBox, rayHits[1].getBoundingBox()) - 1;
-            double objAngle = (Math.atan2((rayHits[1].getY() - y), (rayHits[1].getX() - x)) + Math.PI * 2) % (Math.PI * 2);
+        if (one != null) {
+            input[7] = Equations.distFromRect(boundingBox, one.getBoundingBox()) - 1;
+            double objAngle = (Math.atan2((one.getY() - y), (one.getX() - x)) + Math.PI * 2) % (Math.PI * 2);
             input[8] = (direction - objAngle) / (Math.PI * 2);
             input[9] = (objAngle - direction) / (Math.PI * 2);
-            input[10] = rayHits[1].getEnergyIfConsumed();
-            input[11] = rayHits[1].getSize();
+            input[10] = one.getEnergyIfConsumed();
+            input[11] = one.getSize();
             input[12] = rayHitCounts[1];
         }
-        if (rayHits[2] != null) {
-            input[13] = Equations.distFromRect(boundingBox, rayHits[2].getBoundingBox()) - 1;
+        if (two != null) {
+            input[13] = Equations.distFromRect(boundingBox, two.getBoundingBox()) - 1;
             if (input[13] < size * 1.5) input[13] = -1;
-            double objAngle = (Math.atan2((rayHits[2].getY() - y), (rayHits[2].getX() - x)) + Math.PI * 2) % (Math.PI * 2);
+            double objAngle = (Math.atan2((two.getY() - y), (two.getX() - x)) + Math.PI * 2) % (Math.PI * 2);
             input[14] = (direction - objAngle) / (Math.PI * 2);
             input[15] = (objAngle - direction) / (Math.PI * 2);
-            input[16] = rayHits[2].getEnergyIfConsumed();
-            input[17] = rayHits[2].getSize();
+            input[16] = two.getEnergyIfConsumed();
+            input[17] = two.getSize();
             input[18] = rayHitCounts[2];
         }
-        if (rayHits[3] != null) {
-            input[19] = Equations.distFromRect(boundingBox, rayHits[3].getBoundingBox()) - 1;
-            double objAngle = (Math.atan2((rayHits[3].getY() - y), (rayHits[3].getX() - x)) + Math.PI * 2) % (Math.PI * 2);
+        if (three != null) {
+            input[19] = Equations.distFromRect(boundingBox, three.getBoundingBox()) - 1;
+            double objAngle = (Math.atan2((three.getY() - y), (three.getX() - x)) + Math.PI * 2) % (Math.PI * 2);
             input[20] = (direction - objAngle) / (Math.PI * 2);
             input[21] = (objAngle - direction) / (Math.PI * 2);
-            input[22] = rayHits[3].getEnergyIfConsumed();
-            input[23] = ((Egg) rayHits[3]).getTimeLeft();
+            input[22] = three.getEnergyIfConsumed();
+            input[23] = ((Egg) three).getTimeLeft();
             input[24] = rayHitCounts[3];
         }
 
@@ -411,7 +381,8 @@ public class Creature extends Movable implements Serializable {
         double massDigested = stomachFluid / WorldConstants.Settings.ticksToSecond;
         if (massDigested <= 0) return 0;
         double nutrientsGained = 0;
-        if (plantMass > 0) {
+        boolean rand = Math.random()>=0.5;
+        if (plantMass > 0 && rand) {
             double min = Math.min(plantMass, massDigested * Stomach.plantDigestionRate);
             plantMass -= min;
             massDigested -= min / Stomach.plantDigestionRate;
@@ -423,6 +394,13 @@ public class Creature extends Movable implements Serializable {
             meatMass -= min;
             massDigested -= min / Stomach.meatDigestionRate;
             nutrientsGained += min * Stomach.meatMassToEnergy * genome.carnivoryAffinity;
+        }
+        if (massDigested <= 0) return nutrientsGained;
+        if (plantMass > 0 && !rand) {
+            double min = Math.min(plantMass, massDigested * Stomach.plantDigestionRate);
+            plantMass -= min;
+            massDigested -= min / Stomach.plantDigestionRate;
+            nutrientsGained += min * Stomach.plantMassToEnergy * genome.herbivoryAffinity;
         }
         return nutrientsGained;
     }
@@ -597,10 +575,6 @@ public class Creature extends Movable implements Serializable {
         return report;
     }
 
-    public ArrayList<Grid> getAllVisionGrids() {
-        return allVisionGrids;
-    }
-
     public void setNN(NN newNN) {
         brain = newNN;
     }
@@ -616,6 +590,7 @@ public class Creature extends Movable implements Serializable {
         super.reload(ImageConstants.getRotation(direction));
         this.brain.globalInnovations = World.globalInnovations;
         this.brain.globalNodes = World.globalNodes;
+        this.allRays = new ArrayList<>();
     }
 
     public void setEnergy(double newEnergy) {

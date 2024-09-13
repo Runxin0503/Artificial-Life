@@ -75,10 +75,13 @@ public class Bush extends Immovable implements Serializable {
         setImage(ImageConstants.bush.getScaledInstance(width,height,ImageConstants.ResizeConstant));
         this.maxBerries = (int)(size / BushConstants.initialMaxSize*BushConstants.maxBerries);
     }
+
     @Override
     public void reload(Image newImage){
-        if(getImage() == null) setImage(ImageConstants.bush.getScaledInstance(getBoundingBox().width,getBoundingBox().height,ImageConstants.ResizeConstant));
+        super.reload(null);
+        setImage(ImageConstants.bush.getScaledInstance(getBoundingBox().width,getBoundingBox().height,ImageConstants.ResizeConstant));
     }
+
     @Override
     public Vector2D collision(Movable m) {
         return new Vector2D(m.getVelocityVector().x*-Physics.bushFriction,m.getVelocityVector().y*-Physics.bushFriction);

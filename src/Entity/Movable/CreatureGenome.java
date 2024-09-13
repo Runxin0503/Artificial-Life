@@ -2,7 +2,9 @@ package Entity.Movable;
 
 import Constants.Constants.CreatureConstants.*;
 
-public class CreatureGenome {
+import java.io.Serializable;
+
+public class CreatureGenome implements Serializable {
     public int incubationTime;
     public double growthWeight,growthBias;
     public int visionDistance,visionRayCount;

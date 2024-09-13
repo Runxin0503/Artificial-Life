@@ -113,9 +113,8 @@ public class ZoomableWindow extends JFrame {
         saveItem.addActionListener(e -> {
             world.exists=false;
             try{
-                Thread.sleep(1000);
                 World.save(world);
-            }catch(IOException | InterruptedException exception){
+            }catch(IOException exception){
                 exception.printStackTrace();
             }
             world.exists=true;

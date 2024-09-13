@@ -4,6 +4,7 @@ import Constants.Constants.*;
 import Entity.Movable.Creature;
 import Entity.Movable.Movable;
 import World.GridList;
+import com.sun.source.tree.ArrayAccessTree;
 
 import java.awt.*;
 import java.util.List;
@@ -15,7 +16,7 @@ public abstract class Entity implements Serializable{
     private transient Image image;
     private final Rectangle prevBoundingBox = new Rectangle();
     protected transient boolean boundingBoxChange = true;
-    private transient final List<GridList.Grid> occupiedGrids = new ArrayList<>();
+    private transient List<GridList.Grid> occupiedGrids = new ArrayList<>();
     protected double size=0,x,y;
     public Entity(double x,double y){
         setCoord(x,y);
@@ -59,7 +60,9 @@ public abstract class Entity implements Serializable{
         this.size = newSize;
     }
     public void reload(Image newImage){
-        if(image == null) image = newImage.getScaledInstance(boundingBox.width,boundingBox.height,ImageConstants.ResizeConstant);
+        if(newImage != null) image = newImage.getScaledInstance(boundingBox.width,boundingBox.height,ImageConstants.ResizeConstant);
+        this.occupiedGrids = new ArrayList<>();
+        this.boundingBoxChange = true;
     }
     public Rectangle getBoundingBox(){return boundingBox;}
     public Image getImage(){return image;}

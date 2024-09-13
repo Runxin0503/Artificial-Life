@@ -93,7 +93,12 @@ public class MainMenu extends JFrame {
         // New Game button
         JButton newGameButton = addCustomButton("New World", 150, 40, ImageConstants.button, ImageConstants.buttonHover, ImageConstants.buttonPressed);
         newGameButton.addActionListener(e -> {
-            worldPointer.world = new World(MainMenu.this, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")) + " unnamed", executorService);
+            try {
+                worldPointer.world = new World(MainMenu.this, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")) + " unnamed", executorService);
+            } catch (InterruptedException ex) {
+                executorService.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
             setVisible(false);
         });
 
@@ -193,10 +198,12 @@ public class MainMenu extends JFrame {
                         worldPointer.world = World.read(MainMenu.this, new File("resources/" + selectedFile.getPath()), executorService); // Load the game when the file button is clicked
                         loadScreen.setVisible(false);
                         mainMenu.setVisible(true);
-                        GridList.reset();
                         setVisible(false);
                     } catch (IOException | ClassNotFoundException ex) {
                         ex.printStackTrace();
+                    } catch (InterruptedException ex) {
+                        executorService.shutdownNow();
+                        Thread.currentThread().interrupt();
                     }
                 }
             }
