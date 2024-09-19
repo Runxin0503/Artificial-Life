@@ -1,6 +1,8 @@
 package World;
 
-import Constants.Constants.*;
+import Constants.Constants.CreatureConstants;
+import Constants.Constants.Equations;
+import Constants.Constants.WorldConstants;
 import Entity.Entity;
 import Entity.Immovable.Bush;
 import Entity.Immovable.Egg;
@@ -30,13 +32,14 @@ public class GridList implements Serializable {
                 grids.add(new Grid(x / WorldConstants.GridWidth, y / WorldConstants.GridHeight));
     }
 
-    public static void remove(Entity remove){
+    public static void remove(Entity remove) {
         int minX = Math.max(0, remove.getBoundingBox().x / GRID_WIDTH), maxX = Math.min(GRID_NUM_X, (int) Math.ceil(remove.getBoundingBox().getMaxX() / GRID_WIDTH));
         int minY = Math.max(0, remove.getBoundingBox().y / GRID_HEIGHT), maxY = Math.min(GRID_NUM_Y, (int) Math.ceil(remove.getBoundingBox().getMaxY() / GRID_HEIGHT));
 
-        for(int x = minX; x <= maxX; x++){
-            for(int y = minY; y <= maxY; y++){
-                if (y < GRID_NUM_Y && y >= 0 && x < GRID_NUM_X && x >= 0) grids.get(x + y * GRID_NUM_X).getContainedEntities().remove(remove);
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                if (y < GRID_NUM_Y && y >= 0 && x < GRID_NUM_X && x >= 0)
+                    grids.get(x + y * GRID_NUM_X).getContainedEntities().remove(remove);
             }
         }
     }
@@ -74,7 +77,7 @@ public class GridList implements Serializable {
                 else {
                     Grid temp = grids.get(x + y * GRID_NUM_X);
                     temp.remove(e);
-                    if (e instanceof Movable) ((Movable) e).getOccupiedGrids().remove(temp);
+                    if (e instanceof Movable) e.getOccupiedGrids().remove(temp);
                 }
             }
         }
@@ -89,7 +92,7 @@ public class GridList implements Serializable {
                 }
             }
         }
-        if(e instanceof Bush){
+        if (e instanceof Bush) {
             int test = 2 + 1;
         }
     }
@@ -147,7 +150,7 @@ public class GridList implements Serializable {
                 if (y1 < GRID_NUM_Y && y1 >= 0 && x1 < GRID_NUM_X && x1 >= 0)
                     for (Entity e : grids.get(x1 + y1 * GRID_NUM_X).getContainedEntities())
                         if (e != c) {
-                            seen=true;
+                            seen = true;
                             int id;
                             switch (e) {
                                 case Creature creature -> id = 0;

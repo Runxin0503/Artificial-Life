@@ -10,18 +10,18 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Graph extends JFrame {
-    private HashMap<Integer, HashMap<String, DataSet>> dataSets = new HashMap<Integer, HashMap<String, DataSet>>();
-    private ArrayList<Color> Colors = new ArrayList<Color>();
+    private final HashMap<Integer, HashMap<String, DataSet>> dataSets = new HashMap<Integer, HashMap<String, DataSet>>();
+    private final ArrayList<Color> Colors = new ArrayList<Color>();
     private double scaleX = 1.0;
     private double scaleY = 1.0;
     private double shiftX = 0.0;
     private int latestTime = 0;
     public static final int VALUES = 1;
     public static final int ENTITIES = 2;
-    private int datapointLength=0;
-    public int intervalOfAccepting=1;
-    private GridBagConstraints gbc = new GridBagConstraints();
-    private JPanel legendPanel;
+    private int datapointLength = 0;
+    public int intervalOfAccepting = 1;
+    private final GridBagConstraints gbc = new GridBagConstraints();
+    private final JPanel legendPanel;
 
     public Graph() {
         setTitle("Graph");
@@ -135,21 +135,21 @@ public class Graph extends JFrame {
         }
     }
 
-    public void updateDataSets(){
+    public void updateDataSets() {
         datapointLength++;
-        if(datapointLength>Constants.WindowConstants.graphMaxDataSize){
+        if (datapointLength > Constants.WindowConstants.graphMaxDataSize) {
             System.out.println("Culling");
-            for(HashMap<String, DataSet> temp : dataSets.values()){
-                for(DataSet ds : temp.values()) ds.cullHalf();
+            for (HashMap<String, DataSet> temp : dataSets.values()) {
+                for (DataSet ds : temp.values()) ds.cullHalf();
             }
-            datapointLength/=2;
-            intervalOfAccepting*=2;
+            datapointLength /= 2;
+            intervalOfAccepting *= 2;
         }
     }
 
     public void addPoint(int type, String str, double y, int x) {
         if (!Double.isFinite(x) || !Double.isFinite(y)) {
-            System.out.println("ERROR ON TYPE "+type+"  AND VAL "+str);
+            System.out.println("ERROR ON TYPE " + type + "  AND VAL " + str);
             return;
         }
         dataSets.get(type).get(str.toLowerCase()).addPoint(x, y);
@@ -184,7 +184,8 @@ public class Graph extends JFrame {
     private void drawGraph(Graphics g) {
         try {
             calculateScaling();
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         int width = getWidth();
         int height = getHeight();
@@ -211,7 +212,7 @@ public class Graph extends JFrame {
 //                int interval = Math.max(1, points.size() / 1000); // Render every interval-th point
 
                 Point lastPoint = null;
-                for (int i = 0; i < points.size(); i ++) {
+                for (int i = 0; i < points.size(); i++) {
                     Point nowPoint = scalePoint(points.get(i));
                     if (lastPoint == null) {
                         lastPoint = nowPoint;
@@ -241,7 +242,7 @@ public class Graph extends JFrame {
         int maxX = (int) (width / scaleX);
         int interval = Math.max(maxX / 10, 1);  // Avoid division by zero and ensure at least one label
         for (int i = (int) Math.round(shiftX); i <= maxX; i += interval) {
-            int x = (int) (50 + (i-shiftX) * scaleX);
+            int x = (int) (50 + (i - shiftX) * scaleX);
             g.drawLine(x, height - 50, x, height - 45);
             g.drawString(Integer.toString(i), x - 5, height - 30);
         }
@@ -261,9 +262,9 @@ public class Graph extends JFrame {
     }
 
     private class DataSet {
-        private List<Point2D> points;
-        private Color color;
-        private JCheckBox checkBox;
+        private final List<Point2D> points;
+        private final Color color;
+        private final JCheckBox checkBox;
 
         public DataSet(Color color, JCheckBox checkBox) {
             this.color = color;
@@ -273,11 +274,12 @@ public class Graph extends JFrame {
 
         public void addPoint(double x, double y) {
 
-            points.add(new Point2D.Double(x,y));
+            points.add(new Point2D.Double(x, y));
         }
-        public void cullHalf(){
-            for(int i=points.size()-1;i>=0;i--){
-                if(i%2==0) points.remove(i);
+
+        public void cullHalf() {
+            for (int i = points.size() - 1; i >= 0; i--) {
+                if (i % 2 == 0) points.remove(i);
             }
         }
 
@@ -285,7 +287,12 @@ public class Graph extends JFrame {
             return points;
         }
 
-        public Color getColor() {return color;}
-        public JCheckBox getCheckBox() {return checkBox;}
+        public Color getColor() {
+            return color;
+        }
+
+        public JCheckBox getCheckBox() {
+            return checkBox;
+        }
     }
 }

@@ -1,27 +1,26 @@
 package Screens;
 
-import Entity.Immovable.*;
-import Entity.Movable.*;
-import Evolution.NN;
+import Constants.Constants.ImageConstants;
+import Constants.Constants.WindowConstants;
+import Constants.Constants.WorldConstants;
 import Entity.Entity;
+import Entity.Immovable.Bush;
+import Entity.Immovable.Egg;
+import Entity.Movable.Corpse;
+import Entity.Movable.Creature;
+import Evolution.NN;
+import World.GridList.Grid;
+import World.World;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
-
-import Constants.Constants.*;
-import Constants.Constants.WindowConstants;
-
-import java.util.List;
-
-import World.*;
-import World.GridList.Grid;
 
 public class worldPanel extends JPanel {
     private Rectangle cameraBoundingBox;

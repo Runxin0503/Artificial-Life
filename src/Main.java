@@ -1,5 +1,7 @@
-import Constants.Constants.*;
+import Constants.Constants.CreatureConstants;
+import Constants.Constants.ImageConstants;
 import Constants.Constants.WindowConstants;
+import Constants.Constants.WorldConstants;
 import Menu.MainMenu;
 import World.World;
 import World.worldPointer;
@@ -13,15 +15,13 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.TimeUnit;
 
 public class Main {
     //    public static void main(String[] args){
 //        System.out.println(Double.NaN < 0);
 //    }
     private static final ExecutorService executorService = Constants.Constants.createThreadPool(WorldConstants.Settings.maxThread);
+
     public static void main(String[] args) {
         World.globalNodes = new globalNodes();
         World.globalInnovations = new globalInnovations(World.globalNodes);

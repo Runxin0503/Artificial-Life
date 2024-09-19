@@ -1,14 +1,14 @@
 package Entity.Movable;
 
-import Constants.Constants.*;
+import Constants.Constants.CreatureConstants;
+import Constants.Constants.Physics;
+import Constants.Constants.Vector2D;
+import Constants.Constants.WorldConstants;
 import Entity.Entity;
 import World.GridList;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class Movable extends Entity implements Serializable {
     Vector2D speed;

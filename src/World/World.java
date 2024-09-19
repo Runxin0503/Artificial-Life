@@ -1,22 +1,28 @@
 package World;
 
+import Constants.Constants.BushConstants;
+import Constants.Constants.ImageConstants;
+import Constants.Constants.NeuralNet;
+import Constants.Constants.WorldConstants;
 import Entity.Entity;
+import Entity.Immovable.Bush;
+import Entity.Immovable.Egg;
+import Entity.Movable.Corpse;
+import Entity.Movable.Creature;
 import Menu.MainMenu;
+import Screens.Graph;
+import Screens.ZoomableWindow;
+import globalGenomes.globalInnovations;
+import globalGenomes.globalNodes;
 
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.concurrent.*;
-
-import Constants.Constants.*;
-import Entity.Immovable.Bush;
-import Entity.Immovable.Egg;
-import Entity.Movable.Corpse;
-import Entity.Movable.Creature;
-import Screens.Graph;
-import Screens.ZoomableWindow;
-import globalGenomes.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class World implements Serializable {
     public static globalNodes globalNodes = null;
@@ -31,7 +37,7 @@ public class World implements Serializable {
     public transient boolean exists;
     public transient String name;
     public double tickRate = 1;
-    private ArrayList<Long> tickRates = new ArrayList<Long>();
+    private final ArrayList<Long> tickRates = new ArrayList<Long>();
 
     public World(MainMenu mm, String name, ExecutorService executorService) throws InterruptedException {
         this.name = name;
@@ -262,14 +268,14 @@ public class World implements Serializable {
         for (Corpse c : Corpses) if (c.getX() == 0 && c.getY() == 0) remove.add(c);
     }
 
-    private void sortIntoGrid(boolean plant, boolean animal, ExecutorService executorService) throws InterruptedException{
+    private void sortIntoGrid(boolean plant, boolean animal, ExecutorService executorService) throws InterruptedException {
         CountDownLatch sortLatch = new CountDownLatch((plant ? Bushes.size() : 0) + (animal ? Creatures.size() + Eggs.size() + Corpses.size() : 0));
         if (plant) GridList.sort(executorService, sortLatch, Bushes);
         if (animal) GridList.sort(executorService, sortLatch, Creatures, Eggs, Corpses);
         sortLatch.await();
     }
 
-    private void sortIntoGrid(ExecutorService executorService) throws InterruptedException{
+    private void sortIntoGrid(ExecutorService executorService) throws InterruptedException {
         sortIntoGrid(true, true, executorService);
     }
 
@@ -304,7 +310,6 @@ public class World implements Serializable {
                 executorService.shutdownNow();
                 Thread.currentThread().interrupt();
             }
-            ;
             if (count % 1000 == 0)
                 System.out.println(count + " out of " + length + " ticks. " + count * 100.0 / length + "% Completed");
         }

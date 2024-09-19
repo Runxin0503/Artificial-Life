@@ -2,7 +2,6 @@ package Constants;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.concurrent.*;
 
@@ -508,9 +507,9 @@ public class Constants implements Serializable {
         }
     }
 
-    public static ExecutorService createThreadPool(int maxThreads){
+    public static ExecutorService createThreadPool(int maxThreads) {
         return new ThreadPoolExecutor(
-                maxThreads,maxThreads,
+                maxThreads, maxThreads,
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<>()) {
 

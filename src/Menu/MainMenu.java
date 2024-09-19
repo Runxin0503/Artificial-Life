@@ -1,27 +1,27 @@
 package Menu;
 
-import Constants.Constants.*;
+import Constants.Constants.ImageConstants;
 import Constants.Constants.WindowConstants;
-import World.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import World.World;
+import World.worldPointer;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ExecutorService;
 
 public class MainMenu extends JFrame {
-    private worldPointer worldPointer;
+    private final worldPointer worldPointer;
     private JPanel mainMenu;
     private JPanel loadScreen;
     private JScrollPane scrollPane;
-    private ExecutorService executorService;
+    private final ExecutorService executorService;
 
     public MainMenu(worldPointer worldPointer, ExecutorService executorService) {
         setTitle("Main Menu");

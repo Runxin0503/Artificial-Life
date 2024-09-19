@@ -1,19 +1,16 @@
 package Screens;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import Menu.MainMenu;
-
 import Constants.Constants.WindowConstants;
-import Constants.Constants.*;
+import Constants.Constants.WorldConstants;
+import Menu.MainMenu;
 import World.PlayerGenome;
 import World.World;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 public class ZoomableWindow extends JFrame {
 
@@ -21,7 +18,7 @@ public class ZoomableWindow extends JFrame {
     private sidePanel controlPanel;
     public Settings settingsDialog;
     public Graph graph;
-    private World world;
+    private final World world;
     private JLabel tickRateTracker;
     private MainMenu mainMenu;
 
@@ -37,7 +34,7 @@ public class ZoomableWindow extends JFrame {
         createGraph();
         createMenuBar();
         createControlPanel();
-        worldPanel = new worldPanel(world,controlPanel);
+        worldPanel = new worldPanel(world, controlPanel);
 
         add(worldPanel, BorderLayout.CENTER);
         add(controlPanel, BorderLayout.EAST);
@@ -47,7 +44,7 @@ public class ZoomableWindow extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                world.exists=false;
+                world.exists = false;
                 int choice = JOptionPane.showConfirmDialog(
                         ZoomableWindow.this,
                         "Do you want to save the world before exiting?",
@@ -64,60 +61,61 @@ public class ZoomableWindow extends JFrame {
                             JOptionPane.PLAIN_MESSAGE
                     ) : world.name;
 
-                    if(filename == null){
-                        world.exists=true;
+                    if (filename == null) {
+                        world.exists = true;
                         return;
                     }
 
-                    System.out.println("Saving the World...\n"+filename);
-                    try{
-                        if(!filename.isEmpty()) world.name = filename;
+                    System.out.println("Saving the World...\n" + filename);
+                    try {
+                        if (!filename.isEmpty()) world.name = filename;
                         World.save(world);
                         JOptionPane.showMessageDialog(ZoomableWindow.this, "World has been saved as " + world.name);
                     } catch (IOException exception) {
                         exception.printStackTrace();
                         JOptionPane.showMessageDialog(ZoomableWindow.this, "Error saving world: " + exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                        world.exists=true;
+                        world.exists = true;
                         return;
                     }
                     mm.reset();
                 } else if (choice == JOptionPane.NO_OPTION) {
                     mm.reset();
-                }else{
-                    world.exists=true;
+                } else {
+                    world.exists = true;
                 }
             }
         });
     }
 
     @Override
-    public void repaint(){
+    public void repaint() {
         super.repaint();
 
-        tickRateTracker.setText("Tick Rate: "+Math.max(1,(int)Math.round(1000.0/world.tickRate))+"\tticks/sec");
+        tickRateTracker.setText("Tick Rate: " + Math.max(1, (int) Math.round(1000.0 / world.tickRate)) + "\tticks/sec");
 
-        if(settingsDialog!=null&&settingsDialog.isVisible())
+        if (settingsDialog != null && settingsDialog.isVisible())
             settingsDialog.updateVariables();
 
-        if(controlPanel.isVisible()){
+        if (controlPanel.isVisible()) {
             controlPanel.updateVariables();
         }
 
         worldPanel.repaint();
     }
+
     private void createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
 
         JMenu fileMenu = new JMenu("File");
         JMenuItem saveItem = new JMenuItem("Save");
         saveItem.addActionListener(e -> {
-            world.exists=false;
-            try{
+            world.exists = false;
+            try {
                 World.save(world);
-            }catch(IOException exception){
+            } catch (IOException exception) {
                 exception.printStackTrace();
             }
-            world.exists=true;
+            world.exists = true;
         });
         JMenuItem exitItem = new JMenuItem("Exit");
         exitItem.addActionListener(e -> System.exit(0));
@@ -143,22 +141,26 @@ public class ZoomableWindow extends JFrame {
 
         setJMenuBar(menuBar);
     }
+
     private void createControlPanel() {
         controlPanel = new sidePanel(world);
         controlPanel.setPreferredSize(new Dimension(WindowConstants.controlPanelWidth, getHeight()));
     }
-    private void createGraph(){
+
+    private void createGraph() {
         graph = new Graph();
-        for(String s : WorldConstants.Settings.reportInfo) graph.addDataSet(Graph.VALUES,s);
-        for(String s : WorldConstants.Settings.countInfo) graph.addDataSet(Graph.ENTITIES,s);
-        graph.addDataSet(Graph.ENTITIES,"Ticks/Sec");
+        for (String s : WorldConstants.Settings.reportInfo) graph.addDataSet(Graph.VALUES, s);
+        for (String s : WorldConstants.Settings.countInfo) graph.addDataSet(Graph.ENTITIES, s);
+        graph.addDataSet(Graph.ENTITIES, "Ticks/Sec");
         graph.setVisible(false);
     }
-    private void createSettingsDialog(){
-        settingsDialog = new Settings(this, "Settings", true,world);
+
+    private void createSettingsDialog() {
+        settingsDialog = new Settings(this, "Settings", true, world);
     }
+
     private void showSettingsDialog() {
-        if(settingsDialog==null)createSettingsDialog();
+        if (settingsDialog == null) createSettingsDialog();
         settingsDialog.setVisible(true);
     }
 }

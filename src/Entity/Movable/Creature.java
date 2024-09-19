@@ -1,14 +1,13 @@
 package Entity.Movable;
 
-import Constants.Constants.CreatureConstants.*;
 import Constants.Constants.*;
-
-import Entity.*;
-import Evolution.NN;
-import World.*;
-import World.GridList.Grid;
-import Entity.Immovable.Bush;
+import Constants.Constants.CreatureConstants.*;
+import Entity.Entity;
 import Entity.Immovable.Egg;
+import Evolution.NN;
+import World.GridList;
+import World.PlayerGenome;
+import World.World;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
@@ -164,7 +163,7 @@ public class Creature extends Movable implements Serializable {
             allRays.addAll(rays);
         }
 
-        GridList.get(allRays,this,currentRayHits,currentRayHitCounts,boids);
+        GridList.get(allRays, this, currentRayHits, currentRayHitCounts, boids);
 
         rayHits = currentRayHits;
         rayHitCounts = currentRayHitCounts;
@@ -178,7 +177,7 @@ public class Creature extends Movable implements Serializable {
 
         //input: Nearest Creature Info | Nearest Bush Info | Nearest Corpse Info | Nearest Egg Info | Velocity & Position | Energy | Health | Size | metabolism | strength | Stomach % | starving | clock
         double[] input = new double[NeuralNet.inputNum];
-        Entity zero=rayHits[0],one=rayHits[1],two=rayHits[2],three=rayHits[3];
+        Entity zero = rayHits[0], one = rayHits[1], two = rayHits[2], three = rayHits[3];
         if (zero != null) {
             input[0] = Equations.distFromRect(boundingBox, zero.getBoundingBox()) - 1;
             input[1] = ((Movable) zero).getVelocity();
@@ -381,7 +380,7 @@ public class Creature extends Movable implements Serializable {
         double massDigested = stomachFluid / WorldConstants.Settings.ticksToSecond;
         if (massDigested <= 0) return 0;
         double nutrientsGained = 0;
-        boolean rand = Math.random()>=0.5;
+        boolean rand = Math.random() >= 0.5;
         if (plantMass > 0 && rand) {
             double min = Math.min(plantMass, massDigested * Stomach.plantDigestionRate);
             plantMass -= min;
