@@ -147,7 +147,6 @@ public class Constants implements Serializable {
             public static final double plantDigestionRate = 0.125;
             public static final double meatDigestionRate = 0.8;
             public static final double stomachSizeToMaxStomachFluid = 0.4;
-            public static final double overeatDmgPerct = 0.5;
             public static final double maxStomachSize = 250;
             public static final double plantMassToEnergy = 1.2; //how much energy per 1 unit of mass
             public static final double meatMassToEnergy = 3;
@@ -208,7 +207,7 @@ public class Constants implements Serializable {
             public static final int minVisionValue = 0;
             public static final int maxVisionValue = 1;
             public static final int minVisionDistance = 100;
-            public static final int maxVisionDistance = 600;
+            public static final int maxVisionDistance = 2000;
             public static final int maxVisionRayCount = 20;
             public static final double maxVisionConeAngle = Math.toRadians(240);
 
