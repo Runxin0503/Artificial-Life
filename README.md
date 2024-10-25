@@ -1,6 +1,6 @@
-# Evolving Artificial Life
+# Artificial Life
 
-Welcome to **Evolving Artificial Life**! This project is a simulator of evolution in a 2D virtual environment, where artificial creatures evolve through interactions with plants, eggs, other creatures, and the environment itself. This simulator lets you create new simulations, run them over extended periods, and observe the complex behaviors that emerge as creatures evolve over time.
+Welcome to **Artificial Life**! This project is a simulator of evolution in a 2D virtual environment, where artificial creatures evolve through interactions with plants, eggs, other creatures, and the environment itself. This simulator lets you create new simulations, run them over extended periods, and observe the complex behaviors that emerge as creatures evolve over time.
 
 ## Key Features
 
@@ -56,4 +56,4 @@ This project was heavily influenced by research and resources that helped guide 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 
-Thank you for exploring **Evolving Artificial Life**. This project is continually evolving, so check back often for updates as new features and optimizations are added.
+Thank you for exploring **Artificial Life**. This project is continually evolving, so check back often for updates as new features and optimizations are added.
