@@ -55,4 +55,5 @@ This project was heavily influenced by research and resources that helped guide 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+
 Thank you for exploring **Evolving Artificial Life**. This project is continually evolving, so check back often for updates as new features and optimizations are added.
