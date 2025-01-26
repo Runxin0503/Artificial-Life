@@ -73,10 +73,11 @@ The simulation setup allows you to save and load simulation states to pick up ex
 
 This project was heavily influenced by research and resources that helped guide my understanding and implementation of NEAT, TWEANN, the creatures themselves, and more:
 
-Inspiration: Various creators have inspired me to create this project, whether they were the source of inspiration that made me start it or the instructor who led me to add more elements to the simulation. 
+- **Inspiration**: Various creators have inspired me to create this project, whether they were the source of inspiration that made me start it or the instructor who led me to add more elements to the simulation. 
     - [The Bibites: Digital Life (Youtube Channel)](https://www.youtube.com/@TheBibitesDigitalLife).
     - [Simulating an Evolving Microcosmos | The Path to Multicellularity ](https://youtu.be/fEDqdvKO5Y0?si=MBvfZUhXTDg_klVG) - [Dylan Cope](https://www.youtube.com/@dylancope)
     - [Evolving AIs - Predator vs Prey, who will win?](https://youtu.be/qwrp3lB-jkQ?si=Oa_vXSVZQ5LDtpeR) - [Pezzza's Work](https://www.youtube.com/@PezzzasWork)
+    - [New series "Evolution Simulated", starting under water (🧬Evolution Simulated #1)](https://www.youtube.com/watch?v=x7Kc40SryVc&list=PLLKMinLKRdXyJjaAXGlyHm5m8rQ94E5ZP&ab_channel=TheSapling) - [The Sapling](https://www.youtube.com/@TheSapling)
 - **Resources for NEAT** - applications, visual examples, and implementations:
     - Stanley, Kenneth O., and Risto Miikkulainen. "Evolving Neural Networks through Augmenting Topologies." *MIT Press* (2002). [Read the paper here](https://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf).
     - [AI NEAT (PlayList) - Finn Eggers ](https://www.youtube.com/watch?v=VMQOa4-rVxE&list=PLgomWLYGNl1fcL0o4exBShNeCC5tc6s9C&ab_channel=FinnEggers)
