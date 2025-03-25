@@ -1,6 +1,7 @@
 package Evolution;
 
 import Constants.Constants;
+import Constants.Constants.NeuralNet.AF;
 import Constants.Constants.NeuralNet;
 import Genome.node;
 import Genome.synapse;
@@ -196,64 +197,47 @@ public class NN implements Serializable {
             scanLayer = nextScan;
         }
 
-        if (NeuralNet.outputAF.equalsIgnoreCase("softmax")) {
-            outputList = softmaxActivationFunction(outputList);
-        } else {
-            for (int i = 0; i < NeuralNet.outputNum; i++) {
-                if (Double.isNaN(outputList[i])) {
-                    outputList[i] = 0;
-                } else {
-                    outputList[i] = activationFunction(outputList[i], NeuralNet.outputAF);
-                }
+        for (int i = 0; i < NeuralNet.outputNum; i++) {
+            if (Double.isNaN(outputList[i])) {
+                outputList[i] = 0;
+            } else {
+                outputList[i] = activationFunction(outputList[i], NeuralNet.outputAF);
             }
         }
         NN.output = outputList;
     }
 
-    private static double activationFunction(double num, String activationFunction) {
-        if (activationFunction.equalsIgnoreCase("none")) {
+    private static double activationFunction(double num, AF activationFunction) {
+        if (activationFunction.equals(AF.none)) {
             return num;
-        } else if (activationFunction.equalsIgnoreCase("relu")) {
+        } else if (activationFunction.equals(AF.relu)) {
             return (num > 0) ? num : 0;
-        } else if (activationFunction.equalsIgnoreCase("sigmoid")) {
+        } else if (activationFunction.equals(AF.sigmoid)) {
             return 1 / (1 + Math.pow(Math.E, -num));
-        } else if (activationFunction.equalsIgnoreCase("tanh")) {
+        } else if (activationFunction.equals(AF.tanh)) {
             return (Math.pow(Math.E, num) - Math.pow(Math.E, -num)) / (Math.pow(Math.E, num) + Math.pow(Math.E, -num));
-        } else if (activationFunction.equalsIgnoreCase("leaky relu")) {
+        } else if (activationFunction.equals(AF.leakyRelu)) {
             return Math.max(num, 0.1 * num);
         }
-        System.out.println("ERROR");
-        return num;
-    }
-
-    private static double[] softmaxActivationFunction(double[] nums) {
-        double sum = 0;
-        double[] result = new double[nums.length];
-        for (double num : nums) {
-            sum += num;
-        }
-        for (int i = 0; i < nums.length; i++) {
-            result[i] = sum == 0 ? 0 : nums[i] / sum;
-        }
-        return result;
+        throw new IllegalArgumentException("Invalid activation function: " + activationFunction);
     }
 
     private static void batchNormalization(double[] input) {
         int len = input.length;
+        if(len==0) return;
+
         double sum = 0;
-        for (double val : input) {
-            sum += val;
-        }
+        for (double val : input) sum += val;
         double mean = sum / len;
+
         sum = 0;
         for (double val : input) {
             double temp = val - mean;
             sum += temp * temp;
         }
         double ISD = (sum == 0.0 ? 1 : 1 / Math.sqrt(sum / len));
-        for (int i = 0; i < len; i++) {
-            input[i] = (input[i] - mean) * ISD;
-        }
+
+        for (int i = 0; i < len; i++) input[i] = (input[i] - mean) * ISD;
     }
 
     private static void batchNormalization(ArrayList<synapse> layerConnectedSynapse) {
@@ -501,7 +485,7 @@ public class NN implements Serializable {
                 //failed to add
                 continue;
             }
-            n.activationFunction = NeuralNet.AFs[(int) (Math.random() * NeuralNet.AFs.length)];
+            n.activationFunction = AF.values()[(int) (Math.random() * AF.values().length)];
             return;
         }
     }

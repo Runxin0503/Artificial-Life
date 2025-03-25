@@ -67,7 +67,7 @@ public class MainMenu extends JFrame {
         JLabel titleLabel = new JLabel(new ImageIcon(ImageConstants.titleCard));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel authorLabel = new JLabel("By Author Name");
+        JLabel authorLabel = new JLabel("By Leo Qian");
         authorLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         authorLabel.setForeground(Color.WHITE); // Adjust text color as needed
         authorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);

@@ -1,17 +1,19 @@
 package Genome;
 
+import Constants.Constants.NeuralNet.*;
+
 import java.io.Serializable;
 
 public class node implements Serializable {
     public double bias;
-    public String type;
+    public Type type;
     public double latestInputSum;
     public double latestOutput;
     public int innovationID;
     public double x, y;
-    public String activationFunction;
+    public AF activationFunction;
 
-    public node(String type, int innovationID, double x, double y) {
+    public node(Type type, int innovationID, double x, double y) {
         this.bias = 0;
         this.type = type;
         this.innovationID = innovationID;
@@ -19,7 +21,7 @@ public class node implements Serializable {
         this.y = y;
     }
 
-    public node(String type, int innovationID, double x, double y, String activationFunction) {
+    public node(Type type, int innovationID, double x, double y, AF activationFunction) {
         this.bias = 0;
         this.type = type;
         this.innovationID = innovationID;
@@ -28,7 +30,7 @@ public class node implements Serializable {
         this.activationFunction = activationFunction;
     }
 
-    private node(double bias, String type, int innovationID, double x, double y, String activationFunction) {
+    private node(double bias, Type type, int innovationID, double x, double y, AF activationFunction) {
         this.bias = bias;
         this.type = type;
         this.innovationID = innovationID;
@@ -44,15 +46,15 @@ public class node implements Serializable {
     }
 
     public boolean isOutput() {
-        return this.type.equals("output");
+        return this.type.equals(Type.output);
     }
 
     public boolean isInput() {
-        return this.type.equals("input");
+        return this.type.equals(Type.input);
     }
 
     public boolean isHidden() {
-        return this.type.equals("hidden");
+        return this.type.equals(Type.hidden);
     }
 
 

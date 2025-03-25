@@ -291,9 +291,10 @@ public class Constants implements Serializable {
         public static final boolean batchNormalizeHiddenLayers = false;
         public static final int inputNum = 35;
         public static final int outputNum = 11;
-        public static final String[] AFs = new String[]{"none", "relu", "sigmoid", "tanh", "leaky relu"};
-        public static final String hiddenAF = "sigmoid";
-        public static final String outputAF = "sigmoid";
+        public enum Type {input,hidden,output}
+        public enum AF {none,relu,sigmoid,tanh,leakyRelu}
+        public static final AF hiddenAF = AF.sigmoid;
+        public static final AF outputAF = AF.sigmoid;
         public static final int weightedExcess = 1;
         public static final int weightedDisjoints = 1;
         public static final int weightedWeights = 1;
