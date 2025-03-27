@@ -24,7 +24,7 @@ tasks.withType(JavaCompile) {
 }
 
 application {
-    mainClass = 'World.'//TODO
+    mainClass = 'Genome/Renderer.java'
 }
 
 javafx {
