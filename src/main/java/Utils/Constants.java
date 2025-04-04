@@ -71,6 +71,14 @@ public class Constants implements Serializable {
     }
 
     public static class WindowConstants {
+        public static final int MIN_STAGE_WIDTH = 560;
+        public static final int MIN_STAGE_HEIGHT = 350;
+        public static final int CANVAS_PADDING = 5;
+        public static final double MIN_ZOOM = 0;
+        public static final double MAX_ZOOM = 10;
+        public static final double MAX_FPS = 60;
+        public static final int MAX_CRITTER_SPECIES_FONT_SIZE = 11;
+        public static final int MIN_CRITTER_SPECIES_FONT_SIZE = 6;
         public static final int maxThread = 10;
         public static final int worldWidth = 1200;
         public static final int worldHeight = 800;

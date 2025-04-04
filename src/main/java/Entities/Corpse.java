@@ -10,10 +10,6 @@ public class Corpse extends Entity {
         super(id);
     }
 
-    void instantiate(Creature creature) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     @Override
     public int getHealth() {
         throw new UnsupportedOperationException("Not supported yet.");

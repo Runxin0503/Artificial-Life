@@ -11,21 +11,19 @@ import java.awt.*;
  */
 public abstract class Position extends EntityFactory.EntityFactoryObject {
 
-    /*
-     * Must have:
-     * - An int position of x and y
-     * - A Rectangle object for bounding box
-     * - An Image object
-     * - A final sizeToMass value initialized in constructor, used in getMass()
-     * - A damage value for Entity class to read
-     */
+    /** The int coordinate of this Position */
     int x,y;
 
+    /** The bounding box of this Position, used to dictate if two Position objects collide or not. */
     Rectangle boundingBox;
 
+    /** The image of this particular Position object, used for rendering in {@code JavaFX}. */
     public Image image;
 
-    /** The damage value from the most recent collision, used in {@link #getDamage}. */
+    /** The ratio value used in calculating the mass for {@link #getMass()}. */
+    double sizeToMass;
+
+    /** The damage value from the most recent collision, used in {@link #getDamage()}. */
     double damage;
 
     protected Position(int id) {

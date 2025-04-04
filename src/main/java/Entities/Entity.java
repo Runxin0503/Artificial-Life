@@ -8,7 +8,7 @@ public abstract class Entity extends Entities.EntityFactory.EntityFactoryObject 
 
     /** The Health / Energy of this Entity, has different meaning in different
      * classes but is a must-have for every Entity. */
-    int health,energy;
+    double health,energy;
 
     /** The size of this Entity */
     int size;

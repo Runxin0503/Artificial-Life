@@ -13,10 +13,6 @@ public class Egg extends Entity {
         super(id);
     }
 
-    void instantiate(Creature creature) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     /*
      * Must have
      * - A Creature Object that stores the Genetic Material of this Egg: (maxEnergy,maxHealth,metabolism,Size)

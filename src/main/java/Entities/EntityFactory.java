@@ -44,9 +44,7 @@ public class EntityFactory {
     }
 
 
-    /** An interface that guarantees a reset() method for {@link EntityFactory} to use.
-     * Must have a function .instantiate(...) that allows the object to be "re-initialized" with new
-     * instance values. */
+    /** An interface that guarantees a reset() method for {@link EntityFactory} to use. */
     public abstract static class EntityFactoryObject {
         private final int ID;
 

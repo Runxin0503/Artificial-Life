@@ -23,7 +23,6 @@ public class Constants {
             weightedDisjoints = 1,
             weightedWeights = 1,
             compatibilityThreshold = 4,
-            maxStagDropoff = 20,
             mutationSynapseProbability = 0.03,
             mutationNodeProbability = 0.2,
             mutationWeightShiftProbability = 0.06,
@@ -32,8 +31,7 @@ public class Constants {
             mutationChangeAFProbability = 0.06,
             mutationWeightShiftStrength = 2,
             mutationWeightRandomStrength = 2,
-            mutationBiasShiftStrength = 0.3,
-            perctCull = 0.2;
+            mutationBiasShiftStrength = 0.3;
 
     public int getInputNum() {
         return inputNum;

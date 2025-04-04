@@ -1,6 +1,7 @@
 package Entities;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,20 +11,19 @@ import java.util.List;
  */
 public class Bush extends Entity {
 
+    private int maxBerries,size;
+    private double berryEnergy;
+
+    /** The berries that  */
+    private ArrayList<Point> berries;
+
+    /** The list of Creatures (sorted by descending size) of the creatures that
+     * interacted with this bush. */
+    private ArrayList<Point> queuedBerryEating;
+
     public Bush(int id) {
         super(id);
     }
-
-    void instantiate(Creature creature) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    /*
-     * Must have
-     * - An Array of Point Objects that represents berries
-     * - Genetic Information: (Berries Energy, Max Berries, Size)
-     * - SortedList that stores a queue for creatureInteract berry-eating
-     */
 
     /** Returns the List of Point Object for drawing berries */
     List<Point> getBerries() {

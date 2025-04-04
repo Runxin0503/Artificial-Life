@@ -50,17 +50,12 @@ public class Dynamic extends Position {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    /** Returns a list of Grid Objects that contains this position*/
-    public List<AbstractGrid> getOccupiedGrids(){
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    /** Uses OccupiedGrids array to check for any overlapping Bounding Boxes, and, if so, calls collision on that {@link AbstractPosition} object */
+    /** Uses OccupiedGrids array to check for any overlapping Bounding Boxes, and, if so, calls collision on that {@link Position} object */
     public void checkCollisions(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    /** Uses OccupiedGrids array to check for any Bounding Boxes that overlaps with {@code rect}. If so, calls {@code creatureInteract} on that {@link AbstractPosition} object */
+    /** Uses OccupiedGrids array to check for any Bounding Boxes that overlaps with {@code rect}. If so, calls {@code creatureInteract} on that {@link Position} object */
     public void checkIntersection(Rectangle rect){
         throw new UnsupportedOperationException("Not supported yet.");
     }
