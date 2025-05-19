@@ -19,6 +19,13 @@ public class Rectangle {
         this.height = height;
     }
 
+    public Rectangle(Rectangle rect) {
+        this.x = rect.x;
+        this.y = rect.y;
+        this.width = rect.width;
+        this.height = rect.height;
+    }
+
     public void setRect(Rectangle newRect) {
         this.x = newRect.x;
         this.y = newRect.y;

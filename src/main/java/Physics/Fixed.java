@@ -4,10 +4,12 @@ import Utils.Constants;
 import Utils.Rectangle;
 import Utils.Vector2D;
 
+import java.awt.*;
+
 public class Fixed extends Position {
 
-    public Fixed(int id, double widthToHeight) {
-        super(id, widthToHeight);
+    public Fixed(int id, double widthToHeight, Image image) {
+        super(id, widthToHeight, image);
     }
 
     @Override
@@ -46,7 +48,7 @@ public class Fixed extends Position {
                 minSpeedY = eBoundingBox.getMaxY() - boundingBox.getMinY();
         }
         //No need for elastic collision calculation, invert velocity directly
-        Vector2D otherSpeed = movable.getVelocity().multiply(-Constants.Physics.impulseVelocityLoss).minVector(-minSpeedX, -minSpeedY);
+        Vector2D otherSpeed = movable.getVelocity().multiplied(-Constants.Physics.impulseVelocityLoss).minVectored(-minSpeedX, -minSpeedY);
 
         double mass = movable.getMass() + getMass();
         double damage = movable.getMass() * movable.getVelocity().length() * Constants.CreatureConstants.Movement.momentumToDamage;

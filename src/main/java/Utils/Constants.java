@@ -376,8 +376,8 @@ public class Constants implements Serializable {
     public static class Physics {
         public static final double impulseVelocityLoss = 0.4;
         public static final double frictionAngular = 0.9;
-        public static final double frictionParallel = 0.8;
-        public static final double frictionPerpendicular = 0.9;
+        public static final double frictionParallel = 0.1;
+        public static final double frictionPerpendicular = 0.15;
         public static final double bushFriction = 0.01;
 
         public static double torqueToAlpha(double radius, double mass, double force) {

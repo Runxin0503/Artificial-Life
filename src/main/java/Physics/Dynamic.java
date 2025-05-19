@@ -1,27 +1,33 @@
 package Physics;
 
+import Utils.Constants;
+import Utils.Constants.CreatureConstants;
 import Utils.Constants.Physics;
 import Utils.Constants.WorldConstants;
-import Utils.Constants.CreatureConstants;
 import Utils.Rectangle;
+import Utils.UnitVector2D;
 import Utils.Vector2D;
+
+import java.awt.*;
 
 public class Dynamic extends Position {
 
     /** The bounding box last stashed by calling {@link #stashBoundingBox} */
-    private Rectangle prevBoundingBox;
+    private final Rectangle prevBoundingBox;
 
     /** A 2D Vector representing both the direction and magnitude of the velocity of this Dynamic Object. */
     private Vector2D velocity;
 
     /** A 2D Unit Vector representing the direction this Dynamic Object is facing. */
-    private Vector2D dir;
+    private final UnitVector2D dir;
 
     /** The velocity of how many radians Counterclockwise to turn per tick. */
     private double angularSpeed;
 
-    public Dynamic(int id, double widthToHeight) {
-        super(id, widthToHeight);
+    public Dynamic(int id, double widthToHeight, Image image, UnitVector2D dir) {
+        super(id, widthToHeight, image);
+        prevBoundingBox = new Rectangle(boundingBox);
+        this.dir = dir;
     }
 
     /** Stashes the current bounding box's dimension and position to the previous bounding Box Object. */
@@ -38,10 +44,10 @@ public class Dynamic extends Position {
     /** Updates the velocity vector according to {@link Utils.Constants} */
     public void friction() {
         double dotProduct = velocity.x * dir.x + velocity.y * dir.y;
-        Vector2D parallel = dir.multiply(dotProduct);
-        Vector2D perpendicular = velocity.subtract(parallel);
+        Vector2D parallel = dir.multiplied(dotProduct);
+        Vector2D perpendicular = velocity.subtracted(parallel);
 
-        velocity = parallel.multiply(1 - Physics.frictionParallel).add(perpendicular.multiply(1 - Physics.frictionPerpendicular)).max(WorldConstants.Settings.maxSpeed);
+        velocity = parallel.multiplied(1 - Physics.frictionParallel).added(perpendicular.multiplied(1 - Physics.frictionPerpendicular)).maxVectored(WorldConstants.Settings.maxSpeed);
         if (Math.abs(velocity.x) < 0.1) velocity.x = 0;
         if (Math.abs(velocity.y) < 0.1) velocity.y = 0;
 
@@ -89,6 +95,7 @@ public class Dynamic extends Position {
     @Override
     public void setSize(double newSize) {
         boundingBox.scaleByWidth(newSize);
+        image.getScaledInstance((int) boundingBox.width, (int) boundingBox.height, Constants.ImageConstants.ResizeConstant);
     }
 
     public void setSizeToMass(double newSize) {
@@ -113,8 +120,8 @@ public class Dynamic extends Position {
                 minSpeedY = eBoundingBox.getMaxY() - boundingBox.getMinY();
         }
         Vector2D[] velocities = Physics.elasticCollision(getMass(), movable.getMass(), velocity, movable.velocity);
-        Vector2D speed = velocities[0].multiply(Physics.impulseVelocityLoss).minVector(minSpeedX, minSpeedY);
-        Vector2D otherSpeed = velocities[1].multiply(Physics.impulseVelocityLoss).minVector(-minSpeedX, -minSpeedY);
+        Vector2D speed = velocities[0].multiplied(Physics.impulseVelocityLoss).minVectored(minSpeedX, minSpeedY);
+        Vector2D otherSpeed = velocities[1].multiplied(Physics.impulseVelocityLoss).minVectored(-minSpeedX, -minSpeedY);
 
         double mass = movable.getMass() + getMass();
         double damage = (getMass() * this.velocity.length() + movable.getMass() * movable.velocity.length()) * CreatureConstants.Movement.momentumToDamage;

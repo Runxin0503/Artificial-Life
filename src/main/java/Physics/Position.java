@@ -4,7 +4,7 @@ import Entities.EntityFactory;
 import Utils.Vector2D;
 import Utils.Rectangle;
 
-import java.awt.Image;
+import java.awt.*;
 
 /**
  * An abstract wrapper class for the {@link Rectangle} class to use for the Bounding Box of class {@link Entities}<br>
@@ -27,9 +27,10 @@ public abstract class Position extends EntityFactory.EntityFactoryObject {
     /** The ratio value used in calculating the mass for {@link #getMass()} */
     double sizeToMass;
 
-    protected Position(int id, double widthToHeight) {
+    protected Position(int id, double widthToHeight, Image image) {
         super(id);
         boundingBox = new Rectangle(1,widthToHeight);
+        this.image = image;
     }
 
     /** Returns if bounding box has changed from where it was in the previous tick */
