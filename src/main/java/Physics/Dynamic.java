@@ -39,6 +39,7 @@ public class Dynamic extends Position {
     public void updatePos() {
         x += (int) Math.round(velocity.x);
         y += (int) Math.round(velocity.x);
+        dir.rotate(angularSpeed);
     }
 
     /** Updates the velocity vector according to {@link Utils.Constants} */

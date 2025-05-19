@@ -10,40 +10,71 @@ import java.util.LinkedList;
 /** A static Factory class that re-uses Entity and Position objects to minimize pressure on Java's garbage collector. */
 public class EntityFactory {
 
-    private LinkedList<Pair<Creature, Dynamic>> creaturePair;
-    private LinkedList<Pair<Corpse, Dynamic>> corpsePair;
-    private LinkedList<Pair<Bush, Dynamic>> bushPair;
-    private LinkedList<Pair<Egg, Dynamic>> eggPair;
+    /** Stores how many objects this class has created that's both used and unused. */
+    private int objectCounter = 0;
 
-    /*
-     * Must have
-     * - LinkedList containing UNUSED Entity-Position pairs (using Utils.Pair)
-     */
+    /** Stores references to UNUSED Creature and Dynamic Objects. */
+    private final LinkedList<Pair<Creature, Dynamic>> creaturePair;
+
+    /** Stores references to UNUSED Corpses and Dynamic Objects. */
+    private final LinkedList<Pair<Corpse, Dynamic>> corpsePair;
+
+    /** Stores references to UNUSED Bushes and Fixed Objects. */
+    private final LinkedList<Pair<Bush, Fixed>> bushPair;
+
+    /** Stores references to UNUSED Eggs and Fixed Objects. */
+    private final LinkedList<Pair<Egg, Fixed>> eggPair;
+
+    public EntityFactory() {
+        creaturePair = new LinkedList<>();
+        corpsePair = new LinkedList<>();
+        bushPair = new LinkedList<>();
+        eggPair = new LinkedList<>();
+    }
 
     /** Returns a pair of references to UNUSED Creature and Dynamic Objects.<br>
      * Automatically creates new ones if there are no unused Objects left. */
     public Pair<Creature, Dynamic> getCreaturePair() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (creaturePair.isEmpty()) {
+            objectCounter++;
+            return new Pair<>(new Creature(), new Dynamic());
+        } else {
+            return creaturePair.removeFirst();
+        }
     }
 
     /** Returns a pair of references to UNUSED Corpse and Dynamic Objects.<br>
      * Automatically creates new ones if there are no unused Objects left. */
     public Pair<Corpse, Dynamic> getCorpsePair() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (creaturePair.isEmpty()) {
+            objectCounter++;
+            return new Pair<>(new Corpse(), new Dynamic());
+        } else {
+            return corpsePair.removeFirst();
+        }
     }
 
     /** Returns a pair of references to UNUSED Bush and Fixed Objects.<br>
      * Automatically creates new ones if there are no unused Objects left. */
     public Pair<Bush, Fixed> getBushPair() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (creaturePair.isEmpty()) {
+            objectCounter++;
+            return new Pair<>(new Bush(), new Fixed());
+        } else {
+            return bushPair.removeFirst();
+        }
     }
 
     /** Returns a pair of references to UNUSED Egg and Fixed Objects.<br>
      * Automatically creates new ones if there are no unused Objects left. */
     public Pair<Egg, Fixed> getEggPair() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (creaturePair.isEmpty()) {
+            objectCounter++;
+            return new Pair<>(new Egg(), new Fixed());
+        } else {
+            return eggPair.removeFirst();
+        }
     }
-
 
     /** An interface that guarantees a reset() method for {@link EntityFactory} to use. */
     public abstract static class EntityFactoryObject {
