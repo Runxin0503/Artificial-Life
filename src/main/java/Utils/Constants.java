@@ -17,20 +17,20 @@ public class Constants implements Serializable {
         public static final int GRID_NUM_Y = Math.ceilDiv(yBound, GridHeight);
         public static final Rectangle worldBorder = new Rectangle(0, 0, xBound, yBound);
         public static Polygon topVisionBox = new Polygon(
-                new int[]{-CreatureConstants.Vision.maxVisionDistance - 50, 0, worldBorder.width, worldBorder.width + CreatureConstants.Vision.maxVisionDistance + 50},
+                new int[]{-CreatureConstants.Vision.maxVisionDistance - 50, 0, (int) worldBorder.width, (int) (worldBorder.width + CreatureConstants.Vision.maxVisionDistance + 50)},
                 new int[]{-CreatureConstants.Vision.maxVisionDistance - 50, 0, 0, -CreatureConstants.Vision.maxVisionDistance - 50},
                 4);
         public static Polygon bottomVisionBox = new Polygon(
-                new int[]{-CreatureConstants.Vision.maxVisionDistance - 50, 0, worldBorder.width, worldBorder.width + CreatureConstants.Vision.maxVisionDistance + 50},
-                new int[]{worldBorder.height + CreatureConstants.Vision.maxVisionDistance + 50, worldBorder.height, worldBorder.height, worldBorder.height + CreatureConstants.Vision.maxVisionDistance + 50},
+                new int[]{-CreatureConstants.Vision.maxVisionDistance - 50, 0, (int) worldBorder.width, (int) (worldBorder.width + CreatureConstants.Vision.maxVisionDistance + 50)},
+                new int[]{(int) (worldBorder.height + CreatureConstants.Vision.maxVisionDistance + 50), (int) worldBorder.height, (int) worldBorder.height, (int) (worldBorder.height + CreatureConstants.Vision.maxVisionDistance + 50)},
                 4);
         public static Polygon leftVisionBox = new Polygon(
                 new int[]{-CreatureConstants.Vision.maxVisionDistance - 50, 0, 0, -CreatureConstants.Vision.maxVisionDistance - 50},
-                new int[]{-CreatureConstants.Vision.maxVisionDistance - 50, 0, worldBorder.height, worldBorder.height + CreatureConstants.Vision.maxVisionDistance + 50},
+                new int[]{-CreatureConstants.Vision.maxVisionDistance - 50, 0, (int) worldBorder.height, (int) (worldBorder.height + CreatureConstants.Vision.maxVisionDistance + 50)},
                 4);
         public static Polygon rightVisionBox = new Polygon(
-                new int[]{worldBorder.width + CreatureConstants.Vision.maxVisionDistance + 50, worldBorder.width, worldBorder.width, worldBorder.width + CreatureConstants.Vision.maxVisionDistance + 50},
-                new int[]{-CreatureConstants.Vision.maxVisionDistance - 50, 0, worldBorder.height, worldBorder.height + CreatureConstants.Vision.maxVisionDistance + 50},
+                new int[]{(int) (worldBorder.width + CreatureConstants.Vision.maxVisionDistance + 50), (int) worldBorder.width, (int) worldBorder.width, (int) (worldBorder.width + CreatureConstants.Vision.maxVisionDistance + 50)},
+                new int[]{-CreatureConstants.Vision.maxVisionDistance - 50, 0, (int) worldBorder.height, (int) (worldBorder.height + CreatureConstants.Vision.maxVisionDistance + 50)},
                 4);
 
         public static class Settings {
@@ -39,7 +39,6 @@ public class Constants implements Serializable {
             public static boolean devMode = true;
             public static final int framesPerSec = 60;
             public static int ticksPerSec = -1;
-            public static final int ticksToSecond = 20; //ticks to second conversion rate
             public static final String[] reportInfo = new String[]{"Size", "MinSize", "MaxSize", "Force", "Speed", "Energy", "MaxEnergy", "Reproduction Cost", "Offspring Investment", "Incubation Time", "Health", "MaxHealth", "Maturity", "Strength", "Armour", "Diet Value", "Herbivore Affinity", "Carnivore Affinity"};
             public static final int reportSize = reportInfo.length;
             public static final String[] countInfo = new String[]{"# Carnivore", "# Herbivore", "# Creatures", "# Eggs", "# Corpses", "# Berries"};
@@ -368,35 +367,6 @@ public class Constants implements Serializable {
             return difference > 0;
         }
 
-        public static double distFromRect(Rectangle a, Rectangle b) {
-            int x1 = a.x, y1 = a.y, x1b = x1 + a.width, y1b = y1 + a.height, x2 = b.x, y2 = b.y, x2b = x2 + b.width, y2b = y2 + b.height;
-            boolean left = x2b < x1;
-            boolean right = x1b < x2;
-            boolean bottom = y2b < y1;
-            boolean top = y1b < y2;
-
-            if (top && left) {
-                return Math.sqrt((x1 - x2b) * (x1 - x2b) + (y1b - y2) * (y1b - y2));
-            } else if (left && bottom) {
-                return Math.sqrt((x1 - x2b) * (x1 - x2b) + (y1 - y2b) * (y1 - y2b));
-            } else if (bottom && right) {
-                return Math.sqrt((x1b - x2) * (x1b - x2) + (y1 - y2b) * (y1 - y2b));
-            } else if (right && top) {
-                return Math.sqrt((x1b - x2) * (x1b - x2) + (y1b - y2) * (y1b - y2));
-            } else if (left) {
-                return x1 - x2b;
-            } else if (right) {
-                return x2 - x1b;
-            } else if (bottom) {
-                return y1 - y2b;
-            } else if (top) {
-                return y2 - y1b;
-            } else {
-                // Rectangles intersect
-                return 0;
-            }
-        }
-
         public static double dist(double x1, double y1, double x2, double y2) {
             double dx = x1 - x2, dy = y1 - y2;
             return Math.sqrt(dx * dx + dy * dy);
@@ -419,7 +389,7 @@ public class Constants implements Serializable {
             double mass = mass1 + mass2;
             double velxF1 = (mass2 * (2 * speed2.x - speed1.x) + mass1 * speed1.x) / mass;
             double velyF1 = (mass2 * (2 * speed2.y - speed1.y) + mass1 * speed1.y) / mass;
-            return new Vector2D[]{new Vector2D(velxF1, speed1.x + velxF1 - speed2.x), new Vector2D(velyF1, speed1.y + velyF1 - speed2.y)};
+            return new Vector2D[]{new Vector2D(velxF1, velyF1), new Vector2D(speed1.x + velxF1 - speed2.x, speed1.y + velyF1 - speed2.y)};
         }
     }
 

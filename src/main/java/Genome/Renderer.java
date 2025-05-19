@@ -1,6 +1,5 @@
 package Genome;
 
-import Evolution.Agent;
 import Evolution.Evolution;
 import Evolution.Evolution.EvolutionBuilder;
 import Genome.enums.Activation;
@@ -67,7 +66,6 @@ public class Renderer extends Application implements Initializable {
     private Affine canvasTransform;
 
     private Evolution agentFactory;
-    private Agent agent;
     private NN agentGenome;
 
     private final double radius = 10;
@@ -114,7 +112,6 @@ public class Renderer extends Application implements Initializable {
         agentFactory = new EvolutionBuilder().setInputNum(2).setOutputNum(2)
                 .setDefaultHiddenAF(Activation.sigmoid).setOutputAF(Activation.arrays.softmax)
                 .setCostFunction(Cost.crossEntropy).setNumSimulated(1).build();
-        agent = agentFactory.agents[0];
         agentGenome = NN.getDefaultNeuralNet(agentFactory.Constants);
         System.out.println(agentGenome);
 

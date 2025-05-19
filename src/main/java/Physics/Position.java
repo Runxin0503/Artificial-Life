@@ -2,8 +2,9 @@ package Physics;
 
 import Entities.EntityFactory;
 import Utils.Vector2D;
+import Utils.Rectangle;
 
-import java.awt.*;
+import java.awt.Image;
 
 /**
  * An abstract wrapper class for the {@link Rectangle} class to use for the Bounding Box of class {@link Entities}<br>
@@ -20,14 +21,15 @@ public abstract class Position extends EntityFactory.EntityFactoryObject {
     /** The image of this particular Position object, used for rendering in {@code JavaFX}. */
     public Image image;
 
-    /** The ratio value used in calculating the mass for {@link #getMass()}. */
-    double sizeToMass;
-
     /** The damage value from the most recent collision, used in {@link #getDamage()}. */
     double damage;
 
-    protected Position(int id) {
+    /** The ratio value used in calculating the mass for {@link #getMass()} */
+    double sizeToMass;
+
+    protected Position(int id, double widthToHeight) {
         super(id);
+        boundingBox = new Rectangle(1,widthToHeight);
     }
 
     /** Returns if bounding box has changed from where it was in the previous tick */
@@ -47,14 +49,6 @@ public abstract class Position extends EntityFactory.EntityFactoryObject {
      * Resizes the Image object accordingly.
      */
     public abstract void setSize(double newSize);
-
-    /**
-     * Sets the ratio of the width and height of the Bounding Box to the new ratio
-     * Resizes the Image object accordingly
-     *  EX: widthToHeight of 3 means width = height / 3
-     */
-    @Deprecated
-    public abstract void setDimensionRatio(double widthToHeight);
 
     /**
      * Calculates the various effects of a collision based on mass, velocity, etc

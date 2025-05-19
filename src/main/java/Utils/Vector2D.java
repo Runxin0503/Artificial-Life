@@ -8,11 +8,6 @@ public class Vector2D {
         this.y = y;
     }
 
-    public Vector2D() {
-        this.x = 0;
-        this.y = 0;
-    }
-
     public Vector2D add(double dx, double dy) {
         this.x += dx;
         this.y += dy;
@@ -94,5 +89,10 @@ public class Vector2D {
     @Override
     public String toString() {
         return this.x + "," + this.y;
+    }
+
+    @Override
+    public Object clone() {
+        return new Vector2D(this.x, this.y);
     }
 }

@@ -68,7 +68,7 @@ public class GridWorld {
                     // 2. Update velocity and Body tasks (both run parallel after runBrain())
                     executor.submit(() -> {
                         try {
-                            cd.second().addVelocity(cd.first().getVelocity()).friction();
+                            cd.second().addVelocity(cd.first().getAcceleration()).friction();
                         } finally {
                             latch2.countDown();
                         }
@@ -226,7 +226,7 @@ public class GridWorld {
      * any Dynamic Objects are overlapping with any other Position objects. If so, calls {@link Position#collision}
      * on both Position objects. */
     private void handleCollision(ExecutorService executor, CountDownLatch latch4) {
-
+        //TODO do what doc says
     }
 
     /** Returns a read-only copy of this grid world at the current tick. */

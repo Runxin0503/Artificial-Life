@@ -21,6 +21,9 @@ import java.util.ArrayList;
  */
 public class Creature extends Entity {
 
+    private double health, energy;
+    private boolean isEating;
+
     //todo setup instance values and implement class
     // must have an EatingHitbox Rectangle bounding box
     // must have an ArrayList<Line2D> of fixed length rays that only changes during size change,
@@ -30,7 +33,6 @@ public class Creature extends Entity {
     // must have an output array buffer that stores the most recent output of this Creature's brain
     // must also have an output array buffer that stores the most recent BOID information for Velocity calculation
     private NN brain;
-
 
     public Creature(int id) {
         super(id);
@@ -67,30 +69,32 @@ public class Creature extends Entity {
     }
 
     /** Returns the reference to an ArrayList of the seen entities, can only be used by {@link Physics.GridWorld}. */
-    public ArrayList<Entity> getStashedSeenEntities(){
+    public ArrayList<Entity> getStashedSeenEntities() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    /** Calculates the velocity vector based on the last output of the brain of this Creature
+    /** Calculates the creature's muscle acceleration vector based on the last output of the brain
      * and the last BOID information stored in this Creature's buffer. Returns a Vector2D representing
      * the combined deltaVelocities of both vectors. */
-    public Vector2D getVelocity() {
+    public Vector2D getAcceleration() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    /** Returns a bounding box of the size and position of this Creature's mouth. */
+    /** Returns a bounding box of the size and position of this Creature's mouth, or
+     * {@code Null} if the Creature isn't eating at the moment. */
     public Rectangle getEatingHitbox(Position pos) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (isEating) throw new UnsupportedOperationException("Not supported yet.");//TODO implement eatingHitbox
+        else return null;
     }
 
     @Override
-    public int getHealth() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public double getHealth() {
+        return health;
     }
 
     @Override
-    public int getEnergy() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public double getEnergy() {
+        return energy;
     }
 
     @Override
@@ -120,5 +124,6 @@ public class Creature extends Entity {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public record ReadOnlyBush() implements ReadOnlyEntity{} // TODO implement
+    public record ReadOnlyCreature() implements ReadOnlyEntity {
+    } // TODO implement
 }

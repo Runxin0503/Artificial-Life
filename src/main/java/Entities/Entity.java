@@ -21,10 +21,10 @@ public abstract class Entity extends Entities.EntityFactory.EntityFactoryObject 
     }
 
     /** Returns the Health of this Entity */
-    public abstract int getHealth();
+    public abstract double getHealth();
 
     /** Returns the Energy of this Entity */
-    public abstract int getEnergy();
+    public abstract double getEnergy();
 
     /** Returns the max energy a creature can theoretically extract from this Entity through digestion before this Entity dies */
     public abstract double getEnergyIfConsumed();

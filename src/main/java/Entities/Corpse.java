@@ -14,12 +14,12 @@ public class Corpse extends Entity {
     }
 
     @Override
-    public int getHealth() {
+    public double getHealth() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public int getEnergy() {
+    public double getEnergy() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
