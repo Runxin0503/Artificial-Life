@@ -6,7 +6,7 @@ import Utils.Vector2D;
 import java.awt.*;
 
 /**
- * An interface wrapper for the {@link Rectangle} class to use for the Bounding Box of class {@link Entities}<br>
+ * An abstract wrapper class for the {@link Rectangle} class to use for the Bounding Box of class {@link Entities}<br>
  * Stores an {@link Image} to use for visualization in {@code javaFX}.
  */
 public abstract class Position extends EntityFactory.EntityFactoryObject {

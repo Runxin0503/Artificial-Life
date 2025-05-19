@@ -13,6 +13,8 @@ public class Constants implements Serializable {
         public static final int yBound = 10000;
         public static final int GridWidth = 200;
         public static final int GridHeight = 200;
+        public static final int GRID_NUM_X = Math.ceilDiv(xBound, GridWidth);
+        public static final int GRID_NUM_Y = Math.ceilDiv(yBound, GridHeight);
         public static final Rectangle worldBorder = new Rectangle(0, 0, xBound, yBound);
         public static Polygon topVisionBox = new Polygon(
                 new int[]{-CreatureConstants.Vision.maxVisionDistance - 50, 0, worldBorder.width, worldBorder.width + CreatureConstants.Vision.maxVisionDistance + 50},

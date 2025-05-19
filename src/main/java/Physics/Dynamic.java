@@ -31,7 +31,7 @@ public class Dynamic extends Position {
     }
 
     /** Updates the velocity vector according to {@link Utils.Constants} */
-    public double friction(){
+    public void friction(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -40,8 +40,13 @@ public class Dynamic extends Position {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    /** Returns the velocity vector */
+    /** Returns a clone of the velocity vector */
     public Vector2D getVelocity(){
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /** Adds {@code deltaVelocity} to the velocity of this Dynamic object. Returns a reference to itself. */
+    public Dynamic addVelocity(Vector2D deltaVelocity){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -52,11 +57,6 @@ public class Dynamic extends Position {
 
     /** Uses OccupiedGrids array to check for any overlapping Bounding Boxes, and, if so, calls collision on that {@link Position} object */
     public void checkCollisions(){
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    /** Uses OccupiedGrids array to check for any Bounding Boxes that overlaps with {@code rect}. If so, calls {@code creatureInteract} on that {@link Position} object */
-    public void checkIntersection(Rectangle rect){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

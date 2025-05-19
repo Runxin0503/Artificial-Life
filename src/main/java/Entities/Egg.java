@@ -1,5 +1,8 @@
 package Entities;
 
+import Entities.Creature.Creature;
+import Physics.Position;
+
 /**
  * An Immovable Creature in the fragile form of an Egg<br>
  * Energy --> incubationTime<br>
@@ -40,11 +43,18 @@ public class Egg extends Entity {
 
     @Override
     public void creatureInteract(Creature c) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
+    @Override
+    public ReadOnlyEntity getReadOnlyCopy(Position pos) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void reset() {
 
     }
+
+    public record ReadOnlyEgg() implements ReadOnlyEntity{} // TODO implement
 }

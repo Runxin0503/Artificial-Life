@@ -1,5 +1,8 @@
 package Entities;
 
+import Entities.Creature.Creature;
+import Physics.Position;
+
 /** The dead corpse of a {@link Creature}. Passively rots away, decreasing in size and mass.<br>
  * Energy --> Energy of the original Creature if fully consumed, decaying at some rate over time<br>
  * Health --> N/A
@@ -36,7 +39,14 @@ public class Corpse extends Entity {
     }
 
     @Override
+    public ReadOnlyEntity getReadOnlyCopy(Position pos) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     protected void reset() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    public record ReadOnlyCorpse() implements ReadOnlyEntity{} // TODO implement
 }

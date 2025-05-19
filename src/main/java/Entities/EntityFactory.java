@@ -1,5 +1,6 @@
 package Entities;
 
+import Entities.Creature.Creature;
 import Physics.Dynamic;
 import Physics.Fixed;
 import Utils.Pair;

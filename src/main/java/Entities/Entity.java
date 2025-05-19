@@ -1,5 +1,8 @@
 package Entities;
 
+import Entities.Creature.Creature;
+import Physics.Position;
+
 /**
  * Contains all required methods of Entity class, used for subtyping and inheritance <br>
  * Stores a Position Object and a Health & Energy value
@@ -34,4 +37,10 @@ public abstract class Entity extends Entities.EntityFactory.EntityFactoryObject 
 
     /** Dictates what happens when a Creature's mouth hitbox intersects with this object */
     public abstract void creatureInteract(Creature c);
+
+    /** Gets a Read-only copy of this Current Entity, the Read-only copy should contain
+     * all the information about this Entity including its positional data. */
+    public abstract ReadOnlyEntity getReadOnlyCopy(Position pos);
+
+    public interface ReadOnlyEntity {}
 }

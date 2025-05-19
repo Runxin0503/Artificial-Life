@@ -1,5 +1,8 @@
 package Entities;
 
+import Entities.Creature.Creature;
+import Physics.Position;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +80,14 @@ public class Bush extends Entity {
     }
 
     @Override
+    public ReadOnlyEntity getReadOnlyCopy(Position pos) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     protected void reset() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    public record ReadOnlyBush() implements ReadOnlyEntity{} // TODO implement
 }

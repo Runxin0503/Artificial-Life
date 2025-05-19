@@ -1,7 +1,6 @@
 package Evolution;
 
-import Entities.Creature;
-import Genome.NN;
+import Entities.Creature.Creature;
 
 import java.util.ArrayList;
 
