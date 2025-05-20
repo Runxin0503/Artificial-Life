@@ -84,10 +84,5 @@ public class Bush extends Entity {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    protected void reset() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     public record ReadOnlyBush() implements ReadOnlyEntity{} // TODO implement
 }

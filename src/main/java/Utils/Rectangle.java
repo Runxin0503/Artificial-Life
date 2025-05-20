@@ -1,5 +1,7 @@
 package Utils;
 
+import java.awt.geom.Point2D;
+
 public class Rectangle {
 
     public double x,y;
@@ -81,5 +83,9 @@ public class Rectangle {
 
     public double getMaxY() {
         return y + height;
+    }
+
+    public boolean contains(Point2D p2) {
+        return x < p2.getX() && p2.getX() < x + width && y < p2.getY() && p2.getY() < y + height;
     }
 }

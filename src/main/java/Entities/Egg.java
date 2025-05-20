@@ -51,10 +51,5 @@ public class Egg extends Entity {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public void reset() {
-
-    }
-
     public record ReadOnlyEgg() implements ReadOnlyEntity{} // TODO implement
 }

@@ -481,4 +481,9 @@ public class NN {
 
         return nn.toString().equals(toString());
     }
+
+    /** Returns the complexity score (sum of nodes and synapses) of this Neural Network */
+    public int getComplexity() {
+        return genome.size() + nodes.size();
+    }
 }

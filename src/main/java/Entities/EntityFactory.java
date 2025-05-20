@@ -37,7 +37,8 @@ public class EntityFactory {
     public Pair<Creature, Dynamic> getCreaturePair() {
         if (creaturePair.isEmpty()) {
             objectCounter++;
-            return new Pair<>(new Creature(), new Dynamic());
+            throw new UnsupportedOperationException("Not supported yet.");
+//            return new Pair<>(new Creature(), new Dynamic());
         } else {
             return creaturePair.removeFirst();
         }
@@ -48,7 +49,8 @@ public class EntityFactory {
     public Pair<Corpse, Dynamic> getCorpsePair() {
         if (creaturePair.isEmpty()) {
             objectCounter++;
-            return new Pair<>(new Corpse(), new Dynamic());
+            throw new UnsupportedOperationException("Not supported yet.");
+//            return new Pair<>(new Corpse(), new Dynamic());
         } else {
             return corpsePair.removeFirst();
         }
@@ -59,7 +61,8 @@ public class EntityFactory {
     public Pair<Bush, Fixed> getBushPair() {
         if (creaturePair.isEmpty()) {
             objectCounter++;
-            return new Pair<>(new Bush(), new Fixed());
+            throw new UnsupportedOperationException("Not supported yet.");
+//            return new Pair<>(new Bush(), new Fixed());
         } else {
             return bushPair.removeFirst();
         }
@@ -70,22 +73,20 @@ public class EntityFactory {
     public Pair<Egg, Fixed> getEggPair() {
         if (creaturePair.isEmpty()) {
             objectCounter++;
-            return new Pair<>(new Egg(), new Fixed());
+            throw new UnsupportedOperationException("Not supported yet.");
+//            return new Pair<>(new Egg(), new Fixed());
         } else {
             return eggPair.removeFirst();
         }
     }
 
-    /** An interface that guarantees a reset() method for {@link EntityFactory} to use. */
+    /** An interface that must have at least one reset() method that takes in some for {@link EntityFactory} to use. */
     public abstract static class EntityFactoryObject {
         private final int ID;
 
         protected EntityFactoryObject(int id) {
             ID = id;
         }
-
-        /** Resets this Object to its default values */
-        protected abstract void reset();
 
         /** Compares the ID value of this Object to the other.<br>
          * Used in Hashmaps to allow it to hash this Object. */

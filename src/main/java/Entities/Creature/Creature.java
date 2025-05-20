@@ -3,8 +3,12 @@ package Entities.Creature;
 
 import Entities.Egg;
 import Entities.Entity;
+import Evolution.Constants;
 import Genome.NN;
+import Physics.Dynamic;
 import Physics.Position;
+import Utils.Constants.CreatureConstants.*;
+import Utils.Constants.WorldConstants;
 import Utils.Vector2D;
 
 import java.awt.*;
@@ -21,9 +25,6 @@ import java.util.ArrayList;
  */
 public class Creature extends Entity {
 
-    private double health, energy;
-    private boolean isEating;
-
     //todo setup instance values and implement class
     // must have an EatingHitbox Rectangle bounding box
     // must have an ArrayList<Line2D> of fixed length rays that only changes during size change,
@@ -32,11 +33,80 @@ public class Creature extends Entity {
     // entities that GridWorld determined to intersect with this ray-cast and passed into stashSeenEntities()
     // must have an output array buffer that stores the most recent output of this Creature's brain
     // must also have an output array buffer that stores the most recent BOID information for Velocity calculation
+
+    /** Health and Energy of this Creature. */
+    private double health, energy;
+
+    /** The maximum health and energy of this Creature. */
+    private double maxHealth, maxEnergy;
+
+    /** Stores how much energy this Creature consumes per {@linkplain #tick}. */
+    private double metabolism;
+
+    /** The size of this Creature, or the width of its hitbox in {@linkplain Dynamic}. */
+    private double size;
+
+    /** The age (maturity) of this Creature, controls various body development of this Creature such
+     * as: Muscle, Strength, Armour, Size, etc. */
+    private int age;
+
+    /** Whether this Creature has its mouth open or not. That is, whether an interaction hitbox exists
+     * for this Creature in the world. */
+    private boolean isEating;
+
+    /** Vision Ray Vectors centered at the creature's origin.
+     * When {@linkplain #getVisionRays} is called, the function simply shifts the vectors to their
+     * world-position. */
+    private final ArrayList<Vector2D> relativeRays;
+
+    /** The Genome component of this Creature, stores all gene data when reproduction occurs. */
+    private final Genome genome = new Genome();
+
+    /** The stomach of this Creature */
+    private final Stomach stomach = new Stomach(0);
+
+    /** The Brain component of this Creature, a Neural Network that consumes more energy the bigger it is. */
     private NN brain;
 
     public Creature(int id) {
         super(id);
+        relativeRays = new ArrayList<>();
+        //TODO populate relativeRays with genome
     }
+
+    public void reset(int x, int y, Constants Constants) {
+        this.brain = NN.getDefaultNeuralNet(Constants);//Math.random()<0.6?Genome.defaultGenome():
+        this.genome.reset();
+
+        this.size = genome.minSize;
+        this.maxHealth = Combat.sizeToMaxHealth(size);
+        this.maxEnergy = Energy.sizeToMaxEnergyFormula(size);
+        this.metabolism = Energy.energyCostFormula(maxHealth, size, genome.strength, brain.getComplexity());
+        this.age = 0;
+        this.energy = maxEnergy;
+        this.health = maxHealth;
+
+        this.stomach.reset(size);
+    }
+
+    public void reset(Creature parentOne, Creature parentTwo) {
+        this.brain = NN.crossover(parentOne.brain, parentTwo.brain, parentOne.age, parentTwo.age);
+        if (parentOne.age > parentTwo.age) this.genome.reset(parentOne.genome, parentTwo.genome);
+        else this.genome.reset(parentTwo.genome, parentOne.genome);
+        this.brain.mutate();
+
+        this.size = genome.minSize;
+        this.maxHealth = Combat.sizeToMaxHealth(size);
+        this.maxEnergy = Energy.sizeToMaxEnergyFormula(size);
+        this.age = 0;
+        this.metabolism = Energy.energyCostFormula(maxHealth, size, genome.strength, brain.getComplexity());
+
+        this.stomach.reset(size);
+
+        this.energy = maxEnergy * (parentOne.genome.offspringInvestment + parentTwo.genome.offspringInvestment);
+        this.health = maxHealth * (parentOne.genome.offspringInvestment + parentTwo.genome.offspringInvestment);
+    }
+
 
     /**
      * Once called, builds a {@link Runnable} object that runs the Creature's brain with
@@ -64,8 +134,24 @@ public class Creature extends Entity {
      * Clears and instantiates {@code rays} with accurate coordinates of the two ends of the rays
      * according to this Creature's genome, the position {@code pos} data, and the size of this Creature.
      */
-    public void getVisionRays(ArrayList<Line2D> rays, Position pos) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void getVisionRays(ArrayList<Line2D> rays, Dynamic pos) {
+        for (Vector2D ray : relativeRays) {
+            rays.add(new Line2D.Double(pos.x, pos.y, pos.x + ray.x, pos.y + ray.y));
+            while (!WorldConstants.worldBorder.contains(rays.getLast().getP2())) {
+                Line2D lineBefore = rays.getLast();
+                if (WorldConstants.leftVisionBox.contains(lineBefore.getP2())) {
+                    rays.add(new Line2D.Double(lineBefore.getX1() + WorldConstants.xBound, lineBefore.getY1(), lineBefore.getX2() + WorldConstants.xBound, lineBefore.getY2()));
+                } else if (WorldConstants.rightVisionBox.contains(lineBefore.getP2())) {
+                    rays.add(new Line2D.Double(lineBefore.getX1() - WorldConstants.xBound, lineBefore.getY1(), lineBefore.getX2() - WorldConstants.xBound, lineBefore.getY2()));
+                } else if (WorldConstants.topVisionBox.contains(lineBefore.getP2())) {
+                    rays.add(new Line2D.Double(lineBefore.getX1(), lineBefore.getY1() + WorldConstants.yBound, lineBefore.getX2(), lineBefore.getY2() + WorldConstants.yBound));
+                } else if (WorldConstants.bottomVisionBox.contains(lineBefore.getP2())) {
+                    rays.add(new Line2D.Double(lineBefore.getX1(), lineBefore.getY1() - WorldConstants.yBound, lineBefore.getX2(), lineBefore.getY2() - WorldConstants.yBound));
+                } else {
+                    System.out.println("Exception Occurred. Raycasting end point at " + lineBefore.getX2() + "," + lineBefore.getY2());
+                }
+            }
+        }
     }
 
     /** Returns the reference to an ArrayList of the seen entities, can only be used by {@link Physics.GridWorld}. */
@@ -116,11 +202,6 @@ public class Creature extends Entity {
 
     @Override
     public ReadOnlyEntity getReadOnlyCopy(Position pos) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    protected void reset() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

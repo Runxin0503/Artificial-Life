@@ -473,12 +473,11 @@ public class Constants implements Serializable {
              * @param stomachFluid The amount of stomach fluid.
              * @param size The size of the creature.
              * @param strength The strength of the creature.
-             * @param brainNodes The number of brain nodes.
-             * @param brainSynapses The number of brain synapses.
+             * @param brainComplexity The complexity of the brain.
              * @return The energy cost.
              */
-            public static double energyCostFormula(double stomachFluid, double size, double strength, double brainNodes, double brainSynapses) {
-                return 0.05 * stomachFluid / (Stomach.sizeToStomachSize(size) * Stomach.stomachSizeToMaxStomachFluid) + 0.3 * size / Reproduce.maxSize + 0.3 * strength / Combat.maxStrength + 0.01 * (brainNodes) + 0.01 * brainSynapses;
+            public static double energyCostFormula(double stomachFluid, double size, double strength, int brainComplexity) {
+                return 0.05 * stomachFluid / (Stomach.sizeToStomachSize(size) * Stomach.stomachSizeToMaxStomachFluid) + 0.3 * size / Reproduce.maxSize + 0.3 * strength / Combat.maxStrength + 0.01 * brainComplexity;
             }
 
             /**

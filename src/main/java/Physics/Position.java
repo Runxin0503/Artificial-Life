@@ -13,7 +13,7 @@ import java.awt.*;
 public abstract class Position extends EntityFactory.EntityFactoryObject {
 
     /** The int coordinate of this Position */
-    int x,y;
+    public int x,y;
 
     /** The bounding box of this Position, used to dictate if two Position objects collide or not. */
     Rectangle boundingBox;

@@ -55,14 +55,9 @@ public class Dynamic extends Position {
         angularSpeed *= (1 - Physics.frictionAngular);
     }
 
-    /** Returns the absolute speed of the velocity vector (length of vector) */
-    public double getSpeed() {
-        return velocity.length();
-    }
-
     /** Returns a clone of the velocity vector */
     public Vector2D getVelocity() {
-        return (Vector2D) velocity.clone();
+        return velocity;
     }
 
     /** Adds {@code deltaVelocity} to the velocity of this Dynamic object. Returns a reference to itself. */
