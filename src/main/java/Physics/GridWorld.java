@@ -7,6 +7,7 @@ import Utils.Pair;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -170,24 +171,47 @@ public class GridWorld {
      * entities within their vision cone. Once complete, stashes the entities into their
      * {@link Creature#getStashedSeenEntities}.
      */
-    private void updateVision(ExecutorService executor, CountDownLatch latch1) {
+    private void updateVision(ExecutorService executor, CountDownLatch latch) {
         for (Pair<Creature, Dynamic> cd : creatures)
             executor.submit(() -> {
                 try {
                     ArrayList<Line2D> visionRays = new ArrayList<>();
                     cd.first().getVisionRays(visionRays, cd.second());
 
-                    addSeenEntities(visionRays, cd.first().getStashedSeenEntities());
+                    addSeenEntities(visionRays, cd.first().getStashedSeenEntities(), cd.second());
                 } finally {
-                    latch1.countDown();
+                    latch.countDown();
                 }
             });
     }
 
-    /** Clears {@code seenEntities} before adding all entities intersecting with {@code visionRays} to it */
-    private void addSeenEntities(ArrayList<Line2D> visionRays, ArrayList<Entity> seenEntities) {
-        // TODO implement
-        throw new UnsupportedOperationException("Not supported yet.");
+    /** Adds all entities intersecting with {@code visionRays} to it */
+    private void addSeenEntities(ArrayList<Line2D> visionRays, ArrayList<Entity> seenEntities, Position ignore) {
+        for (Line2D ray : visionRays) {
+            Rectangle2D rayBounds = ray.getBounds2D();
+
+            // Get min/max grid cells covered by the ray's bounding box
+            int minGridX = (int) (rayBounds.getMinX() / WorldConstants.GridWidth);
+            int maxGridX = (int) (rayBounds.getMaxX() / WorldConstants.GridWidth);
+            int minGridY = (int) (rayBounds.getMinY() / WorldConstants.GridHeight);
+            int maxGridY = (int) (rayBounds.getMaxY() / WorldConstants.GridHeight);
+
+            for (int gx = minGridX; gx <= maxGridX; gx++) {
+                for (int gy = minGridY; gy <= maxGridY; gy++) {
+                    if (!isValidGrid(gx, gy)) continue; // Out-of-bounds safety
+
+                    ArrayList<Position> cell = Grids[gx][gy];
+                    for (Position pos : cell) {
+                        Entity entity = positionToEntity.get(pos);
+                        if (seenEntities.contains(entity)) continue;
+
+                        if (ray.intersects(pos.boundingBox)) {
+                            seenEntities.add(entity);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /** Once called, iterate over all Creature objects and calls {@link Creature#getEatingHitbox}
@@ -226,8 +250,40 @@ public class GridWorld {
     /** Once called, iterate over all Dynamic objects and uses spatial partitioning to check if
      * any Dynamic Objects are overlapping with any other Position objects. If so, calls {@link Position#collision}
      * on both Position objects. */
-    private void handleCollision(ExecutorService executor, CountDownLatch latch4) {
-        //TODO do what doc says
+    private void handleCollision(ExecutorService executor, CountDownLatch latch) {
+        for (Position p : positionToEntity.keySet())
+            if (p instanceof Dynamic d)
+                executor.submit(() -> {
+                    try {
+                        int startGridX = d.boundingBox.x / WorldConstants.GridWidth;
+                        int endGridX = (d.boundingBox.x + d.boundingBox.width) / WorldConstants.GridWidth;
+                        int startGridY = d.boundingBox.y / WorldConstants.GridHeight;
+                        int endGridY = (d.boundingBox.y + d.boundingBox.height) / WorldConstants.GridHeight;
+
+                        for (int gx = startGridX; gx <= endGridX; gx++) {
+                            for (int gy = startGridY; gy <= endGridY; gy++) {
+                                if (!isValidGrid(gx, gy)) continue;
+
+                                for (Position o : Grids[gx][gy]) {
+                                    if (o == d) continue;
+                                    // TODO test if Rectangle.intersects works as intended, chatgpt says otherwise
+                                    if (d.boundingBox.intersects(o.boundingBox)) {
+                                        o.collision(d);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        latch.countDown();
+                    }
+                });
+            else latch.countDown();
+    }
+
+    /** Returns true if {@code gx} and {@code gy} is valid coordinates within the 2D array {@linkplain #Grids}. */
+    private boolean isValidGrid(int gx, int gy) {
+        return gx < 0 || WorldConstants.GRID_NUM_X <= gx ||
+                gy < 0 || WorldConstants.GRID_NUM_Y <= gy;
     }
 
     /** Returns a read-only copy of this grid world at the current tick. */
