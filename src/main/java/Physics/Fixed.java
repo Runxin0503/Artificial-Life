@@ -1,7 +1,6 @@
 package Physics;
 
 import Utils.Constants;
-import Utils.Rectangle;
 import Utils.Vector2D;
 
 import java.awt.*;

@@ -7,7 +7,8 @@ import Evolution.Constants;
 import Genome.NN;
 import Physics.Dynamic;
 import Physics.Position;
-import Utils.Constants.CreatureConstants.*;
+import Utils.Constants.CreatureConstants.Combat;
+import Utils.Constants.CreatureConstants.Energy;
 import Utils.Constants.WorldConstants;
 import Utils.Vector2D;
 
@@ -57,7 +58,11 @@ public class Creature extends Entity {
     /** Vision Ray Vectors centered at the creature's origin.
      * When {@linkplain #getVisionRays} is called, the function simply shifts the vectors to their
      * world-position. */
-    private final ArrayList<Vector2D> relativeRays;
+    private final ArrayList<Vector2D> relativeRays = new ArrayList<>();
+
+    /** Entity Objects that have recently intersected with this Creature's vision rays.
+     * Modified and maintained with {@link #getStashedSeenEntities}, queried by {@linkplain #runBrain}. */
+    private final ArrayList<Entity> stashedSeenEntities = new ArrayList<>();
 
     /** The Genome component of this Creature, stores all gene data when reproduction occurs. */
     private final Genome genome = new Genome();
@@ -68,13 +73,15 @@ public class Creature extends Entity {
     /** The Brain component of this Creature, a Neural Network that consumes more energy the bigger it is. */
     private NN brain;
 
-    public Creature(int id) {
+    /** Stores the latest output of the brain. */
+    private double[] brainOutput;
+
+    public Creature(int id, Constants Constants) {
         super(id);
-        relativeRays = new ArrayList<>();
-        //TODO populate relativeRays with genome
+        reset(Constants);
     }
 
-    public void reset(int x, int y, Constants Constants) {
+    public void reset(Constants Constants) {
         this.brain = NN.getDefaultNeuralNet(Constants);//Math.random()<0.6?Genome.defaultGenome():
         this.genome.reset();
 
@@ -87,6 +94,8 @@ public class Creature extends Entity {
         this.health = maxHealth;
 
         this.stomach.reset(size);
+
+        resetRelativeRay();
     }
 
     public void reset(Creature parentOne, Creature parentTwo) {
@@ -105,6 +114,8 @@ public class Creature extends Entity {
 
         this.energy = maxEnergy * (parentOne.genome.offspringInvestment + parentTwo.genome.offspringInvestment);
         this.health = maxHealth * (parentOne.genome.offspringInvestment + parentTwo.genome.offspringInvestment);
+
+        resetRelativeRay();
     }
 
 
@@ -128,6 +139,29 @@ public class Creature extends Entity {
     @Override
     public boolean tick() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /** Completely resets and creates a new set of fixed relative vision rays according to the
+     * current angle of {@code dynamic} and {@linkplain Genome#visionAvailable} in the {@code genome} field. */
+    private void resetRelativeRay() {
+        relativeRays.clear();
+        for (int i = 0; i < genome.visionRayCount; i++) {
+            double angle = genome.visionConeAngle * (-0.5 + (double) i / (genome.visionRayCount - 1));
+            relativeRays.add(new Vector2D(Math.cos(angle) * genome.visionAvailable, Math.sin(angle) * genome.visionAvailable));
+        }
+    }
+
+    /** Updates the fixed relative vision rays according to the current angle of {@code dynamic}
+     * and {@linkplain Genome#visionAvailable} in the {@code genome} field. */
+    private void updateRelativeRay(Dynamic dynamic) {
+        //measures angle change between latest leftmost ray and the current calculated leftmost ray
+        double angleDiff = relativeRays.getFirst().angle() - (dynamic.getDirection().angle() - genome.visionConeAngle * 0.5);
+
+        //change the angle of each ray by angleDiff to update, also change the length of each ray
+        for (Vector2D ray : relativeRays) {
+            ray.rotate(angleDiff);
+            ray.multiply(ray.length() / genome.visionAvailable);
+        }
     }
 
     /**
@@ -156,7 +190,7 @@ public class Creature extends Entity {
 
     /** Returns the reference to an ArrayList of the seen entities, can only be used by {@link Physics.GridWorld}. */
     public ArrayList<Entity> getStashedSeenEntities() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return stashedSeenEntities;
     }
 
     /** Calculates the creature's muscle acceleration vector based on the last output of the brain

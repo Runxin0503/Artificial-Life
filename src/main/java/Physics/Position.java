@@ -2,7 +2,6 @@ package Physics;
 
 import Entities.EntityFactory;
 import Utils.Vector2D;
-import Utils.Rectangle;
 
 import java.awt.*;
 
@@ -13,7 +12,7 @@ import java.awt.*;
 public abstract class Position extends EntityFactory.EntityFactoryObject {
 
     /** The int coordinate of this Position */
-    public int x,y;
+    public int x, y;
 
     /** The bounding box of this Position, used to dictate if two Position objects collide or not. */
     Rectangle boundingBox;
@@ -29,7 +28,7 @@ public abstract class Position extends EntityFactory.EntityFactoryObject {
 
     protected Position(int id, double widthToHeight, Image image) {
         super(id);
-        boundingBox = new Rectangle(1,widthToHeight);
+        boundingBox = new java.awt.Rectangle(1, (int) Math.round(widthToHeight));
         this.image = image;
     }
 

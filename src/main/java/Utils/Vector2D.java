@@ -21,8 +21,19 @@ public class Vector2D {
         this.y = y;
     }
 
-    /** Adds the given values to this vector. The only MUTABLE function allowed in this class
-     * because of its repetitive usage. */
+    /** Rotates this vector by the specified amount in radians counterclockwise. */
+    public void rotate(double angle) {
+        double cos = Math.cos(angle);
+        double sin = Math.sin(angle);
+        double newX = x * cos - y * sin;
+        double newY = x * sin + y * cos;
+
+        this.x = newX;
+        this.y = newY;
+    }
+
+    /** Adds the given values to this vector. One of the few MUTABLE function
+     * allowed in this class because of its repetitive usage. */
     public void add(Vector2D speed) {
         x += speed.x;
         y += speed.y;
@@ -47,6 +58,14 @@ public class Vector2D {
     public Vector2D normalized() {
         double strength = length();
         return strength == 0 ? new Vector2D(0, 0) : new Vector2D(x / strength, y / strength);
+    }
+
+
+    /** Scales this vector by the given multiplier. One of the few MUTABLE function
+     * allowed in this class because of its repetitive usage. */
+    public void multiply(double multiplier) {
+        x *= multiplier;
+        y *= multiplier;
     }
 
     /** Returns a new vector scaled by the given multiplier. */

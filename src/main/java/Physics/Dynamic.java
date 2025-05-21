@@ -4,7 +4,6 @@ import Utils.Constants;
 import Utils.Constants.CreatureConstants;
 import Utils.Constants.Physics;
 import Utils.Constants.WorldConstants;
-import Utils.Rectangle;
 import Utils.UnitVector2D;
 import Utils.Vector2D;
 
@@ -55,9 +54,14 @@ public class Dynamic extends Position {
         angularSpeed *= (1 - Physics.frictionAngular);
     }
 
-    /** Returns a clone of the velocity vector */
+    /** Returns the velocity vector */
     public Vector2D getVelocity() {
         return velocity;
+    }
+
+    /** Returns the direction vector */
+    public Vector2D getDirection() {
+        return dir;
     }
 
     /** Adds {@code deltaVelocity} to the velocity of this Dynamic object. Returns a reference to itself. */
@@ -90,8 +94,8 @@ public class Dynamic extends Position {
 
     @Override
     public void setSize(double newSize) {
-        boundingBox.scaleByWidth(newSize);
-        image.getScaledInstance((int) boundingBox.width, (int) boundingBox.height, Constants.ImageConstants.ResizeConstant);
+        boundingBox.setSize((int) Math.round(newSize), (int) Math.round(boundingBox.height * boundingBox.width / newSize));
+        image.getScaledInstance(boundingBox.width, boundingBox.height, Constants.ImageConstants.ResizeConstant);
     }
 
     public void setSizeToMass(double newSize) {

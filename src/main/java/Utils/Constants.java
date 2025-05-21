@@ -262,7 +262,7 @@ public class Constants implements Serializable {
         /**
          * Constants and methods related to the stomach and digestion process of creatures.
          */
-        public static class Stomach {
+        public static class Digestion {
             /** Ratio of stomach size to the maximum stomach fluid capacity. */
             public static final double stomachSizeToMaxStomachFluid = 0.4;
             /** Maximum stomach size a creature can have. */
@@ -477,7 +477,7 @@ public class Constants implements Serializable {
              * @return The energy cost.
              */
             public static double energyCostFormula(double stomachFluid, double size, double strength, int brainComplexity) {
-                return 0.05 * stomachFluid / (Stomach.sizeToStomachSize(size) * Stomach.stomachSizeToMaxStomachFluid) + 0.3 * size / Reproduce.maxSize + 0.3 * strength / Combat.maxStrength + 0.01 * brainComplexity;
+                return 0.05 * stomachFluid / (Digestion.sizeToStomachSize(size) * Digestion.stomachSizeToMaxStomachFluid) + 0.3 * size / Reproduce.maxSize + 0.3 * strength / Combat.maxStrength + 0.01 * brainComplexity;
             }
 
             /**

@@ -5,15 +5,27 @@ import Utils.Constants.CreatureConstants.*;
 import java.io.Serializable;
 
 class Genome implements Serializable {
+    /** Immutable value that only changes in the event of a {@linkplain #reset} call */
     int incubationTime;
+    /** Immutable value that only changes in the event of a {@linkplain #reset} call */
     double growthWeight, growthBias;
+    /** Immutable value that only changes in the event of a {@linkplain #reset} call */
     int visionDistance, visionRayCount;
+    /** Immutable value that only changes in the event of a {@linkplain #reset} call */
     double visionConeAngle, visionValue;
+    /** Immutable value that only changes in the event of a {@linkplain #reset} call */
     double carnivoryAffinity, herbivoryAffinity, dietValue;
+    /** Immutable value that only changes in the event of a {@linkplain #reset} call */
     double boidSeparationWeight, boidAlignmentWeight, boidCohesionWeight;
+    /** Immutable value that only changes in the event of a {@linkplain #reset} call */
     double offspringInvestment;
+    /** Immutable value that only changes in the event of a {@linkplain #reset} call */
     double minSize, maxSize;
+    /** Immutable value that only changes in the event of a {@linkplain #reset} call */
     double strength, force, armour, armourMultiplier;
+
+    /** mutable value that changes whenever {@linkplain #updateSize} is called. */
+    double visionAvailable;
 
     public Genome() {
         reset();
@@ -147,6 +159,7 @@ class Genome implements Serializable {
     }
 
     public double updateSize(int maturity) {
+        //TODO update mutable fields like armourAvailable, forceAvailable, strengthAvailable, visionAvailable, etc.
         return Energy.maturingSizeFormula(maturity, minSize, maxSize, growthWeight, growthBias);
     }
 

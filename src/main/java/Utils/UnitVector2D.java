@@ -7,16 +7,13 @@ public class UnitVector2D extends Vector2D {
         super(Math.cos(angle), Math.sin(angle));
     }
 
-    public void rotate(double angle) {
-        double cos = Math.cos(angle);
-        double sin = Math.sin(angle);
-        double newX = x * cos - y * sin;
-        double newY = x * sin + y * cos;
-
-        this.x = newX;
-        this.y = newY;
+    /** NOT SUPPORTED in Unit Vector Class since it may violate the class invariant. */
+    @Override
+    public void multiply(double multiplier) {
+        throw new UnsupportedOperationException("Not supported in Unit Vector class.");
     }
 
+    /** NOT SUPPORTED in Unit Vector Class since it may violate the class invariant. */
     @Override
     public void add(Vector2D speed) {
         throw new UnsupportedOperationException("Not supported in Unit Vector class.");

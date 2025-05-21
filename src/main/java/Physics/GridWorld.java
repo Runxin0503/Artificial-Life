@@ -186,6 +186,7 @@ public class GridWorld {
 
     /** Clears {@code seenEntities} before adding all entities intersecting with {@code visionRays} to it */
     private void addSeenEntities(ArrayList<Line2D> visionRays, ArrayList<Entity> seenEntities) {
+        // TODO implement
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
