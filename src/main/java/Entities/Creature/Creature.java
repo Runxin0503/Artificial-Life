@@ -231,7 +231,7 @@ public class Creature extends Entity {
      * between the two genomes of the Creature. Takes into account both their Neural Network genome
      * and body genome. */
     public double compare(Creature o) {
-        return o.brain.compare(brain);
+        return NN.compare(o.brain, brain);
     }
 
     @Override

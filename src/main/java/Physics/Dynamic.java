@@ -25,11 +25,11 @@ public final class Dynamic extends Position {
 
     public Dynamic(int id, double widthToHeight, Image image, UnitVector2D dir) {
         super(id, widthToHeight, image);
-        reset(widthToHeight, image,dir);
+        reset(widthToHeight, image, dir);
     }
 
     public void reset(double widthToHeight, Image image, UnitVector2D dir) {
-        boundingBox.setRect(0,0,1,widthToHeight);
+        boundingBox.setRect(0, 0, 1, widthToHeight);
         prevBoundingBox.setRect(boundingBox);
         this.dir.x = dir.x;
         this.dir.y = dir.y;

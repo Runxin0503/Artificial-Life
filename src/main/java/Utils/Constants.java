@@ -1,5 +1,9 @@
 package Utils;
 
+import Genome.Activation;
+import Genome.Cost;
+import Genome.Optimizer;
+
 import java.awt.*;
 import java.io.Serializable;
 
@@ -558,6 +562,38 @@ public class Constants implements Serializable {
             public static final int minSynapses = 4;
         }
     }
+
+    /** Constants for the Neural Network (brain) of each Creature. */
+    public static class NeuralNet {
+        /** How frequently per tick to prompt the Neural Network for its outputs. */
+        public static final int PromptInterval = 1;
+
+        /** The length of the input & output vector for the Neural Network. */
+        private static final int inputNum = 35, outputNum = 11;
+        /** The default Activation Function for new Neurons. Can be changed during mutation. */
+        private static final Activation hiddenAF = Activation.sigmoid;
+        /** The fixed Activation Function for the output neurons. Cannot be changed ever. */
+        private static final Activation.arrays outputAF = Activation.arrays.sigmoid;
+        /** The Cost Function of which output values are optimized to minimize. */
+        private static final Cost costFunction = Cost.diffSquared;
+        /** The Optimizer whose algorithm is used to minimize the Cost function above. */
+        private static final Optimizer optimizer = Optimizer.RMS_PROP;
+
+        /** The complete Neural Network Constants object, used in order to create
+         * default Neural Networks with no synapses or any hidden neurons. */
+        public static final Evolution.Constants EvolutionConstants =
+                new Evolution.Constants(inputNum, outputNum, 0, hiddenAF, outputAF, costFunction, optimizer);
+
+        /** Stores which Input neuron corresponds to which related input. */
+        public static final String[] String = new String[]{
+                "Creature Dist.", "Creature Vel.", "Creature Dir. L", "Creature Dir. R", "Creature Energy", "Creature Armour", "# Creature",
+                "Bush Dist.", "Bush Dir. L", "Bush Dir. R", "Bush Energy", "Bush Size", "# Bush",
+                "Corpse Dist.", "Corpse Dir. L", "Corpse Dir. R", "Corpse Energy", "Corpse Size", "# Corpse",
+                "Egg Dist.", "Egg Dir. L", "Egg Dir. R", "Egg Energy", "Egg Hatch Time", "# Egg",
+                "Velocity", "Angular Vel.", "Energy", "Health", "Size", "Metabolism", "Strength", "Stomach %", "Starving", "ON",
+                "Forward", "Backward", "Left", "Right", "Mate", "Regen", "Eat", "Digestion Rate", "Herd", "Separate", "Reset Clock"};
+    }
+
 
     /**
      * Utility class for common mathematical equations used in simulations,

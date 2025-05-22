@@ -1,0 +1,57 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.github.runxin0503</groupId>
+    <artifactId>artificial-life</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>Artificial-Life</name>
+    <description>A simulated enviorment where artificial creatures evolve through interaction with plants, eggs, other creatures, and the enviorment itself.</description>
+    <url>https://github.com/Runxin0503/Artificial-Life</url>
+
+    <properties>
+        <maven.compiler.release>21</maven.compiler.release>
+        <junit.version>5.10.2</junit.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.runxin0503</groupId>
+            <artifactId>backprop-with-neat</artifactId>
+            <version>1.3.1</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages - backprop-with-neat</name>
+            <url>https://github.com/Runxin0503/BackProp-with-NEAT</url>
+        </repository>
+    </repositories>
+</project>

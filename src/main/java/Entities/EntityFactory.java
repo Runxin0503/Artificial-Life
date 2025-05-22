@@ -41,7 +41,7 @@ public class EntityFactory {
         double randAngle = Math.random() * 2 * Math.PI;
         if (creaturePair.isEmpty()) {
             Pair<Creature, Dynamic> cd = new Pair<>(
-                    new Creature(objectCounter, ), //TODO implement Creature Constructor
+                    new Creature(objectCounter, Constants.NeuralNet.EvolutionConstants),
                     new Dynamic(objectCounter, 1,
                             Constants.ImageConstants.birdRotations[(int) Math.round(Math.toDegrees(randAngle))],
                             new UnitVector2D(randAngle)));
@@ -49,7 +49,7 @@ public class EntityFactory {
             return cd;
         } else {
             Pair<Creature, Dynamic> cd = creaturePair.removeFirst();
-            cd.first().reset(); //TODO implement Creature Constructor
+            cd.first().reset(Constants.NeuralNet.EvolutionConstants);
             cd.second().reset(1,
                     Constants.ImageConstants.birdRotations[(int) Math.round(Math.toDegrees(randAngle))],
                     new UnitVector2D(randAngle));
