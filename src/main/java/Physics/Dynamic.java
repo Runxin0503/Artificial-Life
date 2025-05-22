@@ -9,24 +9,31 @@ import Utils.Vector2D;
 
 import java.awt.*;
 
-public class Dynamic extends Position {
+public final class Dynamic extends Position {
 
     /** The bounding box last stashed by calling {@link #stashBoundingBox} */
-    private final Rectangle prevBoundingBox;
+    private final Rectangle prevBoundingBox = new Rectangle();
 
     /** A 2D Vector representing both the direction and magnitude of the velocity of this Dynamic Object. */
     private Vector2D velocity;
 
     /** A 2D Unit Vector representing the direction this Dynamic Object is facing. */
-    private final UnitVector2D dir;
+    private final UnitVector2D dir = new UnitVector2D(0);
 
     /** The velocity of how many radians Counterclockwise to turn per tick. */
     private double angularSpeed;
 
     public Dynamic(int id, double widthToHeight, Image image, UnitVector2D dir) {
         super(id, widthToHeight, image);
-        prevBoundingBox = new Rectangle(boundingBox);
-        this.dir = dir;
+        reset(widthToHeight, image,dir);
+    }
+
+    public void reset(double widthToHeight, Image image, UnitVector2D dir) {
+        boundingBox.setRect(0,0,1,widthToHeight);
+        prevBoundingBox.setRect(boundingBox);
+        this.dir.x = dir.x;
+        this.dir.y = dir.y;
+        this.image = image;
     }
 
     /** Stashes the current bounding box's dimension and position to the previous bounding Box Object. */
@@ -130,9 +137,5 @@ public class Dynamic extends Position {
 
         this.velocity.add(speed);
         return otherSpeed;
-    }
-
-    protected void reset() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

@@ -5,7 +5,7 @@ import Utils.Vector2D;
 
 import java.awt.*;
 
-public class Fixed extends Position {
+public final class Fixed extends Position {
 
     public Fixed(int id, double widthToHeight, Image image) {
         super(id, widthToHeight, image);

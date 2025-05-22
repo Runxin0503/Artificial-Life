@@ -28,7 +28,7 @@ public abstract class Position extends EntityFactory.EntityFactoryObject {
 
     protected Position(int id, double widthToHeight, Image image) {
         super(id);
-        boundingBox = new java.awt.Rectangle(1, (int) Math.round(widthToHeight));
+        boundingBox = new Rectangle(1, (int) Math.round(widthToHeight));
         this.image = image;
     }
 

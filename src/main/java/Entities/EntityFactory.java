@@ -3,7 +3,9 @@ package Entities;
 import Entities.Creature.Creature;
 import Physics.Dynamic;
 import Physics.Fixed;
+import Utils.Constants;
 import Utils.Pair;
+import Utils.UnitVector2D;
 
 import java.util.LinkedList;
 
@@ -32,15 +34,26 @@ public class EntityFactory {
         eggPair = new LinkedList<>();
     }
 
-    /** Returns a pair of references to UNUSED Creature and Dynamic Objects.<br>
+    /** Returns a pair of references to UNUSED Creature and Dynamic Objects, placed
+     * somewhere randomly in the world.<br>
      * Automatically creates new ones if there are no unused Objects left. */
-    public Pair<Creature, Dynamic> getCreaturePair() {
+    public Pair<Creature, Dynamic> getCreaturePairRandom() {
+        double randAngle = Math.random() * 2 * Math.PI;
         if (creaturePair.isEmpty()) {
+            Pair<Creature, Dynamic> cd = new Pair<>(
+                    new Creature(objectCounter, ), //TODO implement Creature Constructor
+                    new Dynamic(objectCounter, 1,
+                            Constants.ImageConstants.birdRotations[(int) Math.round(Math.toDegrees(randAngle))],
+                            new UnitVector2D(randAngle)));
             objectCounter++;
-            throw new UnsupportedOperationException("Not supported yet.");
-//            return new Pair<>(new Creature(), new Dynamic());
+            return cd;
         } else {
-            return creaturePair.removeFirst();
+            Pair<Creature, Dynamic> cd = creaturePair.removeFirst();
+            cd.first().reset(); //TODO implement Creature Constructor
+            cd.second().reset(1,
+                    Constants.ImageConstants.birdRotations[(int) Math.round(Math.toDegrees(randAngle))],
+                    new UnitVector2D(randAngle));
+            return cd;
         }
     }
 
