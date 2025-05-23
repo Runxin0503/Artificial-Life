@@ -81,6 +81,11 @@ public class Creature extends Entity {
         reset(Constants);
     }
 
+    public Creature(int id, Creature parentOne, Creature parentTwo) {
+        super(id);
+        reset(parentOne, parentTwo);
+    }
+
     public void reset(Constants Constants) {
         this.brain = NN.getDefaultNeuralNet(Constants);//Math.random()<0.6?Genome.defaultGenome():
         this.genome.reset();

@@ -9,6 +9,10 @@ import Utils.Vector2D;
 
 import java.awt.*;
 
+/**
+ * Represents a dynamic physical entity in the simulation.
+ * This object supports motion, orientation, and collisions, and is designed to be reused by an object factory.
+ */
 public final class Dynamic extends Position {
 
     /** The bounding box last stashed by calling {@link #stashBoundingBox} */
@@ -23,17 +27,38 @@ public final class Dynamic extends Position {
     /** The velocity of how many radians Counterclockwise to turn per tick. */
     private double angularSpeed;
 
-    public Dynamic(int id, double widthToHeight, Image image, UnitVector2D dir) {
+    /** Constructs a new {@code Dynamic} object with random position within world bounds.
+     * Used to create a basic Creature spawning somewhere in the world. */
+    public Dynamic(int id, double widthToHeight, Image image, double dir) {
         super(id, widthToHeight, image);
         reset(widthToHeight, image, dir);
     }
 
-    public void reset(double widthToHeight, Image image, UnitVector2D dir) {
+    /** Resets this {@code Dynamic} object for reuse with new size, image, and direction. Used to
+     * create a basic Creature spawning somewhere in the world. */
+    public void reset(double widthToHeight, Image image, double dir) {
         boundingBox.setRect(0, 0, 1, widthToHeight);
         prevBoundingBox.setRect(boundingBox);
-        this.dir.x = dir.x;
-        this.dir.y = dir.y;
+        this.dir.x = Math.cos(dir);
+        this.dir.y = Math.sin(dir);
         this.image = image;
+        x = (int) (Math.random() * WorldConstants.xBound);
+        y = (int) (Math.random() * WorldConstants.yBound);
+    }
+
+    /** Constructs a new {@code Dynamic} object with fixed position. Used in Creature Construction
+     * when two Creatures reproduce. */
+    public Dynamic(int id, double widthToHeight, Image image, double dir, int x, int y) {
+        super(id, widthToHeight, image);
+        reset(widthToHeight, image, dir, x, y);
+    }
+
+    /** Resets this {@code Dynamic} object for reuse with new size, image, direction, and position.
+     * Used in Creature Construction when two Creatures reproduce. */
+     public void reset(double widthToHeight, Image image, double dir, int x, int y) {
+        reset(widthToHeight, image, dir);
+        this.x = x;
+        this.y = y;
     }
 
     /** Stashes the current bounding box's dimension and position to the previous bounding Box Object. */

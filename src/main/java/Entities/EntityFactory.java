@@ -5,7 +5,6 @@ import Physics.Dynamic;
 import Physics.Fixed;
 import Utils.Constants;
 import Utils.Pair;
-import Utils.UnitVector2D;
 
 import java.util.LinkedList;
 
@@ -35,24 +34,48 @@ public class EntityFactory {
     }
 
     /** Returns a pair of references to UNUSED Creature and Dynamic Objects, placed
-     * somewhere randomly in the world.<br>
+     * somewhere RANDOMLY in the world.<br>
      * Automatically creates new ones if there are no unused Objects left. */
-    public Pair<Creature, Dynamic> getCreaturePairRandom() {
+    public Pair<Creature, Dynamic> getCreaturePair() {
         double randAngle = Math.random() * 2 * Math.PI;
         if (creaturePair.isEmpty()) {
             Pair<Creature, Dynamic> cd = new Pair<>(
                     new Creature(objectCounter, Constants.NeuralNet.EvolutionConstants),
                     new Dynamic(objectCounter, 1,
-                            Constants.ImageConstants.birdRotations[(int) Math.round(Math.toDegrees(randAngle))],
-                            new UnitVector2D(randAngle)));
+                            Constants.ImageConstants.getRotation(randAngle),
+                            randAngle));
             objectCounter++;
             return cd;
         } else {
             Pair<Creature, Dynamic> cd = creaturePair.removeFirst();
             cd.first().reset(Constants.NeuralNet.EvolutionConstants);
             cd.second().reset(1,
-                    Constants.ImageConstants.birdRotations[(int) Math.round(Math.toDegrees(randAngle))],
-                    new UnitVector2D(randAngle));
+                    Constants.ImageConstants.getRotation(randAngle),
+                    randAngle);
+            return cd;
+        }
+    }
+
+    /** Returns a pair of references to UNUSED Creature and Dynamic Objects, placed
+     * somewhere randomly in the world.<br>
+     * Automatically creates new ones if there are no unused Objects left. */
+    public Pair<Creature, Dynamic> getCreaturePair(Pair<Creature, Dynamic> cd1, Pair<Creature, Dynamic> cd2) {
+        double randAngle = Math.random() * 2 * Math.PI;
+
+        if (creaturePair.isEmpty()) {
+            Pair<Creature, Dynamic> cd = new Pair<>(
+                    new Creature(objectCounter, cd1.first(), cd2.first()),
+                    new Dynamic(objectCounter, 1,
+                            Constants.ImageConstants.getRotation(randAngle),
+                            randAngle, cd1.second().x, cd1.second().y));
+            objectCounter++;
+            return cd;
+        } else {
+            Pair<Creature, Dynamic> cd = creaturePair.removeFirst();
+            cd.first().reset(cd1.first(), cd2.first());
+            cd.second().reset(1,
+                    Constants.ImageConstants.getRotation(randAngle),
+                    randAngle, cd1.second().x, cd1.second().y);
             return cd;
         }
     }
