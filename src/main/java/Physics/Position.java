@@ -26,9 +26,9 @@ public abstract class Position extends EntityFactory.EntityFactoryObject {
     /** The ratio value used in calculating the mass for {@link #getMass()} */
     double sizeToMass;
 
-    protected Position(int id, double widthToHeight, Image image) {
+    protected Position(int id, double width, double height, Image image) {
         super(id);
-        boundingBox = new Rectangle(1, (int) Math.round(widthToHeight));
+        boundingBox = new Rectangle((int) Math.round(width), (int) Math.round(height));
         this.image = image;
     }
 

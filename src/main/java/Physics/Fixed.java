@@ -7,8 +7,16 @@ import java.awt.*;
 
 public final class Fixed extends Position {
 
-    public Fixed(int id, double widthToHeight, Image image) {
-        super(id, widthToHeight, image);
+    public Fixed(int id, Image image, double width, double height, int x, int y, double sizeToMass) {
+        super(id, width, height, image);
+        reset(x, y, width, height, sizeToMass);
+    }
+
+    public void reset(int x, int y, double width, double height, double sizeToMass) {
+        this.x = x;
+        this.y = y;
+        this.boundingBox.setRect(x - width / 2, y - height / 2, width, height);
+        this.sizeToMass = sizeToMass;
     }
 
     @Override

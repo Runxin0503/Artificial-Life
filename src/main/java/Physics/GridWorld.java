@@ -253,6 +253,7 @@ public class GridWorld {
     private void handleCollision(ExecutorService executor, CountDownLatch latch) {
         for (Position p : positionToEntity.keySet())
             if (p instanceof Dynamic d)
+                // TODO remove Bush from the collision detection system
                 executor.submit(() -> {
                     try {
                         int startGridX = d.boundingBox.x / WorldConstants.GridWidth;

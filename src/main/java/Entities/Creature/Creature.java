@@ -1,7 +1,6 @@
 package Entities.Creature;
 
 
-import Entities.Egg;
 import Entities.Entity;
 import Evolution.Constants;
 import Genome.NN;
@@ -65,7 +64,7 @@ public class Creature extends Entity {
     private final ArrayList<Entity> stashedSeenEntities = new ArrayList<>();
 
     /** The Genome component of this Creature, stores all gene data when reproduction occurs. */
-    private final Genome genome = new Genome();
+    final Genome genome = new Genome();
 
     /** The stomach of this Creature */
     private final Stomach stomach = new Stomach(0);
@@ -213,18 +212,12 @@ public class Creature extends Entity {
     }
 
     @Override
-    public double getHealth() {
-        return health;
-    }
-
-    @Override
-    public double getEnergy() {
-        return energy;
-    }
-
-    @Override
     public double getEnergyIfConsumed() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public double getSize() {
+        return size;
     }
 
     @Override

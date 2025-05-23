@@ -27,38 +27,32 @@ public final class Dynamic extends Position {
     /** The velocity of how many radians Counterclockwise to turn per tick. */
     private double angularSpeed;
 
-    /** Constructs a new {@code Dynamic} object with random position within world bounds.
-     * Used to create a basic Creature spawning somewhere in the world. */
-    public Dynamic(int id, double widthToHeight, Image image, double dir) {
-        super(id, widthToHeight, image);
-        reset(widthToHeight, image, dir);
+    /** Constructs a new {@code Dynamic} object with assigned position. */
+    public Dynamic(int id, Image image, double width, double height, int x, int y, double dir) {
+        super(id, width, height, image);
+        reset(image, width, height, x, y, dir);
+        //TODO integrate sizeToMass into this constructor and reset function
     }
 
-    /** Resets this {@code Dynamic} object for reuse with new size, image, and direction. Used to
-     * create a basic Creature spawning somewhere in the world. */
-    public void reset(double widthToHeight, Image image, double dir) {
-        boundingBox.setRect(0, 0, 1, widthToHeight);
+    /** Resets this {@code Dynamic} object for reuse with new size, image, direction, and position. */
+    public void reset(Image image, double width, double height, int x, int y, double dir) {
+        boundingBox.setRect(x - width / 2, y - height / 2, width, height);
         prevBoundingBox.setRect(boundingBox);
         this.dir.x = Math.cos(dir);
         this.dir.y = Math.sin(dir);
         this.image = image;
-        x = (int) (Math.random() * WorldConstants.xBound);
-        y = (int) (Math.random() * WorldConstants.yBound);
-    }
-
-    /** Constructs a new {@code Dynamic} object with fixed position. Used in Creature Construction
-     * when two Creatures reproduce. */
-    public Dynamic(int id, double widthToHeight, Image image, double dir, int x, int y) {
-        super(id, widthToHeight, image);
-        reset(widthToHeight, image, dir, x, y);
-    }
-
-    /** Resets this {@code Dynamic} object for reuse with new size, image, direction, and position.
-     * Used in Creature Construction when two Creatures reproduce. */
-     public void reset(double widthToHeight, Image image, double dir, int x, int y) {
-        reset(widthToHeight, image, dir);
         this.x = x;
         this.y = y;
+    }
+
+    /** Constructs a new {@code Dynamic} object with assigned position. */
+    public Dynamic(int id, Image image, Dynamic d) {
+        this(id, image, d.boundingBox.width, d.boundingBox.height, d.x, d.y, d.dir.angle());
+    }
+
+    /** Resets this {@code Dynamic} object for reuse with new size, image, direction, and position. */
+    public void reset(Image image, Dynamic d) {
+        reset(image, d.boundingBox.width, d.boundingBox.height, d.x, d.y, d.dir.angle());
     }
 
     /** Stashes the current bounding box's dimension and position to the previous bounding Box Object. */
@@ -127,7 +121,7 @@ public final class Dynamic extends Position {
     @Override
     public void setSize(double newSize) {
         boundingBox.setSize((int) Math.round(newSize), (int) Math.round(boundingBox.height * boundingBox.width / newSize));
-        image.getScaledInstance(boundingBox.width, boundingBox.height, Constants.ImageConstants.ResizeConstant);
+        image = image.getScaledInstance(boundingBox.width, boundingBox.height, Constants.ImageConstants.ResizeConstant);
     }
 
     public void setSizeToMass(double newSize) {

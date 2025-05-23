@@ -1,25 +1,36 @@
-package Entities;
+package Entities.Creature;
 
-import Entities.Creature.Creature;
+import Entities.Entity;
 import Physics.Position;
 
 /**
- * An Immovable Creature in the fragile form of an Egg<br>
- * Energy --> incubationTime<br>
- * Health --> Decreases with damage
+ * An Immovable Creature entity in the fragile form of an Egg.
  */
 public class Egg extends Entity {
 
+    /** The Creature this egg is incubating. */
     private Creature creature;
 
-    public Egg(int id) {
+    /** The time (amount of ticks passed) since this Egg is created.
+     * <br>Egg hatches when {@code timeCount == incubationTime}. */
+    private int timeCount;
+
+    /** The total time (ticks) it will take for this Egg to hatch.
+     * <br>Egg hatches when {@code timeCount == incubationTime}. */
+    private double incubationTime;
+    private boolean isEaten;
+
+    public Egg(int id, Creature c) {
         super(id);
+        reset(c);
     }
 
-    /*
-     * Must have
-     * - A Creature Object that stores the Genetic Material of this Egg: (maxEnergy,maxHealth,metabolism,Size)
-     */
+    public void reset(Creature c) {
+        creature = c;
+        timeCount = 0;
+        incubationTime = c.genome.incubationTime;
+        isEaten = false;
+    }
 
     @Override
     public double getEnergyIfConsumed() {
@@ -27,6 +38,7 @@ public class Egg extends Entity {
     }
 
     /** Returns true if this Entity has to be removed */
+    @Override
     public boolean tick() {
         throw new UnsupportedOperationException("Not supported yet.");
     }

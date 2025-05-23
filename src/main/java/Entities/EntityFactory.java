@@ -1,9 +1,13 @@
 package Entities;
 
 import Entities.Creature.Creature;
+import Entities.Creature.Egg;
 import Physics.Dynamic;
 import Physics.Fixed;
-import Utils.Constants;
+import Utils.Constants.BushConstants;
+import Utils.Constants.ImageConstants;
+import Utils.Constants.NeuralNet;
+import Utils.Constants.WorldConstants;
 import Utils.Pair;
 
 import java.util.LinkedList;
@@ -38,20 +42,23 @@ public class EntityFactory {
      * Automatically creates new ones if there are no unused Objects left. */
     public Pair<Creature, Dynamic> getCreaturePair() {
         double randAngle = Math.random() * 2 * Math.PI;
+        int x = (int) (Math.random() * WorldConstants.xBound);
+        int y = (int) (Math.random() * WorldConstants.yBound);
+
         if (creaturePair.isEmpty()) {
-            Pair<Creature, Dynamic> cd = new Pair<>(
-                    new Creature(objectCounter, Constants.NeuralNet.EvolutionConstants),
-                    new Dynamic(objectCounter, 1,
-                            Constants.ImageConstants.getRotation(randAngle),
-                            randAngle));
+            Creature c = new Creature(objectCounter, NeuralNet.EvolutionConstants);
+            Dynamic d = new Dynamic(objectCounter, ImageConstants.getRotation(randAngle),
+                    c.getSize(), c.getSize(),
+                    x, y, randAngle);
             objectCounter++;
-            return cd;
+            //TODO fix that sizeToMass thing in Dynamic
+            return new Pair<>(c, d);
         } else {
             Pair<Creature, Dynamic> cd = creaturePair.removeFirst();
-            cd.first().reset(Constants.NeuralNet.EvolutionConstants);
-            cd.second().reset(1,
-                    Constants.ImageConstants.getRotation(randAngle),
-                    randAngle);
+            cd.first().reset(NeuralNet.EvolutionConstants);
+            cd.second().reset(ImageConstants.getRotation(randAngle),
+                    cd.first().getSize(), cd.first().getSize(),
+                    x, y, randAngle);
             return cd;
         }
     }
@@ -63,51 +70,67 @@ public class EntityFactory {
         double randAngle = Math.random() * 2 * Math.PI;
 
         if (creaturePair.isEmpty()) {
-            Pair<Creature, Dynamic> cd = new Pair<>(
-                    new Creature(objectCounter, cd1.first(), cd2.first()),
-                    new Dynamic(objectCounter, 1,
-                            Constants.ImageConstants.getRotation(randAngle),
-                            randAngle, cd1.second().x, cd1.second().y));
+            Creature c = new Creature(objectCounter, cd1.first(), cd2.first());
+            Dynamic d = new Dynamic(objectCounter, ImageConstants.getRotation(randAngle),
+                    c.getSize(), c.getSize(),
+                    cd1.second().x, cd1.second().y, randAngle);
             objectCounter++;
-            return cd;
+            //TODO fix that sizeToMass thing in Dynamic
+            return new Pair<>(c, d);
         } else {
             Pair<Creature, Dynamic> cd = creaturePair.removeFirst();
             cd.first().reset(cd1.first(), cd2.first());
-            cd.second().reset(1,
-                    Constants.ImageConstants.getRotation(randAngle),
-                    randAngle, cd1.second().x, cd1.second().y);
+            cd.second().reset(ImageConstants.getRotation(randAngle),
+                    cd.first().getSize(), cd.first().getSize(),
+                    cd1.second().x, cd1.second().y, randAngle);
             return cd;
         }
     }
 
     /** Returns a pair of references to UNUSED Corpse and Dynamic Objects.<br>
      * Automatically creates new ones if there are no unused Objects left. */
-    public Pair<Corpse, Dynamic> getCorpsePair() {
-        if (creaturePair.isEmpty()) {
+    public Pair<Corpse, Dynamic> getCorpsePair(Pair<Creature, Dynamic> cd) {
+        if (corpsePair.isEmpty()) {
+            Corpse c = new Corpse(objectCounter, cd.first());
+            Dynamic d = new Dynamic(objectCounter, ImageConstants.corpse, cd.second());
             objectCounter++;
-            throw new UnsupportedOperationException("Not supported yet.");
-//            return new Pair<>(new Corpse(), new Dynamic());
+            //TODO fix that sizeToMass thing in Dynamic
+            return new Pair<>(c, d);
         } else {
-            return corpsePair.removeFirst();
+            Pair<Corpse, Dynamic> cod = corpsePair.removeFirst();
+            cod.first().reset(cd.first());
+            cod.second().reset(ImageConstants.corpse, cd.second());
+            return cod;
         }
     }
 
     /** Returns a pair of references to UNUSED Bush and Fixed Objects.<br>
      * Automatically creates new ones if there are no unused Objects left. */
     public Pair<Bush, Fixed> getBushPair() {
-        if (creaturePair.isEmpty()) {
+        int x = (int) (Math.random() * WorldConstants.xBound);
+        int y = (int) (Math.random() * WorldConstants.yBound);
+        int width = (int) (Math.random() * (BushConstants.initialMaxSize - BushConstants.initialMinSize)) + BushConstants.initialMinSize;
+        int height = (int) (width * BushConstants.widthToHeight);
+
+        if (bushPair.isEmpty()) {
+            Bush b = new Bush(objectCounter, x, y, width, height);
+            Fixed f = new Fixed(objectCounter, ImageConstants.bush,
+                    width, height, x, y, 0);
             objectCounter++;
-            throw new UnsupportedOperationException("Not supported yet.");
-//            return new Pair<>(new Bush(), new Fixed());
+            return new Pair<>(b, f);
         } else {
-            return bushPair.removeFirst();
+            Pair<Bush,Fixed> bf = bushPair.removeFirst();
+            bf.first().reset(x,y,width,height);
+            bf.second().reset(x,y,width,height,0);
+            return bf;
         }
     }
 
     /** Returns a pair of references to UNUSED Egg and Fixed Objects.<br>
      * Automatically creates new ones if there are no unused Objects left. */
     public Pair<Egg, Fixed> getEggPair() {
-        if (creaturePair.isEmpty()) {
+        if (eggPair.isEmpty()) {
+            //TODO implement this
             objectCounter++;
             throw new UnsupportedOperationException("Not supported yet.");
 //            return new Pair<>(new Egg(), new Fixed());
