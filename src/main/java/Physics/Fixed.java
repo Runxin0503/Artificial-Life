@@ -19,6 +19,18 @@ public final class Fixed extends Position {
         this.sizeToMass = sizeToMass;
     }
 
+    public Fixed(int id, Image image, Dynamic d) {
+        super(id,d.boundingBox.width,d.boundingBox.height,image);
+        reset(d);
+    }
+
+    public void reset(Dynamic d) {
+        this.x = d.x;
+        this.y = d.y;
+        this.boundingBox.setRect(d.boundingBox);
+        this.sizeToMass = d.sizeToMass;
+    }
+
     @Override
     boolean isBoundingBoxChange() {
         return false;

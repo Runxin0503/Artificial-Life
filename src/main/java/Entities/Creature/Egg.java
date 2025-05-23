@@ -32,6 +32,13 @@ public class Egg extends Entity {
         isEaten = false;
     }
 
+    public Creature hatch() {
+        if (timeCount == incubationTime && !isEaten) {
+            return creature;
+        }
+        throw new RuntimeException("Called Egg.hatch() when egg is destroyed / not ready to hatch.");
+    }
+
     @Override
     public double getEnergyIfConsumed() {
         throw new UnsupportedOperationException("Not supported yet.");

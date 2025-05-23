@@ -4,13 +4,10 @@ import Entities.Creature.Creature;
 import Entities.Creature.Egg;
 import Physics.Dynamic;
 import Physics.Fixed;
-import Utils.Constants.BushConstants;
-import Utils.Constants.ImageConstants;
-import Utils.Constants.NeuralNet;
-import Utils.Constants.WorldConstants;
+import Utils.Constants.*;
 import Utils.Pair;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 /** A static Factory class that re-uses Entity and Position objects to minimize pressure on Java's garbage collector. */
 public class EntityFactory {
@@ -19,72 +16,41 @@ public class EntityFactory {
     private int objectCounter = 0;
 
     /** Stores references to UNUSED Creature and Dynamic Objects. */
-    private final LinkedList<Pair<Creature, Dynamic>> creaturePair;
+    private final ArrayList<Pair<Creature, Dynamic>> creaturePair;
+
+    /** Stores references to Creature and Dynamic Objects currently being incubated in an egg. */
+    private final ArrayList<Pair<Creature, Dynamic>> incubatedCreaturePair;
 
     /** Stores references to UNUSED Corpses and Dynamic Objects. */
-    private final LinkedList<Pair<Corpse, Dynamic>> corpsePair;
+    private final ArrayList<Pair<Corpse, Dynamic>> corpsePair;
 
     /** Stores references to UNUSED Bushes and Fixed Objects. */
-    private final LinkedList<Pair<Bush, Fixed>> bushPair;
+    private final ArrayList<Pair<Bush, Fixed>> bushPair;
 
     /** Stores references to UNUSED Eggs and Fixed Objects. */
-    private final LinkedList<Pair<Egg, Fixed>> eggPair;
+    private final ArrayList<Pair<Egg, Fixed>> eggPair;
 
     public EntityFactory() {
-        creaturePair = new LinkedList<>();
-        corpsePair = new LinkedList<>();
-        bushPair = new LinkedList<>();
-        eggPair = new LinkedList<>();
+        creaturePair = new ArrayList<>();
+        incubatedCreaturePair = new ArrayList<>();
+        corpsePair = new ArrayList<>();
+        bushPair = new ArrayList<>();
+        eggPair = new ArrayList<>();
     }
 
     /** Returns a pair of references to UNUSED Creature and Dynamic Objects, placed
-     * somewhere RANDOMLY in the world.<br>
-     * Automatically creates new ones if there are no unused Objects left. */
-    public Pair<Creature, Dynamic> getCreaturePair() {
-        double randAngle = Math.random() * 2 * Math.PI;
-        int x = (int) (Math.random() * WorldConstants.xBound);
-        int y = (int) (Math.random() * WorldConstants.yBound);
+     * somewhere RANDOMLY in the world. */
+    public Pair<Creature, Dynamic> getCreaturePair(Pair<Egg, Fixed> ef) {
+        Creature c = ef.first().hatch();
+        Pair<Creature, Dynamic> cd = null;
+        for (int i = 0; i < incubatedCreaturePair.size(); i++)
+            if (incubatedCreaturePair.get(i).first() == c) {
+                cd = incubatedCreaturePair.remove(i);
+                break;
+            }
+        if (cd == null) throw new RuntimeException("Unexpectedly found no Creature pair in incubatedCreaturePair.");
 
-        if (creaturePair.isEmpty()) {
-            Creature c = new Creature(objectCounter, NeuralNet.EvolutionConstants);
-            Dynamic d = new Dynamic(objectCounter, ImageConstants.getRotation(randAngle),
-                    c.getSize(), c.getSize(),
-                    x, y, randAngle);
-            objectCounter++;
-            //TODO fix that sizeToMass thing in Dynamic
-            return new Pair<>(c, d);
-        } else {
-            Pair<Creature, Dynamic> cd = creaturePair.removeFirst();
-            cd.first().reset(NeuralNet.EvolutionConstants);
-            cd.second().reset(ImageConstants.getRotation(randAngle),
-                    cd.first().getSize(), cd.first().getSize(),
-                    x, y, randAngle);
-            return cd;
-        }
-    }
-
-    /** Returns a pair of references to UNUSED Creature and Dynamic Objects, placed
-     * somewhere randomly in the world.<br>
-     * Automatically creates new ones if there are no unused Objects left. */
-    public Pair<Creature, Dynamic> getCreaturePair(Pair<Creature, Dynamic> cd1, Pair<Creature, Dynamic> cd2) {
-        double randAngle = Math.random() * 2 * Math.PI;
-
-        if (creaturePair.isEmpty()) {
-            Creature c = new Creature(objectCounter, cd1.first(), cd2.first());
-            Dynamic d = new Dynamic(objectCounter, ImageConstants.getRotation(randAngle),
-                    c.getSize(), c.getSize(),
-                    cd1.second().x, cd1.second().y, randAngle);
-            objectCounter++;
-            //TODO fix that sizeToMass thing in Dynamic
-            return new Pair<>(c, d);
-        } else {
-            Pair<Creature, Dynamic> cd = creaturePair.removeFirst();
-            cd.first().reset(cd1.first(), cd2.first());
-            cd.second().reset(ImageConstants.getRotation(randAngle),
-                    cd.first().getSize(), cd.first().getSize(),
-                    cd1.second().x, cd1.second().y, randAngle);
-            return cd;
-        }
+        return cd;
     }
 
     /** Returns a pair of references to UNUSED Corpse and Dynamic Objects.<br>
@@ -92,14 +58,13 @@ public class EntityFactory {
     public Pair<Corpse, Dynamic> getCorpsePair(Pair<Creature, Dynamic> cd) {
         if (corpsePair.isEmpty()) {
             Corpse c = new Corpse(objectCounter, cd.first());
-            Dynamic d = new Dynamic(objectCounter, ImageConstants.corpse, cd.second());
+            Dynamic d = new Dynamic(objectCounter, ImageConstants.corpse, cd.second(), CorpseConstants.sizeMovementConstant);
             objectCounter++;
-            //TODO fix that sizeToMass thing in Dynamic
             return new Pair<>(c, d);
         } else {
             Pair<Corpse, Dynamic> cod = corpsePair.removeFirst();
             cod.first().reset(cd.first());
-            cod.second().reset(ImageConstants.corpse, cd.second());
+            cod.second().reset(ImageConstants.corpse, cd.second(), CorpseConstants.sizeMovementConstant);
             return cod;
         }
     }
@@ -119,23 +84,110 @@ public class EntityFactory {
             objectCounter++;
             return new Pair<>(b, f);
         } else {
-            Pair<Bush,Fixed> bf = bushPair.removeFirst();
-            bf.first().reset(x,y,width,height);
-            bf.second().reset(x,y,width,height,0);
+            Pair<Bush, Fixed> bf = bushPair.removeFirst();
+            bf.first().reset(x, y, width, height);
+            bf.second().reset(x, y, width, height, 0);
             return bf;
         }
     }
 
-    /** Returns a pair of references to UNUSED Egg and Fixed Objects.<br>
+    /** Returns a pair of references to UNUSED Egg and Fixed Objects, placed
+     * somewhere RANDOMLY in the world.<br>
      * Automatically creates new ones if there are no unused Objects left. */
     public Pair<Egg, Fixed> getEggPair() {
         if (eggPair.isEmpty()) {
-            //TODO implement this
+            Pair<Creature, Dynamic> cd = getIncubatedCreature();
+            Egg e = new Egg(objectCounter, cd.first());
+
+            Fixed f = new Fixed(objectCounter, ImageConstants.egg,
+                    cd.second());
             objectCounter++;
-            throw new UnsupportedOperationException("Not supported yet.");
-//            return new Pair<>(new Egg(), new Fixed());
+            return new Pair<>(e, f);
         } else {
-            return eggPair.removeFirst();
+            Pair<Creature, Dynamic> cd = getIncubatedCreature();
+
+            Pair<Egg, Fixed> ef = eggPair.removeFirst();
+            ef.first().reset(cd.first());
+            ef.second().reset(cd.second());
+            return ef;
+        }
+    }
+
+    /** Returns a pair of references to UNUSED Creature and Dynamic Objects, placed
+     * somewhere randomly in the world.<br>
+     * Automatically creates new ones if there are no unused Objects left. */
+    public Pair<Egg, Fixed> getEggPair(Pair<Creature, Dynamic> cd1, Pair<Creature, Dynamic> cd2) {
+        if (eggPair.isEmpty()) {
+            Pair<Creature, Dynamic> cd = getIncubatedCreature(cd1, cd2);
+            Egg e = new Egg(objectCounter, cd.first());
+
+            Fixed f = new Fixed(objectCounter, ImageConstants.egg,
+                    cd.second());
+            objectCounter++;
+            return new Pair<>(e, f);
+        } else {
+            Pair<Creature, Dynamic> cd = getIncubatedCreature(cd1, cd2);
+
+            Pair<Egg, Fixed> ef = eggPair.removeFirst();
+            ef.first().reset(cd.first());
+            ef.second().reset(cd.second());
+            return ef;
+        }
+    }
+
+    /** Returns a pair of references to UNUSED Creature and Dynamic Objects, placed
+     * somewhere RANDOMLY in the world.<br>
+     * Automatically creates new ones if there are no unused Objects left. */
+    private Pair<Creature, Dynamic> getIncubatedCreature() {
+        double randAngle = Math.random() * 2 * Math.PI;
+        int x = (int) (Math.random() * WorldConstants.xBound);
+        int y = (int) (Math.random() * WorldConstants.yBound);
+
+        if (creaturePair.isEmpty()) {
+            Creature c = new Creature(objectCounter, NeuralNet.EvolutionConstants);
+            Egg e = new Egg(objectCounter, c);
+
+            Dynamic d = new Dynamic(objectCounter, ImageConstants.getRotation(randAngle),
+                    c.getSize(), c.getSize(),
+                    x, y, randAngle, CreatureConstants.Movement.sizeMovementConstant);
+            objectCounter++;
+            Pair<Creature, Dynamic> cd = new Pair<>(c, d);
+            incubatedCreaturePair.add(cd);
+            return cd;
+        } else {
+            Pair<Creature, Dynamic> cd = creaturePair.removeFirst();
+            cd.first().reset(NeuralNet.EvolutionConstants);
+            cd.second().reset(ImageConstants.getRotation(randAngle),
+                    cd.first().getSize(), cd.first().getSize(),
+                    x, y, randAngle, CreatureConstants.Movement.sizeMovementConstant);
+            incubatedCreaturePair.add(cd);
+            return cd;
+        }
+    }
+
+    /** Returns a pair of references to UNUSED Creature and Dynamic Objects, placed
+     * somewhere randomly in the world.<br>
+     * Automatically creates new ones if there are no unused Objects left. */
+    private Pair<Creature, Dynamic> getIncubatedCreature
+    (Pair<Creature, Dynamic> cd1, Pair<Creature, Dynamic> cd2) {
+        double randAngle = Math.random() * 2 * Math.PI;
+
+        if (creaturePair.isEmpty()) {
+            Creature c = new Creature(objectCounter, cd1.first(), cd2.first());
+            Dynamic d = new Dynamic(objectCounter, ImageConstants.getRotation(randAngle),
+                    c.getSize(), c.getSize(),
+                    cd1.second().x, cd1.second().y, randAngle, CreatureConstants.Movement.sizeMovementConstant);
+            objectCounter++;
+            Pair<Creature, Dynamic> cd = new Pair<>(c, d);
+            incubatedCreaturePair.add(cd);
+            return cd;
+        } else {
+            Pair<Creature, Dynamic> cd = creaturePair.removeFirst();
+            cd.first().reset(cd1.first(), cd2.first());
+            cd.second().reset(ImageConstants.getRotation(randAngle),
+                    cd.first().getSize(), cd.first().getSize(),
+                    cd1.second().x, cd1.second().y, randAngle, CreatureConstants.Movement.sizeMovementConstant);
+            return cd;
         }
     }
 
@@ -149,12 +201,14 @@ public class EntityFactory {
 
         /** Compares the ID value of this Object to the other.<br>
          * Used in Hashmaps to allow it to hash this Object. */
+        @Override
         public boolean equals(Object obj) {
             return (obj instanceof EntityFactoryObject o && o.hashCode() == this.hashCode());
         }
 
         /** Returns the ID value of this Object, which must be unique.<br>
          * Used in Hashmaps to allow it to hash this Object */
+        @Override
         public int hashCode() {
             return this.ID;
         }

@@ -28,14 +28,13 @@ public final class Dynamic extends Position {
     private double angularSpeed;
 
     /** Constructs a new {@code Dynamic} object with assigned position. */
-    public Dynamic(int id, Image image, double width, double height, int x, int y, double dir) {
+    public Dynamic(int id, Image image, double width, double height, int x, int y, double dir, double sizeToMass) {
         super(id, width, height, image);
-        reset(image, width, height, x, y, dir);
-        //TODO integrate sizeToMass into this constructor and reset function
+        reset(image, width, height, x, y, dir, sizeToMass);
     }
 
     /** Resets this {@code Dynamic} object for reuse with new size, image, direction, and position. */
-    public void reset(Image image, double width, double height, int x, int y, double dir) {
+    public void reset(Image image, double width, double height, int x, int y, double dir, double sizeToMass) {
         boundingBox.setRect(x - width / 2, y - height / 2, width, height);
         prevBoundingBox.setRect(boundingBox);
         this.dir.x = Math.cos(dir);
@@ -43,16 +42,17 @@ public final class Dynamic extends Position {
         this.image = image;
         this.x = x;
         this.y = y;
+        this.sizeToMass = sizeToMass;
     }
 
     /** Constructs a new {@code Dynamic} object with assigned position. */
-    public Dynamic(int id, Image image, Dynamic d) {
-        this(id, image, d.boundingBox.width, d.boundingBox.height, d.x, d.y, d.dir.angle());
+    public Dynamic(int id, Image image, Dynamic d, double sizeToMass) {
+        this(id, image, d.boundingBox.width, d.boundingBox.height, d.x, d.y, d.dir.angle(), sizeToMass);
     }
 
     /** Resets this {@code Dynamic} object for reuse with new size, image, direction, and position. */
-    public void reset(Image image, Dynamic d) {
-        reset(image, d.boundingBox.width, d.boundingBox.height, d.x, d.y, d.dir.angle());
+    public void reset(Image image, Dynamic d, double sizeToMass) {
+        reset(image, d.boundingBox.width, d.boundingBox.height, d.x, d.y, d.dir.angle(), sizeToMass);
     }
 
     /** Stashes the current bounding box's dimension and position to the previous bounding Box Object. */
