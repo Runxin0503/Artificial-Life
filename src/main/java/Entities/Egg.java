@@ -22,16 +22,6 @@ public class Egg extends Entity {
      */
 
     @Override
-    public double getHealth() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public double getEnergy() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public double getEnergyIfConsumed() {
         throw new UnsupportedOperationException("Not supported yet.");
     }

@@ -4,27 +4,13 @@ import Entities.Creature.Creature;
 import Physics.Position;
 
 /**
- * Contains all required methods of Entity class, used for subtyping and inheritance <br>
- * Stores a Position Object and a Health & Energy value
+ * Contains all required methods of Entity class, used for subtyping and inheritance. <br>
  */
 public abstract class Entity extends Entities.EntityFactory.EntityFactoryObject {
-
-    /** The Health / Energy of this Entity, has different meaning in different
-     * classes but is a must-have for every Entity. */
-    double health,energy;
-
-    /** The size of this Entity */
-    int size;
 
     public Entity(int id) {
         super(id);
     }
-
-    /** Returns the Health of this Entity */
-    public abstract double getHealth();
-
-    /** Returns the Energy of this Entity */
-    public abstract double getEnergy();
 
     /** Returns the max energy a creature can theoretically extract from this Entity through digestion before this Entity dies */
     public abstract double getEnergyIfConsumed();
