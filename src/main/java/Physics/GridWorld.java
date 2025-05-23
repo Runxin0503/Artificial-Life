@@ -35,7 +35,12 @@ public class GridWorld {
     private ArrayList<Pair<Creature, Dynamic>> creatures;
 
     public GridWorld() {
-        // TODO implement
+        creatures = new ArrayList<>();
+        numEntities = 0;
+        positionToEntity = new HashMap<>();
+        Grids = new ArrayList[WorldConstants.GRID_NUM_X][WorldConstants.GRID_NUM_Y];
+
+        // TODO Create Bushes
     }
 
     public static GridWorld loadWorld(String filePath) {
@@ -46,7 +51,20 @@ public class GridWorld {
      * {@link Entity} and returns the one with the smallest hit-box, or null
      * if no entities are found. */
     public Entity get(int x, int y) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ArrayList<Position> gridPosition = Grids[x / WorldConstants.GridWidth][y / WorldConstants.GridHeight];
+        if (gridPosition.isEmpty()) return null;
+
+        double minArea = Double.MAX_VALUE;
+        Position minAreaPosition = null;
+        for (Position pos : gridPosition) {
+            double area = pos.boundingBox.width * pos.boundingBox.height;
+            if (area < minArea) {
+                minArea = area;
+                minAreaPosition = pos;
+            }
+        }
+
+        return positionToEntity.get(minAreaPosition);
     }
 
     /** Completes all actions required of the world in one tick. */
@@ -59,8 +77,10 @@ public class GridWorld {
                 latch5 = new CountDownLatch(positionToEntity.size()),
                 latch6 = new CountDownLatch(positionToEntity.size());
 
+        ArrayList<Pair> newEntities = new ArrayList<>();
+
         // 1. Neural Network (Brain)
-        ArrayList<Pair<Creature, Dynamic>> deadCreatures = new ArrayList<>((int) Math.ceil(creatures.size() * 0.1));
+        ArrayList<Pair<Creature, Dynamic>> deadCreatures = new ArrayList<>((int) Math.ceil(creatures.size() * 0.01));
         for (Pair<Creature, Dynamic> cd : creatures)
             executor.submit(() -> {
                 try {
@@ -97,6 +117,7 @@ public class GridWorld {
             latch1.await();
             latch2.await();
             // TODO remove Creatures via EntityFactory object
+            //  and spawn in Corpses with newEntities
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -151,6 +172,7 @@ public class GridWorld {
         try {
             latch5.await();
             // TODO remove all positions from removedPosition using EntityFactory
+            //  and add in new ones with newEntities.
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -158,12 +180,14 @@ public class GridWorld {
         // 6. Collision (Dynamic, Body? Genome?)
         handleCollision(executor, latch6);
 
-        // await latch 5
+        // await latch 6
         try {
             latch6.await();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+        // TODO spawn in all Entities in queue
     }
 
     /**

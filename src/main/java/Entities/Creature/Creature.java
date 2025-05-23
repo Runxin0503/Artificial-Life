@@ -124,13 +124,12 @@ public class Creature extends Entity {
 
 
     /**
-     * Once called, builds a {@link Runnable} object that runs the Creature's brain with
-     * the Creature {@code c}'s current information stash.
+     * Once called, runs the Creature's brain with the Creature {@code c}'s current information stash.
      * <br>Builds the input array as a fixed value before returning the Runnable object, in other words,
      * even if {@code c}'s information stash changes after calling this function, the input
      * array (and hence output array) of this Creature's brain won't change.
      */
-    public static Runnable runBrain(Creature c) {
+    public static void runBrain(Creature c) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
