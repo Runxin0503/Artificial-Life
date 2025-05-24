@@ -191,6 +191,26 @@ public class EntityFactory {
         }
     }
 
+    /**
+     * Recycles a previously used entity pair by returning it to the appropriate object pool.
+     *
+     * @param pair the Pair of an entity and its physics object to recycle.
+     * @throws RuntimeException if the Pair type is not recognized.
+     */
+    public void recyclePair(Pair<?,?> pair) {
+        if (pair.first() instanceof Creature && pair.second() instanceof Dynamic)
+            creaturePair.add((Pair<Creature, Dynamic>) (pair));
+        else if (pair.first() instanceof Corpse && pair.second() instanceof Dynamic)
+            corpsePair.add((Pair<Corpse, Dynamic>) (pair));
+        else if (pair.first() instanceof Bush && pair.second() instanceof Fixed)
+            bushPair.add((Pair<Bush, Fixed>) (pair));
+        else if (pair.first() instanceof Egg && pair.second() instanceof Fixed)
+            eggPair.add((Pair<Egg, Fixed>) (pair));
+        else
+            throw new RuntimeException("Unknown Pair type: " +
+                    pair.first().getClass().getName() + ", " + pair.second().getClass().getName());
+    }
+
     /** An interface that must have at least one reset() method that takes in some for {@link EntityFactory} to use. */
     public abstract static class EntityFactoryObject {
         private final int ID;
