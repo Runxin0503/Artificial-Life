@@ -65,6 +65,8 @@ public final class Dynamic extends Position {
         x += (int) Math.round(velocity.x);
         y += (int) Math.round(velocity.x);
         dir.rotate(angularSpeed);
+        boundingBox.x = x - boundingBox.width / 2;
+        boundingBox.y = y - boundingBox.height / 2;
     }
 
     /** Updates the velocity vector according to {@link Utils.Constants} */

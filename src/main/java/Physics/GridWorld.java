@@ -1,7 +1,11 @@
 package Physics;
 
+import Entities.Bush;
+import Entities.Corpse;
 import Entities.Creature.Creature;
+import Entities.Creature.Egg;
 import Entities.Entity;
+import Entities.EntityFactory;
 import Utils.Constants.WorldConstants;
 import Utils.Pair;
 
@@ -16,7 +20,7 @@ import java.util.concurrent.ExecutorService;
 
 /**
  *  The main world object containing every entity existing in this world.
- * <br>A 2D world of grid cells where {@link Physics.Position} are stored and spatial partitioned
+ * <br>A 2D world of grid cells where {@link Position} are stored and spatial partitioned
  * for more efficient collision processing. */
 public class GridWorld {
 
@@ -34,11 +38,15 @@ public class GridWorld {
     /** An Arraylist of all {@link Creature} to {@link Dynamic} object mappings present in {@code positionToEntity}.  */
     private ArrayList<Pair<Creature, Dynamic>> creatures;
 
+    /** The Entity Factory object used to create its factory-objects for less object-creation resource overhead. */
+    private EntityFactory entityFactory;
+
     public GridWorld() {
         creatures = new ArrayList<>();
         numEntities = 0;
         positionToEntity = new HashMap<>();
         Grids = new ArrayList[WorldConstants.GRID_NUM_X][WorldConstants.GRID_NUM_Y];
+        entityFactory = new EntityFactory();
 
         // TODO Create Bushes
     }
@@ -116,8 +124,6 @@ public class GridWorld {
         try {
             latch1.await();
             latch2.await();
-            // TODO remove Creatures via EntityFactory object
-            //  and spawn in Corpses with newEntities
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -130,6 +136,7 @@ public class GridWorld {
                         d.stashBoundingBox();
                         d.updatePos();
                         // TODO compare previous bounding box Grids to current bounding box Grids
+                        //  update Grid with this information, removing / adding references to the Position obj
                     } finally {
                         latch3.countDown();
                     }
@@ -173,6 +180,39 @@ public class GridWorld {
             latch5.await();
             // TODO remove all positions from removedPosition using EntityFactory
             //  and add in new ones with newEntities.
+
+            for (Position p : removedPositions) {
+                Entity e = positionToEntity.remove(p);
+                entityFactory.recycle(new Pair<>(p, e));
+
+                switch (e) {
+                    case Creature c -> {
+                        // TODO remove creature from arraylist creatures
+                        //  also add a corpse
+                    }
+                    case Corpse c -> {
+                        // nothing
+                    }
+                    case Bush b -> {
+                        // nothing
+                    }
+                    case Egg egg -> {
+                        // nothing
+                    }
+                    default -> throw new IllegalStateException("Unexpected class Entity: " + e.getClass().getName());
+                }
+
+                //TODO remove the entity from Grid references
+            }
+
+            for (Pair<Creature, Dynamic> cd : deadCreatures) {
+                creatures.remove(cd);
+                entityFactory.recycle(cd);
+                if (positionToEntity.remove(cd.second()) != cd.first())
+                    throw new RuntimeException("positionToEntity in GridWorld doesn't match up with expected Pairing.");
+                newEntities.add(entityFactory.getCorpsePair(cd));
+                //TODO remove the entity from Grid references
+            }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

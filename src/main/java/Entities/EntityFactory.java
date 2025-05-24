@@ -197,7 +197,7 @@ public class EntityFactory {
      * @param pair the Pair of an entity and its physics object to recycle.
      * @throws RuntimeException if the Pair type is not recognized.
      */
-    public void recyclePair(Pair<?,?> pair) {
+    public void recycle(Pair<?,?> pair) {
         if (pair.first() instanceof Creature && pair.second() instanceof Dynamic)
             creaturePair.add((Pair<Creature, Dynamic>) (pair));
         else if (pair.first() instanceof Corpse && pair.second() instanceof Dynamic)
