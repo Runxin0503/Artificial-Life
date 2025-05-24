@@ -14,7 +14,6 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 
@@ -30,21 +29,21 @@ public class GridWorld {
     /** The 2D array of ArrayLists of Positions, representing a 2D array of "Grids".<br>
      * Used for spatial partition and in searching for a Position
      * Object during creature interaction. */
-    private ArrayList<Position>[][] Grids;
+    private final ArrayList<Position>[][] Grids;
 
     /** The map that stores mappings from Entities to Position objects. */
-    private HashMap<Position, Entity> positionToEntity;
+    private final HashMap<Position, Pair<? extends Entity, ? extends Position>> positionToEntityPair;
 
     /** An Arraylist of all {@link Creature} to {@link Dynamic} object mappings present in {@code positionToEntity}.  */
-    private ArrayList<Pair<Creature, Dynamic>> creatures;
+    private final ArrayList<Pair<Creature, Dynamic>> creatures;
 
     /** The Entity Factory object used to create its factory-objects for less object-creation resource overhead. */
-    private EntityFactory entityFactory;
+    private final EntityFactory entityFactory;
 
     public GridWorld() {
         creatures = new ArrayList<>();
         numEntities = 0;
-        positionToEntity = new HashMap<>();
+        positionToEntityPair = new HashMap<>();
         Grids = new ArrayList[WorldConstants.GRID_NUM_X][WorldConstants.GRID_NUM_Y];
         entityFactory = new EntityFactory();
 
@@ -72,7 +71,7 @@ public class GridWorld {
             }
         }
 
-        return positionToEntity.get(minAreaPosition);
+        return positionToEntityPair.get(minAreaPosition).first();
     }
 
     /** Completes all actions required of the world in one tick. */
@@ -80,12 +79,12 @@ public class GridWorld {
         // Count down latch for 1 & 2
         CountDownLatch latch1 = new CountDownLatch(creatures.size() * 2),
                 latch2 = new CountDownLatch(creatures.size() * 2),
-                latch3 = new CountDownLatch(positionToEntity.size()),
+                latch3 = new CountDownLatch(positionToEntityPair.size()),
                 latch4 = new CountDownLatch(creatures.size()),
-                latch5 = new CountDownLatch(positionToEntity.size()),
-                latch6 = new CountDownLatch(positionToEntity.size());
+                latch5 = new CountDownLatch(positionToEntityPair.size()),
+                latch6 = new CountDownLatch(positionToEntityPair.size());
 
-        ArrayList<Pair> newEntities = new ArrayList<>();
+        ArrayList<Pair<? extends Entity, ? extends Position>> newEntities = new ArrayList<>();
 
         // 1. Neural Network (Brain)
         ArrayList<Pair<Creature, Dynamic>> deadCreatures = new ArrayList<>((int) Math.ceil(creatures.size() * 0.01));
@@ -129,14 +128,13 @@ public class GridWorld {
         }
 
         // 3. Update Position (Dynamic)
-        for (Position p : positionToEntity.keySet()) {
+        for (Position p : positionToEntityPair.keySet()) {
             if (p instanceof Dynamic d && d.isMoving())
                 executor.submit(() -> {
                     try {
                         d.stashBoundingBox();
                         d.updatePos();
-                        // TODO compare previous bounding box Grids to current bounding box Grids
-                        //  update Grid with this information, removing / adding references to the Position obj
+                        updatePosition(d);
                     } finally {
                         latch3.countDown();
                     }
@@ -163,12 +161,12 @@ public class GridWorld {
 
         // 5. Tick all entities EXCEPT creature, remove
         ArrayList<Position> removedPositions = new ArrayList<>();
-        for (Map.Entry<Position, Entity> entry : positionToEntity.entrySet())
-            if (!(entry.getValue() instanceof Creature))
+        for (Pair<? extends Entity, ? extends Position> value : positionToEntityPair.values())
+            if (!(value.first() instanceof Creature))
                 executor.submit(() -> {
                     try {
-                        if (entry.getValue().tick())
-                            removedPositions.add(entry.getKey());
+                        if (value.first().tick())
+                            removedPositions.add(value.second());
                     } finally {
                         latch5.countDown();
                     }
@@ -182,13 +180,14 @@ public class GridWorld {
             //  and add in new ones with newEntities.
 
             for (Position p : removedPositions) {
-                Entity e = positionToEntity.remove(p);
-                entityFactory.recycle(new Pair<>(p, e));
+                Pair<? extends Entity, ? extends Position> pair = positionToEntityPair.remove(p);
 
-                switch (e) {
+                switch (pair.first()) {
                     case Creature c -> {
-                        // TODO remove creature from arraylist creatures
-                        //  also add a corpse
+                        if (!creatures.remove(pair))
+                            throw new RuntimeException("Unexpectedly found no creature pair when removing dead creatures.");
+
+                        newEntities.add(entityFactory.getCorpsePair((Pair<Creature, Dynamic>) pair));
                     }
                     case Corpse c -> {
                         // nothing
@@ -197,21 +196,23 @@ public class GridWorld {
                         // nothing
                     }
                     case Egg egg -> {
-                        // nothing
+                        // TODO determine if it should hatch or not
                     }
-                    default -> throw new IllegalStateException("Unexpected class Entity: " + e.getClass().getName());
+                    default ->
+                            throw new IllegalStateException("Unexpected class Entity: " + pair.first().getClass().getName());
                 }
+                entityFactory.recycle(pair);
 
-                //TODO remove the entity from Grid references
+                removePosition(p);
             }
 
             for (Pair<Creature, Dynamic> cd : deadCreatures) {
                 creatures.remove(cd);
                 entityFactory.recycle(cd);
-                if (positionToEntity.remove(cd.second()) != cd.first())
+                if (positionToEntityPair.remove(cd.second()).first() != cd.first())
                     throw new RuntimeException("positionToEntity in GridWorld doesn't match up with expected Pairing.");
                 newEntities.add(entityFactory.getCorpsePair(cd));
-                //TODO remove the entity from Grid references
+                removePosition(cd.second());
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -228,6 +229,31 @@ public class GridWorld {
         }
 
         // TODO spawn in all Entities in queue
+    }
+
+    /** Adds the {@code pos} position object to Grid. In other words,
+     * adds references to {@code pos} in every Grid cell that intersects / contains
+     * {@code pos's} bounding box. */
+    private void addPosition(Position pos) {
+        // TODO implement as spec specifies.
+
+    }
+
+    /** Removes the {@code pos} position object to Grid. In other words,
+     * removes all references to {@code pos} in every Grid cell that intersects / contains
+     * {@code pos's} bounding box. */
+    private void removePosition(Position pos) {
+        // TODO implement as spec specifies.
+
+    }
+
+    /** Updates the {@code pos} position object to Grid. In other words,
+     * adds references to {@code pos} in every Grid cell that intersects / contains
+     * {@code pos's} bounding box and removes all references in Grid cells that intersects
+     * with {@code pos's} prev bounding box. */
+    private void updatePosition(Dynamic d) {
+        // TODO implement as spec specifies.
+
     }
 
     /**
@@ -266,7 +292,7 @@ public class GridWorld {
 
                     ArrayList<Position> cell = Grids[gx][gy];
                     for (Position pos : cell) {
-                        Entity entity = positionToEntity.get(pos);
+                        Entity entity = positionToEntityPair.get(pos).first();
                         if (seenEntities.contains(entity)) continue;
 
                         if (ray.intersects(pos.boundingBox)) {
@@ -302,7 +328,7 @@ public class GridWorld {
                             for (int y = minY; y < maxY; y++)
                                 for (Position p : Grids[x][y])
                                     if (p != cd.second())
-                                        positionToEntity.get(p).creatureInteract(cd.first());
+                                        positionToEntityPair.get(p).first().creatureInteract(cd.first());
                     } finally {
                         latch3.countDown();
                     }
@@ -315,9 +341,8 @@ public class GridWorld {
      * any Dynamic Objects are overlapping with any other Position objects. If so, calls {@link Position#collision}
      * on both Position objects. */
     private void handleCollision(ExecutorService executor, CountDownLatch latch) {
-        for (Position p : positionToEntity.keySet())
-            if (p instanceof Dynamic d)
-                // TODO remove Bush from the collision detection system
+        for (Pair<? extends Entity, ? extends Position> pair : positionToEntityPair.values())
+            if (!(pair.first() instanceof Bush) && pair.second() instanceof Dynamic d)
                 executor.submit(() -> {
                     try {
                         int startGridX = d.boundingBox.x / WorldConstants.GridWidth;
@@ -353,18 +378,18 @@ public class GridWorld {
 
     /** Returns a read-only copy of this grid world at the current tick. */
     public ReadOnlyWorld getReadOnlyCopy() {
-        return new ReadOnlyWorld(positionToEntity);
+        return new ReadOnlyWorld(positionToEntityPair);
     }
 
     public static class ReadOnlyWorld {
         public final Entity.ReadOnlyEntity[] readOnlyData;
 
-        public ReadOnlyWorld(HashMap<Position, Entity> positionToEntity) {
+        public ReadOnlyWorld(HashMap<Position, Pair<? extends Entity, ? extends Position>> positionToEntity) {
             readOnlyData = new Entity.ReadOnlyEntity[positionToEntity.size()];
 
             int count = 0;
-            for (Map.Entry<Position, Entity> entry : positionToEntity.entrySet())
-                readOnlyData[count++] = entry.getValue().getReadOnlyCopy(entry.getKey());
+            for (Pair<? extends Entity, ? extends Position> value : positionToEntity.values())
+                readOnlyData[count++] = value.first().getReadOnlyCopy(value.second());
         }
     }
 }
