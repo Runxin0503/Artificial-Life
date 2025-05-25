@@ -24,6 +24,9 @@ import java.util.concurrent.ExecutorService;
  * for more efficient collision processing. */
 public class GridWorld {
 
+    /** Keeps track of the total number of Creatures (and Eggs) in this world. */
+    private int numCreatures;
+
     /** The 2D array of ArrayLists of Positions, representing a 2D array of "Grids".<br>
      * Used for spatial partition and in searching for a Position
      * Object during creature interaction. */
@@ -86,7 +89,11 @@ public class GridWorld {
                 latch6 = new CountDownLatch(positionToEntityPair.size());
 
         ArrayList<Pair<? extends Entity, ? extends Position>> newEntities = new ArrayList<>();
-        // TODO naturally spawn eggs, etc.
+
+        // naturally spawn eggs
+        if (numCreatures < WorldConstants.WorldGen.naturalSpawningThreshold)
+            if (Math.random() < WorldConstants.WorldGen.naturalSpawningProbability)
+                newEntities.add(entityFactory.getEggPair());
 
         // 1. Neural Network (Brain)
         ArrayList<Pair<Creature, Dynamic>> deadCreatures = new ArrayList<>((int) Math.ceil(creatures.size() * 0.01));
@@ -105,10 +112,12 @@ public class GridWorld {
                     });
                     executor.submit(() -> {
                         try {
-                            if (cd.first().tick())
+                            if (cd.first().tick()) {
                                 synchronized (deadCreatures) {
                                     deadCreatures.add(cd);
                                 }
+                            }
+                            // TODO check if Creature wants to lay an egg.
                         } finally {
                             latch2.countDown();
                         }
@@ -189,6 +198,7 @@ public class GridWorld {
                         if (!creatures.remove(pair))
                             throw new RuntimeException("Unexpectedly found no creature pair when removing dead creatures.");
 
+                        numCreatures--;
                         newEntities.add(entityFactory.getCorpsePair((Pair<Creature, Dynamic>) pair));
                     }
                     case Corpse c -> {
@@ -201,6 +211,7 @@ public class GridWorld {
                         // determine if it should hatch or not
                         if (egg.isHatchable())
                             newEntities.add(entityFactory.getCreaturePair((Pair<Egg, Fixed>) pair));
+                        else numCreatures--;
                     }
                     default ->
                             throw new IllegalStateException("Unexpected class Entity: " + pair.first().getClass().getName());
@@ -211,6 +222,7 @@ public class GridWorld {
             }
 
             for (Pair<Creature, Dynamic> cd : deadCreatures) {
+                numCreatures--;
                 creatures.remove(cd);
                 entityFactory.recycle(cd);
                 if (positionToEntityPair.remove(cd.second()).first() != cd.first())
@@ -236,7 +248,11 @@ public class GridWorld {
         for (Pair<? extends Entity, ? extends Position> pair : newEntities) {
             addPosition(pair.second());
             positionToEntityPair.put(pair.second(), pair);
-            if (pair.first() instanceof Creature) creatures.add((Pair<Creature, Dynamic>) pair);
+            if (pair.first() instanceof Creature) {
+                creatures.add((Pair<Creature, Dynamic>) pair);
+                numCreatures++;
+            } else if (pair.first() instanceof Egg)
+                numCreatures++;
         }
     }
 
