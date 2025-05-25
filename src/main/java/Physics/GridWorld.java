@@ -7,6 +7,7 @@ import Entities.Creature.Egg;
 import Entities.Entity;
 import Entities.EntityFactory;
 import Utils.Constants.WorldConstants;
+import Utils.Equations;
 import Utils.Pair;
 
 import java.awt.*;
@@ -22,9 +23,6 @@ import java.util.concurrent.ExecutorService;
  * <br>A 2D world of grid cells where {@link Position} are stored and spatial partitioned
  * for more efficient collision processing. */
 public class GridWorld {
-
-    /** Keeps track of the total number of Entities in this world. */
-    private int numEntities;
 
     /** The 2D array of ArrayLists of Positions, representing a 2D array of "Grids".<br>
      * Used for spatial partition and in searching for a Position
@@ -42,15 +40,18 @@ public class GridWorld {
 
     public GridWorld() {
         creatures = new ArrayList<>();
-        numEntities = 0;
         positionToEntityPair = new HashMap<>();
         Grids = new ArrayList[WorldConstants.GRID_NUM_X][WorldConstants.GRID_NUM_Y];
         entityFactory = new EntityFactory();
 
-        // TODO Create Bushes
+        // Create Bushes
+        for (int i = 0; i < WorldConstants.WorldGen.numBushes; i++)
+            addBush();
     }
 
+    /** TODO write specs */
     public static GridWorld loadWorld(String filePath) {
+        // TODO implement this
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -85,7 +86,7 @@ public class GridWorld {
                 latch6 = new CountDownLatch(positionToEntityPair.size());
 
         ArrayList<Pair<? extends Entity, ? extends Position>> newEntities = new ArrayList<>();
-        // TODO spawn bushes, naturally spawn eggs, etc.
+        // TODO naturally spawn eggs, etc.
 
         // 1. Neural Network (Brain)
         ArrayList<Pair<Creature, Dynamic>> deadCreatures = new ArrayList<>((int) Math.ceil(creatures.size() * 0.01));
@@ -248,7 +249,7 @@ public class GridWorld {
 
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
-                if (isValidGrid(x,y))
+                if (isValidGrid(x, y))
                     Grids[x][y].remove(pos);
             }
         }
@@ -263,7 +264,7 @@ public class GridWorld {
 
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
-                if (isValidGrid(x,y))
+                if (isValidGrid(x, y))
                     Grids[x][y].add(pos);
             }
         }
@@ -299,6 +300,42 @@ public class GridWorld {
                 }
             }
         }
+    }
+
+    /**
+     * Generates and adds a new {@code Bush} entity to the world, ensuring it is not placed
+     * too close to any existing bushes.<br>
+     * <br>
+     * The method repeatedly requests a new {@linkplain Bush} and its associated {@linkplain Fixed} position
+     * from {@linkplain EntityFactory} until it finds a position that is at least
+     * {@link WorldConstants.WorldGen#bushRadius} away from all existing entities.<br>
+     * <br>
+     * Once a valid location is found, the bush's position is added to the world’s spatial structure
+     * and the pair is registered in {@code positionToEntityPair}.<br>
+     * <br>
+     * If a bush is generated too close to another entity, it is recycled to avoid memory waste.
+     */
+    private void addBush() {
+        Pair<Bush, Fixed> bushPair = entityFactory.getBushPair();
+        boolean tooClose = true;
+
+        while (tooClose) {
+            tooClose = false;
+            for (Pair<? extends Entity, ? extends Position> pair : positionToEntityPair.values()) {
+                if (!(pair.first() instanceof Bush)) continue;
+                if (Equations.dist(pair.second().x, pair.second().y, bushPair.second().x, bushPair.second().y) < WorldConstants.WorldGen.bushRadius) {
+                    tooClose = true;
+                    break;
+                }
+            }
+            if (tooClose) {
+                entityFactory.recycle(bushPair);
+                bushPair = entityFactory.getBushPair();
+            }
+        }
+
+        addPosition(bushPair.second());
+        positionToEntityPair.put(bushPair.second(), bushPair);
     }
 
     /**
