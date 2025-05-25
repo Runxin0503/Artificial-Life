@@ -67,10 +67,10 @@ public final class Fixed extends Position {
                 minSpeedY = eBoundingBox.getMaxY() - boundingBox.getMinY();
         }
         //No need for elastic collision calculation, invert velocity directly
-        Vector2D otherSpeed = movable.getVelocity().multiplied(-Constants.Physics.impulseVelocityLoss).minVectored(-minSpeedX, -minSpeedY);
+        Vector2D otherSpeed = movable.velocity.multiplied(-Constants.Physics.impulseVelocityLoss).minVectored(-minSpeedX, -minSpeedY);
 
         double mass = movable.getMass() + getMass();
-        double damage = movable.getMass() * movable.getVelocity().length() * Constants.CreatureConstants.Movement.momentumToDamage;
+        double damage = movable.getMass() * movable.velocity.length() * Constants.CreatureConstants.Movement.momentumToDamage;
         movable.damage += damage * getMass() / mass;
         this.damage += damage * movable.getMass() / mass;
 

@@ -85,6 +85,7 @@ public class GridWorld {
                 latch6 = new CountDownLatch(positionToEntityPair.size());
 
         ArrayList<Pair<? extends Entity, ? extends Position>> newEntities = new ArrayList<>();
+        // TODO spawn bushes, naturally spawn eggs, etc.
 
         // 1. Neural Network (Brain)
         ArrayList<Pair<Creature, Dynamic>> deadCreatures = new ArrayList<>((int) Math.ceil(creatures.size() * 0.01));
@@ -176,7 +177,7 @@ public class GridWorld {
         // await latch 5
         try {
             latch5.await();
-            // TODO remove all positions from removedPosition using EntityFactory
+            // remove all positions from removedPosition using EntityFactory
             //  and add in new ones with newEntities.
 
             for (Position p : removedPositions) {
@@ -196,7 +197,9 @@ public class GridWorld {
                         // nothing
                     }
                     case Egg egg -> {
-                        // TODO determine if it should hatch or not
+                        // determine if it should hatch or not
+                        if (egg.isHatchable())
+                            newEntities.add(entityFactory.getCreaturePair((Pair<Egg, Fixed>) pair));
                     }
                     default ->
                             throw new IllegalStateException("Unexpected class Entity: " + pair.first().getClass().getName());
@@ -228,23 +231,42 @@ public class GridWorld {
             throw new RuntimeException(e);
         }
 
-        // TODO spawn in all Entities in queue
+        // spawn in all Entities in queue
+        for (Pair<? extends Entity, ? extends Position> pair : newEntities) {
+            addPosition(pair.second());
+            positionToEntityPair.put(pair.second(), pair);
+            if (pair.first() instanceof Creature) creatures.add((Pair<Creature, Dynamic>) pair);
+        }
     }
 
     /** Adds the {@code pos} position object to Grid. In other words,
      * adds references to {@code pos} in every Grid cell that intersects / contains
      * {@code pos's} bounding box. */
     private void addPosition(Position pos) {
-        // TODO implement as spec specifies.
+        int minX = Math.max(0, pos.boundingBox.x / WorldConstants.GridWidth), maxX = Math.min(WorldConstants.GRID_NUM_X, (int) Math.ceil(pos.boundingBox.getMaxX() / WorldConstants.GridWidth));
+        int minY = Math.max(0, pos.boundingBox.y / WorldConstants.GridHeight), maxY = Math.min(WorldConstants.GRID_NUM_Y, (int) Math.ceil(pos.boundingBox.getMaxY() / WorldConstants.GridHeight));
 
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                if (isValidGrid(x,y))
+                    Grids[x][y].remove(pos);
+            }
+        }
     }
 
     /** Removes the {@code pos} position object to Grid. In other words,
      * removes all references to {@code pos} in every Grid cell that intersects / contains
      * {@code pos's} bounding box. */
     private void removePosition(Position pos) {
-        // TODO implement as spec specifies.
+        int minX = Math.max(0, pos.boundingBox.x / WorldConstants.GridWidth), maxX = Math.min(WorldConstants.GRID_NUM_X, (int) Math.ceil(pos.boundingBox.getMaxX() / WorldConstants.GridWidth));
+        int minY = Math.max(0, pos.boundingBox.y / WorldConstants.GridHeight), maxY = Math.min(WorldConstants.GRID_NUM_Y, (int) Math.ceil(pos.boundingBox.getMaxY() / WorldConstants.GridHeight));
 
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                if (isValidGrid(x,y))
+                    Grids[x][y].add(pos);
+            }
+        }
     }
 
     /** Updates the {@code pos} position object to Grid. In other words,
@@ -252,8 +274,31 @@ public class GridWorld {
      * {@code pos's} bounding box and removes all references in Grid cells that intersects
      * with {@code pos's} prev bounding box. */
     private void updatePosition(Dynamic d) {
-        // TODO implement as spec specifies.
+        int prevMinX = Math.max(0, d.prevBoundingBox.x / WorldConstants.GridWidth), prevMaxX = Math.min(WorldConstants.GRID_NUM_X, (int) Math.ceil(d.prevBoundingBox.getMaxX() / WorldConstants.GridWidth));
+        int prevMinY = Math.max(0, d.prevBoundingBox.y / WorldConstants.GridHeight), prevMaxY = Math.min(WorldConstants.GRID_NUM_Y, (int) Math.ceil(d.prevBoundingBox.getMaxY() / WorldConstants.GridHeight));
+        int newMinX = Math.max(0, d.boundingBox.x / WorldConstants.GridWidth), newMaxX = Math.min(WorldConstants.GRID_NUM_X, (int) Math.ceil(d.boundingBox.getMaxX() / WorldConstants.GridWidth));
+        int newMinY = Math.max(0, d.boundingBox.y / WorldConstants.GridHeight), newMaxY = Math.min(WorldConstants.GRID_NUM_Y, (int) Math.ceil(d.boundingBox.getMaxY() / WorldConstants.GridHeight));
 
+        int xDiff = Math.min(prevMaxX, newMaxX) - Math.max(prevMinX, newMinX) - 1;
+        boolean flipper;
+        for (int y = prevMinY; y < prevMaxY; y++) {
+            flipper = y >= newMinY && y < newMaxY;
+            for (int x = prevMinX; x < prevMaxX; x++) {
+                if (flipper && x >= newMinX && x < newMaxX) x += xDiff;
+                else {
+                    Grids[x][y].remove(d);
+                }
+            }
+        }
+        for (int y = newMinY; y < newMaxY; y++) {
+            flipper = y >= prevMinY && y < prevMaxY;
+            for (int x = newMinX; x < newMaxX; x++) {
+                if (flipper && x >= prevMinX && x < prevMaxX) x += xDiff;
+                else {
+                    Grids[x][y].add(d);
+                }
+            }
+        }
     }
 
     /**
@@ -356,7 +401,6 @@ public class GridWorld {
 
                                 for (Position o : Grids[gx][gy]) {
                                     if (o == d) continue;
-                                    // TODO test if Rectangle.intersects works as intended, chatgpt says otherwise
                                     if (d.boundingBox.intersects(o.boundingBox)) {
                                         o.collision(d);
                                     }

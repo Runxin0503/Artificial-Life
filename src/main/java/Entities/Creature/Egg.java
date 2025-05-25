@@ -33,10 +33,14 @@ public class Egg extends Entity {
     }
 
     public Creature hatch() {
-        if (timeCount == incubationTime && !isEaten) {
+        if (isHatchable())
             return creature;
-        }
+
         throw new RuntimeException("Called Egg.hatch() when egg is destroyed / not ready to hatch.");
+    }
+
+    public boolean isHatchable() {
+        return timeCount == incubationTime && !isEaten;
     }
 
     @Override
@@ -60,5 +64,6 @@ public class Egg extends Entity {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public record ReadOnlyEgg() implements ReadOnlyEntity{} // TODO implement
+    public record ReadOnlyEgg() implements ReadOnlyEntity {
+    } // TODO implement
 }

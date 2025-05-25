@@ -16,10 +16,10 @@ import java.awt.*;
 public final class Dynamic extends Position {
 
     /** The bounding box last stashed by calling {@link #stashBoundingBox} */
-    private final Rectangle prevBoundingBox = new Rectangle();
+    final Rectangle prevBoundingBox = new Rectangle();
 
     /** A 2D Vector representing both the direction and magnitude of the velocity of this Dynamic Object. */
-    private Vector2D velocity;
+    Vector2D velocity;
 
     /** A 2D Unit Vector representing the direction this Dynamic Object is facing. */
     private final UnitVector2D dir = new UnitVector2D(0);
@@ -80,11 +80,6 @@ public final class Dynamic extends Position {
         if (Math.abs(velocity.y) < 0.1) velocity.y = 0;
 
         angularSpeed *= (1 - Physics.frictionAngular);
-    }
-
-    /** Returns the velocity vector */
-    public Vector2D getVelocity() {
-        return velocity;
     }
 
     /** Returns the direction vector */
