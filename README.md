@@ -131,6 +131,7 @@ This project uses standard Java and requires no external dependencies.
 
 * [ ] Optimize **collision detection & memory usage**
 
+* [ ] Add **biomes, temperature, terrain height, etc**. (Low Priority)
 
 ---
 
