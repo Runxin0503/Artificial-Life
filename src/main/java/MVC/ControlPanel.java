@@ -1,4 +1,4 @@
 package MVC;
 
-public class ControlPanel {
+class ControlPanel {
 }

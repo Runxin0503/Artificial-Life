@@ -26,7 +26,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.ResourceBundle;
 
-public class MainView extends Application implements Initializable {
+class MainView extends Application implements Initializable {
 
     /** Clears TaskQueue, adds a stopRunning Task and createNewWorld Task to Controller TaskQueue */
     @FXML
@@ -117,10 +117,19 @@ public class MainView extends Application implements Initializable {
     /** This class should have an iterator that communicates to Controller the information in TaskQueue */
     private Queue<Task> TaskQueue;
 
+    /** The other Controller objects associated with the subsections of the fxml file. */
+    private InfoDisplay infoDisplay;
+
+    /** The other Controller objects associated with the subsections of the fxml file. */
+    private ControlPanel controlPanel;
+
+    /** The other Controller objects associated with the subsections of the fxml file. */
+    private CanvasControl canvasControl;
+
     /**
      * Stores the instance of the model this View renders.
      * Controller writes to model via {@link #updateViewModel},
-     * View reads from model via {@link Canvas#drawCanvas()}
+     * View reads from model via {@link CanvasControl#drawCanvas()}
      */
     private GridWorld.ReadOnlyWorld model;
 
@@ -226,7 +235,7 @@ public class MainView extends Application implements Initializable {
 
     /** Allows the MVC Controller to update text field */
     public void updateStepsPerSec(double stepsPerSec) {
-        stepsPerSecCounter.setText(Double.toString(stepsPerSec));
+        canvasControl.stepsPerSecCounter.setText(Double.toString(stepsPerSec));
     }
 
     /**
@@ -245,9 +254,9 @@ public class MainView extends Application implements Initializable {
      */
     public void updateViewModel(GridWorld.ReadOnlyWorld newModel) {
         assert newModel != null;
-        synchronized (canvas){
+        synchronized (canvasControl){
             model = newModel;
-            redrawCanvas = true;
+            canvasControl.redrawCanvas = true;
         }
     }
 

@@ -6,6 +6,7 @@ import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -14,36 +15,38 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 
-public class Canvas {
+class CanvasControl {
 
-    /**  */
-    private boolean redrawCanvas = false;
+    /** When true, this object will redraw the canvas at the next available tick. */
+    public boolean redrawCanvas = false;
 
     /**
      * Adds a 'Select Critter' task with a reference to the critter itself to TaskQueue
      * <br>Be able to select any hex tiles, only send event when selected hex tile is a critter
      */
     @FXML
-    private javafx.scene.canvas.Canvas canvas;
+    private Canvas canvas;
 
-    /**  */
+    /** The transformation applied to the canvas, used in {@linkplain #drawCanvas}. */
     private final Affine canvasTransform = new Affine();
 
+    /** The Panel or pane used to detect mouse actions on the canvas. */
     @FXML
     private StackPane canvasScroller;
 
+    /** Just a background image. */
     @FXML
     private ImageView backgroundImage;
 
-    /**  */
+    /** The text display that shows the frames-per-second rendering speed at a periodic interval. */
     @FXML
     private Text fpsCounter;
 
     /** A function in View that Controller calls to update Text directly*/
     @FXML
-    private Text stepsPerSecCounter;
+    public Text stepsPerSecCounter;
 
-    public Canvas() {
+    public CanvasControl() {
         canvasScroller.widthProperty().addListener((obs, oldVal, newVal) -> {
             Rectangle2D currentViewport = backgroundImage.getViewport();
             double newWidth = newVal.doubleValue();
