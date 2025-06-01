@@ -1,34 +1,20 @@
 package MVC;
 
 import Entities.Entity;
-import Utils.Constants;
-import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.transform.Affine;
-import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import javafx.util.Duration;
 
 import Physics.*;
 import Utils.Constants.WindowConstants;
@@ -40,7 +26,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.ResourceBundle;
 
-public class View extends Application implements Initializable {
+public class MainView extends Application implements Initializable {
 
     /** Clears TaskQueue, adds a stopRunning Task and createNewWorld Task to Controller TaskQueue */
     @FXML
@@ -71,14 +57,6 @@ public class View extends Application implements Initializable {
 
     @FXML
     private Text speedSliderDisplay;
-
-    /**  */
-    @FXML
-    private Text fpsCounter;
-
-    /** A function in View that Controller calls to update Text directly*/
-    @FXML
-    private Text stepsPerSecCounter;
 
     /** A function in View that Controller calls to update Text directly */
     @FXML
@@ -134,23 +112,6 @@ public class View extends Application implements Initializable {
     private GridPane critterGridPane;
 
     @FXML
-    private ImageView backgroundImage;
-
-    /**
-     * Adds a 'Select Critter' task with a reference to the critter itself to TaskQueue
-     * <br>Be able to select any hex tiles, only send event when selected hex tile is a critter
-     */
-    @FXML
-    private Canvas canvas;
-
-    private Affine canvasTransform;
-
-    @FXML private Button recenterButton;
-
-    @FXML
-    private StackPane worldScroller;
-
-    @FXML
     private MenuBar menuBar;
 
     /** This class should have an iterator that communicates to Controller the information in TaskQueue */
@@ -158,13 +119,10 @@ public class View extends Application implements Initializable {
 
     /**
      * Stores the instance of the model this View renders.
-     * <br>Synchronized on {@link #canvas},
      * Controller writes to model via {@link #updateViewModel},
-     * View reads from model via {@link #drawCanvas()}
+     * View reads from model via {@link Canvas#drawCanvas()}
      */
     private GridWorld.ReadOnlyWorld model;
-
-    private boolean redrawCanvas;
 
     /** Stores the current selected Entity */
     private Entity selectedEntity;
@@ -188,7 +146,6 @@ public class View extends Application implements Initializable {
             assert r != null;
             final Parent node = FXMLLoader.load(r);
             final Scene scene = new Scene(node);
-            stage.setTitle("WALLY'S WORLD");
             stage.setScene(scene);
             stage.sizeToScene();
             stage.show();
@@ -215,130 +172,17 @@ public class View extends Application implements Initializable {
         TaskQueue = new LinkedList<>();
         model = null;
 
-        canvasTransform = new Affine();
-
-        redrawCanvas = false;
-
-//        backgroundImage.fitWidthProperty().bind(worldScroller.widthProperty());
-//        backgroundImage.fitHeightProperty().bind(worldScroller.heightProperty());
-        worldScroller.widthProperty().addListener((obs, oldVal, newVal) -> {
-            Rectangle2D currentViewport = backgroundImage.getViewport();
-            double newWidth = newVal.doubleValue();
-            double newHeight = worldScroller.getHeight();
-            backgroundImage.setViewport(new Rectangle2D(
-                    currentViewport.getMinX(),
-                    currentViewport.getMinY(),
-                    newWidth,
-                    newHeight
-            ));
-        });
-
-        backgroundImage.setPreserveRatio(true);
-        backgroundImage.setViewport(new Rectangle2D(0,0,backgroundImage.getFitWidth(),backgroundImage.getFitHeight()));
-
-        worldScroller.heightProperty().addListener((obs, oldVal, newVal) -> {
-            Rectangle2D currentViewport = backgroundImage.getViewport();
-            double newWidth = worldScroller.getWidth();
-            double newHeight = newVal.doubleValue();
-            backgroundImage.setViewport(new Rectangle2D(
-                    currentViewport.getMinX(),
-                    currentViewport.getMinY(),
-                    newWidth,
-                    newHeight
-            ));
-        });
-
-        canvas.widthProperty().bind(worldScroller.widthProperty().add(WindowConstants.CANVAS_PADDING * 2));
-        canvas.heightProperty().bind(worldScroller.heightProperty().add(WindowConstants.CANVAS_PADDING * 2));
-
-        canvas.widthProperty().addListener(event->redrawCanvas=true);
-        canvas.heightProperty().addListener(event->redrawCanvas=true);
-
-        newWorld.setOnAction(event-> {
+        newWorld.setOnAction(event -> {
             addTask(new Task(Task.TaskType.CREATE_NEW_WORLD));
         });
-
-        backgroundImage.fitWidthProperty().bind(canvas.widthProperty());
-        backgroundImage.fitHeightProperty().bind(canvas.heightProperty());
 
         addTask(new Task(Task.TaskType.CREATE_NEW_WORLD));
 
 
         loadWorld.setOnAction(event -> {
             File file = openFileExplorer();
-            if(file == null) return;
-            addTask(new Task(Task.TaskType.LOAD_WORLD,file.getAbsolutePath()));
-        });
-
-        worldScroller.setOnScroll(ae -> {
-            if (ae.getDeltaY() != 0) {  // Only react to vertical scroll
-                double zoomFactor = ae.getDeltaY() > 0 ? 1.1 : 0.9;  // Zoom in or out
-                if ((canvasTransform.getMxx() >= WindowConstants.MAX_ZOOM / 1.1 || canvasTransform.getMyy() >= WindowConstants.MAX_ZOOM / 1.1) && zoomFactor > 1)
-                    return;
-                if ((canvasTransform.getMxx() <= WindowConstants.MIN_ZOOM / 0.9 || canvasTransform.getMyy() <= WindowConstants.MIN_ZOOM / 0.9) && zoomFactor < 1)
-                    return;
-
-                Point2D mouseCoords;
-                try{
-                    mouseCoords = canvasTransform.inverseTransform(canvas.sceneToLocal(ae.getSceneX(), ae.getSceneY()));
-                } catch (NonInvertibleTransformException e) {
-                    throw new RuntimeException(e);
-                }
-
-                double oldScaleX = canvasTransform.getMxx(), oldScaleY = canvasTransform.getMyy();
-
-                canvasTransform.setMxx(Math.clamp(oldScaleX * zoomFactor, WindowConstants.MIN_ZOOM, WindowConstants.MAX_ZOOM));
-                canvasTransform.setMyy(Math.clamp(oldScaleY * zoomFactor, WindowConstants.MIN_ZOOM, WindowConstants.MAX_ZOOM));
-
-                // Translate to maintain zoom focus on the mouse position
-                canvasTransform.setTx(canvasTransform.getTx() - mouseCoords.getX() * (canvasTransform.getMxx() - oldScaleX));
-                canvasTransform.setTy(canvasTransform.getTy() - mouseCoords.getY() * (canvasTransform.getMyy() - oldScaleY));
-
-                redrawCanvas = true;
-            }
-        });
-
-        final double[] dragAnchor = new double[2]; // To store initial mouse click position
-        worldScroller.setOnMousePressed(ae -> {
-            // Store initial mouse position for panning
-            dragAnchor[0] = ae.getSceneX() - canvasTransform.getTx();
-            dragAnchor[1] = ae.getSceneY() - canvasTransform.getTy();
-        });
-
-        worldScroller.setOnMouseDragged(ae -> {
-            // Calculate new position for panning
-            double offsetX = ae.getSceneX() - dragAnchor[0];
-            double offsetY = ae.getSceneY() - dragAnchor[1];
-            canvasTransform.setTx(offsetX);
-            canvasTransform.setTy(offsetY);
-
-            redrawCanvas = true;
-        });
-
-        worldScroller.setOnMouseReleased(ae -> {
-            if (model == null) return;
-
-            Point2D mouseCoords;
-            try{
-                mouseCoords = canvasTransform.inverseTransform(canvas.sceneToLocal(ae.getSceneX(), ae.getSceneY()));
-            } catch (NonInvertibleTransformException e) {
-                throw new RuntimeException(e);
-            }
-
-            redrawCanvas = true;
-
-            // TODO find the selected entity. If no entity is selected or continuousStep is true,
-            //  set selectedEntity to null, otherwise set selectedEntity to that selected Entity
-
-        });
-
-        recenterButton.setOnAction(event -> {
-            canvasTransform.setMxx(1);
-            canvasTransform.setMyy(1);
-            canvasTransform.setTx(0);
-            canvasTransform.setTy(0);
-
-            redrawCanvas = true;
+            if (file == null) return;
+            addTask(new Task(Task.TaskType.LOAD_WORLD, file.getAbsolutePath()));
         });
 
         critterGridPane.setVisible(false);
@@ -349,7 +193,7 @@ public class View extends Application implements Initializable {
         speedSlider.setMax(1000);
         speedSliderDisplay.setText("100 steps/sec");
         speedSlider.valueProperty().addListener(num -> {
-            synchronized (speedSlider){
+            synchronized (speedSlider) {
                 int simSpeed = (int) speedSlider.getValue();
                 speedSliderDisplay.setText(simSpeed == 1000 ? "MAX SPEED" : simSpeed + " steps/sec");
             }
@@ -364,49 +208,6 @@ public class View extends Application implements Initializable {
         // starts the Controller Thread
         new Thread(new Controller(this)).start();
 
-        // start the periodic drawCanvas Timeline
-        Timeline updateCanvasPeriodically = new Timeline(new KeyFrame(
-                Duration.seconds(1.0 / WindowConstants.MAX_FPS),
-                event -> {
-                    if (model == null || !redrawCanvas) return;
-                    drawCanvas();
-
-                    updateSelectedEntity();
-
-                    // TODO update every text information of the world on screen
-
-//                    timeElapsed.setText(String.valueOf(model.getSteps()));
-//                    aliveCritters.setText(String.valueOf(model.getNumberOfAliveCritters()));
-//
-//                    numFoodTiles.setText(String.valueOf(model.getNumberOfFood()));
-//                    numRockTiles.setText(String.valueOf(model.getNumberOfRocks()));
-                }
-        ));
-
-        new AnimationTimer() {
-            private long lastUpdate = 0;
-            private int frameCount = 0;
-            private long lastFrameTime = 0;
-
-            @Override
-            public void handle(long now) {
-                if (lastUpdate > 0) {
-                    frameCount++;
-
-                    // Update FPS every 0.2 seconds
-                    if (now - lastFrameTime >= 200_000_000) { // 0.5 seconds = 500,000,000 nanoseconds
-                        double fps = frameCount / ((now - lastFrameTime) / 1_000_000_000.0);
-                        fpsCounter.setText(String.valueOf(((int)fps*100)/100.0));
-                        frameCount = 0;
-                        lastFrameTime = now;
-                    }
-                }
-                lastUpdate = now;
-            }
-        }.start();
-
-        updateCanvasPeriodically.setCycleCount(Timeline.INDEFINITE);
-        updateCanvasPeriodically.play();
     }
 
     private void addTask(Task task) {
@@ -500,54 +301,6 @@ public class View extends Application implements Initializable {
         }
     }
 
-    /** A method that draws the Canvas according to {@link #model} */
-    private synchronized void drawCanvas() {
-        GridWorld.ReadOnlyWorld model;
-        synchronized (canvas) {
-            model = this.model;
-        }
-
-        double minX = Math.clamp(
-                (WindowConstants.CANVAS_PADDING - canvasTransform.getTx()) / canvasTransform.getMxx(),
-                WindowConstants.CANVAS_PADDING,
-                Constants.WorldConstants.xBound
-        );
-        double minY = Math.clamp(
-                (WindowConstants.CANVAS_PADDING - canvasTransform.getTy()) / canvasTransform.getMyy(),
-                WindowConstants.CANVAS_PADDING,
-                Constants.WorldConstants.yBound
-        );
-        double maxX = Math.clamp(
-                (canvas.getWidth() - WindowConstants.CANVAS_PADDING - canvasTransform.getTx()) / canvasTransform.getMxx(),
-                WindowConstants.CANVAS_PADDING,
-                Constants.WorldConstants.xBound
-        );
-        double maxY = Math.clamp(
-                (canvas.getHeight() - WindowConstants.CANVAS_PADDING - canvasTransform.getTy()) / canvasTransform.getMyy(),
-                WindowConstants.CANVAS_PADDING,
-                Constants.WorldConstants.yBound
-        );
-
-//      Create the bounding box
-        Rectangle2D canvasCameraBoundingBox = new Rectangle2D(minX, minY, maxX - minX, maxY - minY);
-
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        gc.clearRect(0,0,canvas.getWidth(),canvas.getHeight());
-
-        gc.save();
-        gc.translate(canvasTransform.getTx(),canvasTransform.getTy());  // Translate first
-        gc.scale(canvasTransform.getMxx(),canvasTransform.getMyy());  // Then apply scale
-
-        gc.setStroke(Color.BLACK);
-
-        // TODO draw the canvas here with model normally, assuming no translation is needed
-
-        // TODO draw red line around selected Entity
-
-        gc.restore();
-        redrawCanvas = false;
-    }
 
     @FXML
     private void handleWorldCritterTogglePressed(final ActionEvent e) {

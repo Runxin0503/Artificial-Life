@@ -14,7 +14,7 @@
    <children>
       <StackPane AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Canvas cache="true" cacheHint="SPEED" height="359.0" pickOnBounds="true" width="392.0" />
+            <Canvas cache="true" cacheHint="SPEED" height="359.0" pickOnBounds="true" width="420.0" />
          </children>
       </StackPane>
       <AnchorPane prefHeight="15.0" style="-fx-background-color: #f4f4f4;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">

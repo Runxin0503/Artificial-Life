@@ -2,20 +2,19 @@ package MVC;
 
 import Physics.GridWorld;
 
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 class Controller implements Runnable{
 
     /** The view module associated with this Controller in the MVC pairing */
-    private final View view;
+    private final MainView view;
 
     /** The World that runs in fixed intervals */
     private GridWorld world;
 
     /** Acts as a buffer for how many tick steps the world has taken without
-     * calculating and updating the steps/sec rate on {@link View}. */
+     * calculating and updating the steps/sec rate on {@link MainView}. */
     private int stepCounter;
 
     private ExecutorService executorService;
@@ -24,7 +23,7 @@ class Controller implements Runnable{
      * for a Task to tick the world or change this value to true. */
     private boolean runContinuously;
 
-    public Controller(View view) {
+    public Controller(MainView view) {
         this.view = view;
         this.world = null;
         this.runContinuously = false;
