@@ -2,6 +2,7 @@ package MVC;
 
 import Physics.GridWorld;
 import Utils.Constants;
+import Utils.Ref;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -46,7 +47,11 @@ class CanvasControl {
     @FXML
     public Text stepsPerSecCounter;
 
-    public CanvasControl() {
+    private final Ref<GridWorld.ReadOnlyWorld> model;
+
+    public CanvasControl(Ref<GridWorld.ReadOnlyWorld> model) {
+        this.model = model;
+
         canvasScroller.widthProperty().addListener((obs, oldVal, newVal) -> {
             Rectangle2D currentViewport = backgroundImage.getViewport();
             double newWidth = newVal.doubleValue();
@@ -173,9 +178,7 @@ class CanvasControl {
     /** A method that draws the Canvas according to {@code model}. */
     public synchronized void drawCanvas() {
         GridWorld.ReadOnlyWorld model;
-        synchronized (canvas) {
-            model = this.model;
-        }
+        model = this.model.get();
 
         double minX = Math.clamp(
                 (Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTx()) / canvasTransform.getMxx(),
@@ -217,5 +220,9 @@ class CanvasControl {
 
         gc.restore();
         redrawCanvas = false;
+    }
+
+    public synchronized void redrawCanvas() {
+        redrawCanvas = true;
     }
 }
