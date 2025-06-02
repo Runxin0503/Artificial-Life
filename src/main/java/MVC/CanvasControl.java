@@ -1,6 +1,5 @@
 package MVC;
 
-import Entities.Entity;
 import Physics.GridWorld;
 import Utils.Constants;
 import Utils.Ref;
@@ -24,7 +23,7 @@ import java.util.ResourceBundle;
 public class CanvasControl implements Initializable {
 
     /** When true, this object will redraw the canvas at the next available tick. */
-    public boolean redrawCanvas = false;
+    private boolean redrawCanvas = false;
 
     /**
      * Adds a 'Select Critter' task with a reference to the critter itself to TaskQueue
@@ -87,8 +86,8 @@ public class CanvasControl implements Initializable {
         canvas.widthProperty().bind(canvasScroller.widthProperty().add(Constants.WindowConstants.CANVAS_PADDING * 2));
         canvas.heightProperty().bind(canvasScroller.heightProperty().add(Constants.WindowConstants.CANVAS_PADDING * 2));
 
-        canvas.widthProperty().addListener(event -> redrawCanvas = true);
-        canvas.heightProperty().addListener(event -> redrawCanvas = true);
+        canvas.widthProperty().addListener(event -> redrawCanvas());
+        canvas.heightProperty().addListener(event -> redrawCanvas());
 
         backgroundImage.fitWidthProperty().bind(canvas.widthProperty());
         backgroundImage.fitHeightProperty().bind(canvas.heightProperty());
@@ -117,7 +116,7 @@ public class CanvasControl implements Initializable {
                 canvasTransform.setTx(canvasTransform.getTx() - mouseCoords.getX() * (canvasTransform.getMxx() - oldScaleX));
                 canvasTransform.setTy(canvasTransform.getTy() - mouseCoords.getY() * (canvasTransform.getMyy() - oldScaleY));
 
-                redrawCanvas = true;
+                redrawCanvas();
             }
         });
 
@@ -135,7 +134,7 @@ public class CanvasControl implements Initializable {
             canvasTransform.setTx(offsetX);
             canvasTransform.setTy(offsetY);
 
-            redrawCanvas = true;
+            redrawCanvas();
         });
 
         canvasScroller.setOnMouseReleased(ae -> {
@@ -148,7 +147,7 @@ public class CanvasControl implements Initializable {
                 throw new RuntimeException(e);
             }
 
-            redrawCanvas = true;
+            redrawCanvas();
 
             // TODO find the selected entity. If no entity is selected or continuousStep is true,
             //  set selectedEntity to null, otherwise set selectedEntity to that selected Entity
