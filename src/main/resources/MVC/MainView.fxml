@@ -24,8 +24,8 @@
    <SplitPane id="Info/WorldHorizontalSplitPane" dividerPositions="0.5" layoutX="45.0" layoutY="34.0" prefHeight="376.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0">
       <AnchorPane maxWidth="200.0" minWidth="200.0" prefWidth="200.0">
          <children>
-            <fx:include source="InfoDisplay.fxml" AnchorPane.bottomAnchor="83.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" />
-            <fx:include source="ControlPanel.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <fx:include source="InfoDisplay.fxml" AnchorPane.bottomAnchor="83.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <fx:include source="ControlPanel.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="297.0" />
          </children>
       </AnchorPane>
       <fx:include source="Canvas.fxml" />

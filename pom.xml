@@ -15,6 +15,7 @@
     <properties>
         <maven.compiler.release>21</maven.compiler.release>
         <junit.version>5.10.2</junit.version>
+        <javafx.version>21</javafx.version>
     </properties>
 
     <dependencies>
@@ -23,6 +24,18 @@
             <artifactId>backprop-with-neat</artifactId>
             <version>1.3.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -42,6 +55,15 @@
                 <version>3.2.5</version>
                 <configuration>
                     <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.8</version>
+                <configuration>
+                    <mainClass>MVC.MainView</mainClass>
                 </configuration>
             </plugin>
         </plugins>

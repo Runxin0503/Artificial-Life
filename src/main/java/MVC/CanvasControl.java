@@ -1,10 +1,12 @@
 package MVC;
 
+import Entities.Entity;
 import Physics.GridWorld;
 import Utils.Constants;
 import Utils.Ref;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
@@ -16,7 +18,10 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 
-class CanvasControl {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class CanvasControl implements Initializable {
 
     /** When true, this object will redraw the canvas at the next available tick. */
     public boolean redrawCanvas = false;
@@ -47,11 +52,11 @@ class CanvasControl {
     @FXML
     public Text stepsPerSecCounter;
 
-    private final Ref<GridWorld.ReadOnlyWorld> model;
+    private Ref<GridWorld.ReadOnlyWorld> model;
 
-    public CanvasControl(Ref<GridWorld.ReadOnlyWorld> model) {
-        this.model = model;
-
+    /** Initializer automatically called by JavaFX right after FXML injected all dependencies. */
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         canvasScroller.widthProperty().addListener((obs, oldVal, newVal) -> {
             Rectangle2D currentViewport = backgroundImage.getViewport();
             double newWidth = newVal.doubleValue();
@@ -173,6 +178,11 @@ class CanvasControl {
                 lastUpdate = now;
             }
         }.start();
+    }
+
+    /** Custom initializer called by {@linkplain MainView}. */
+    public void init(Ref<GridWorld.ReadOnlyWorld> model) {
+        this.model = model;
     }
 
     /** A method that draws the Canvas according to {@code model}. */

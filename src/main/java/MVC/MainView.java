@@ -21,7 +21,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.ResourceBundle;
 
-class MainView extends Application implements Initializable {
+public class MainView extends Application implements Initializable {
 
 
     /** This class should have an iterator that communicates to Controller the information in TaskQueue */
@@ -53,7 +53,7 @@ class MainView extends Application implements Initializable {
     @Override
     public void start(final Stage stage) {
         try {
-            final URL r = getClass().getResource("/GUI.fxml");
+            final URL r = getClass().getResource("/MVC/MainView.fxml");
             if (r == null) {
                 System.err.println("No FXML resource found.");
                 try {

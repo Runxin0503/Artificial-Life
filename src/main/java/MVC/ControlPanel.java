@@ -3,14 +3,17 @@ package MVC;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.text.Text;
 
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
-class ControlPanel {
+public class ControlPanel implements Initializable {
 
     /** disables {@link #advanceStep} when its toggled, adds a runContinuously/stopRunning Task to Controller TaskQueue  */
     @FXML
@@ -30,11 +33,11 @@ class ControlPanel {
 
     /** Lambda function that adds a task to the Task-Queue in MainView according
      * to {@code MainView.addTask}. */
-    private final Consumer<Task> taskAdder;
+    private Consumer<Task> taskAdder;
 
-    public ControlPanel(Consumer<Task> addTask) {
-        taskAdder = addTask;
-
+    /** Initializer automatically called by JavaFX right after FXML injected all dependencies. */
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         speedSlider.setValue(100);
         speedSlider.setMax(1000);
         speedSliderDisplay.setText("100 steps/sec");
@@ -50,6 +53,11 @@ class ControlPanel {
                 speedSliderDisplay.setText(simSpeed == 1000 ? "MAX SPEED" : simSpeed + " steps/sec");
             }
         });
+    }
+
+    /** Custom initializer called by {@linkplain MainView}. */
+    public void init(Consumer<Task> addTask) {
+        taskAdder = addTask;
     }
 
     /** Unselects the continuous step toggle button when a new world is loaded. */

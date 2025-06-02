@@ -5,13 +5,15 @@ import Physics.GridWorld;
 import Utils.Ref;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
-class InfoDisplay {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class InfoDisplay implements Initializable {
 
     /** Updates the view to show world info */
     @FXML
@@ -46,16 +48,21 @@ class InfoDisplay {
     private AnchorPane entityInfoTab;
 
     /** Stores the reference to the instance of the model this InfoDisplay displays. */
-    private final Ref<GridWorld.ReadOnlyWorld> model;
+    private Ref<GridWorld.ReadOnlyWorld> model;
 
     /** Stores a reference to the current selected Entity. */
-    private final Ref<Entity> selectedEntity;
+    private Ref<Entity> selectedEntity;
 
-    public InfoDisplay(Ref<GridWorld.ReadOnlyWorld> model, Ref<Entity> selectedEntity) {
+    /** Initializer automatically called by JavaFX right after FXML injected all dependencies. */
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         entityInfoTab.setVisible(false);
         worldInfoToggle.setSelected(true);
         entityInfoToggle.setDisable(true);
+    }
 
+    /** Custom initializer called by {@linkplain MainView}. */
+    public void init(Ref<GridWorld.ReadOnlyWorld> model, Ref<Entity> selectedEntity) {
         this.model = model;
         this.selectedEntity = selectedEntity;
     }
