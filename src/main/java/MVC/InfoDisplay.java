@@ -1,5 +1,9 @@
 package MVC;
 
+import Entities.Bush;
+import Entities.Corpse;
+import Entities.Creature.Creature;
+import Entities.Creature.Egg;
 import Entities.Entity;
 import Physics.GridWorld;
 import Utils.Ref;
@@ -72,7 +76,7 @@ public class InfoDisplay implements Initializable {
         entityInfoToggle.setDisable(true);
     }
 
-    /** Custom initializer called by {@linkplain MainView}. */
+    /** Custom initializer called by {@linkplain GUI}. */
     public void init(Ref<GridWorld.ReadOnlyWorld> model, Ref<Entity> selectedEntity) {
         this.model = model;
         this.selectedEntity = selectedEntity;
@@ -80,13 +84,16 @@ public class InfoDisplay implements Initializable {
 
     /** Updates the world info tab when the tab is open and visible. */
     private void updateWorldInfo() {
-        // TODO update world info tab
+        if (worldInfoTab.isVisible()) {
+            // TODO update world info tab
+
+        }
     }
 
     /** Updates the Entity Information on the selected entity, or closes the info tab if no entity is selected. */
-    private void updateSelectedEntity() {
+    private void updateEntityInfo() {
         // TODO check whether entity or world info tab is open before updating information for optimization.
-        if (!selectedEntity.isEmpty()) {
+        if (!selectedEntity.isEmpty() && !worldInfoTab.isVisible()) {
             // TODO list information about the selected entity here
 //            ReadOnlyCritter readOnlyCritter;
 //            try {
@@ -113,14 +120,18 @@ public class InfoDisplay implements Initializable {
     }
 
     @FXML
-    private void handleWorldCritterTogglePressed(final ActionEvent e) {
+    private void handleWorldEntityTogglePressed(final ActionEvent e) {
         if (e.getSource() == worldInfoToggle) {
             selectInfoTab(0);
         } else if (e.getSource() == entityInfoToggle) {
-            // TODO switch to appropriate tab with selectInfoTab(i)
-            worldInfoTab.setVisible(false);
-            entityInfoTab.setVisible(true);
-            worldInfoToggle.setSelected(false);
+            // selected Entity must not be null if entity-info-toggle was pressed.
+            switch (selectedEntity.get()) {
+                case Corpse ignored -> selectInfoTab(1);
+                case Bush ignored -> selectInfoTab(2);
+                case Egg ignored -> selectInfoTab(3);
+                case Creature ignored -> selectInfoTab(4);
+                case null, default -> throw new IllegalStateException("Unexpected value: " + selectedEntity.get());
+            }
         }
     }
 
@@ -141,15 +152,15 @@ public class InfoDisplay implements Initializable {
      *          </ul>
      */
     private void selectInfoTab(int i) {
-        if(i < 0 || i > 4) throw new RuntimeException("Unsupported tab selection {"+i+"}.");
+        if (i < 0 || i > 4) throw new RuntimeException("Unsupported tab selection {" + i + "}.");
 
-        worldInfoToggle.setSelected(i==0);
-        entityInfoToggle.setSelected(i!=0);
+        worldInfoToggle.setSelected(i == 0);
+        entityInfoToggle.setSelected(i != 0);
 
-        worldInfoTab.setVisible(i==0);
-        corpseInfoTab.setVisible(i==1);
-        bushInfoTab.setVisible(i==2);
-        eggInfoTab.setVisible(i==3);
-        creatureInfoTab.setVisible(i==4);
+        worldInfoTab.setVisible(i == 0);
+        corpseInfoTab.setVisible(i == 1);
+        bushInfoTab.setVisible(i == 2);
+        eggInfoTab.setVisible(i == 3);
+        creatureInfoTab.setVisible(i == 4);
     }
 }

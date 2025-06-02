@@ -10,6 +10,7 @@ Utils\UnitVector2D.class
 Physics\GridWorld.class
 Utils\Vector2D.class
 MVC\Task$TaskType.class
+MVC\GUI.class
 Entities\Creature\Egg$ReadOnlyEgg.class
 Utils\Constants$CorpseConstants.class
 Entities\Entity$ReadOnlyEntity.class

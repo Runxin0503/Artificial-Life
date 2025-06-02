@@ -63,7 +63,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>MVC.MainView</mainClass>
+                    <mainClass>MVC.GUI</mainClass>
                 </configuration>
             </plugin>
         </plugins>

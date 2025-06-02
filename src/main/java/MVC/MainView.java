@@ -2,88 +2,48 @@ package MVC;
 
 import Entities.Entity;
 import Physics.GridWorld;
-import Utils.Constants.WindowConstants;
 import Utils.Ref;
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.stage.Window;
+import javafx.scene.layout.Pane;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.ResourceBundle;
 
-public class MainView extends Application implements Initializable {
+public class MainView implements Initializable {
 
+    @FXML
+    Pane infoDisplayPane;
+
+    @FXML
+    Pane controlPanelPane;
+
+    @FXML
+    Pane canvasControlPane;
 
     /** This class should have an iterator that communicates to Controller the information in TaskQueue */
     private Queue<Task> TaskQueue;
 
     /** The other Controller objects associated with the subsections of the fxml file. */
-    private InfoDisplay infoDisplay;
+    InfoDisplay infoDisplay;
 
     /** The other Controller objects associated with the subsections of the fxml file. */
-    private ControlPanel controlPanel;
+    ControlPanel controlPanel;
 
     /** The other Controller objects associated with the subsections of the fxml file. */
-    private CanvasControl canvasControl;
+    CanvasControl canvasControl;
 
     /**
      * Stores the reference to the instance of the model this View renders.
      * Controller writes to model via {@link #updateViewModel},
      * View reads from model via {@link CanvasControl#drawCanvas()}
      */
-    private final Ref<GridWorld.ReadOnlyWorld> model = new Ref<>(null);
+    private Ref<GridWorld.ReadOnlyWorld> model;
 
     /** Stores a reference to the current selected Entity. */
-    private final Ref<Entity> selectedEntity = new Ref<>(null);
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    @Override
-    public void start(final Stage stage) {
-        try {
-            final URL r = getClass().getResource("/MVC/MainView.fxml");
-            if (r == null) {
-                System.err.println("No FXML resource found.");
-                try {
-                    stop();
-                } catch (final Exception ignored) {
-                }
-            }
-            assert r != null;
-            final Parent node = FXMLLoader.load(r);
-            final Scene scene = new Scene(node);
-            stage.setScene(scene);
-            stage.sizeToScene();
-            stage.show();
-//            scene.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-//                System.out.println(event.getX() + "," + event.getY());
-//            });
-//            scene.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-//                System.out.println(scene.getWidth() + "," + scene.getHeight());
-//            });
-            stage.setMinWidth(WindowConstants.MIN_STAGE_WIDTH);
-            stage.setMinHeight(WindowConstants.MIN_STAGE_HEIGHT);
-        } catch (final IOException ioe) {
-            System.err.println("Can't load FXML file.");
-            ioe.printStackTrace();
-            try {
-                stop();
-            } catch (final Exception ignored) {
-            }
-        }
-    }
+    private Ref<Entity> selectedEntity;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -91,12 +51,17 @@ public class MainView extends Application implements Initializable {
 
         // starts the Controller Thread
         new Thread(new Controller(this)).start();
+    }
 
+    /** Custom initializer called by {@linkplain GUI}. */
+    public void init(Ref<GridWorld.ReadOnlyWorld> model, Ref<Entity> selectedEntity) {
+        this.model = model;
+        this.selectedEntity = selectedEntity;
     }
 
     /** Adds a task to the {@linkplain #TaskQueue}. Doesn't do
      * anything if the Queue has over 100 tasks already. */
-    private void addTask(Task task) {
+    void addTask(Task task) {
         synchronized (TaskQueue) {
             if (TaskQueue.size() > 100) return;
             TaskQueue.add(task);

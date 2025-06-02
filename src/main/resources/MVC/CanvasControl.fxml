@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="WorldAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="347.0" prefWidth="416.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.CanvasControl">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="347.0" prefWidth="416.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.CanvasControl">
    <children>
       <StackPane fx:id="canvasScroller" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>

@@ -2,6 +2,7 @@
 
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -10,11 +11,12 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="WorldAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="347.0" prefWidth="416.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="347.0" prefWidth="416.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.CanvasControl">
    <children>
-      <StackPane AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="canvasScroller" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Canvas cache="true" cacheHint="SPEED" height="359.0" pickOnBounds="true" width="420.0" />
+            <Canvas fx:id="canvas" cache="true" cacheHint="SPEED" height="359.0" pickOnBounds="true" width="420.0" />
+            <ImageView fx:id="backgroundImage" fitHeight="332.0" fitWidth="416.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </StackPane>
       <AnchorPane prefHeight="15.0" style="-fx-background-color: #f4f4f4;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
@@ -50,7 +52,7 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                                    <Text fx:id="fpsCounter" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
                                  </children>
                               </HBox>
                            </children>
@@ -79,7 +81,7 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                                    <Text fx:id="stepsPerSecCounter" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
                                  </children>
                               </HBox>
                            </children>

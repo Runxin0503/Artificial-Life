@@ -55,7 +55,7 @@ public class ControlPanel implements Initializable {
         });
     }
 
-    /** Custom initializer called by {@linkplain MainView}. */
+    /** Custom initializer called by {@linkplain GUI}. */
     public void init(Consumer<Task> addTask) {
         taskAdder = addTask;
     }

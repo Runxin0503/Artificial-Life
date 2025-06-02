@@ -14,10 +14,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.InfoDisplay">
    <children>
-      <AnchorPane id="InfoSwitcherAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="41.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="41.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <columnConstraints>
@@ -30,12 +29,12 @@
                <children>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <ToggleButton focusTraversable="false" mnemonicParsing="false" text="World" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0" />
+                        <ToggleButton fx:id="worldInfoToggle" focusTraversable="false" mnemonicParsing="false" text="World" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0" />
                      </children>
                   </AnchorPane>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                      <children>
-                        <ToggleButton focusTraversable="false" mnemonicParsing="false" text="Entity" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                        <ToggleButton fx:id="entityInfoToggle" focusTraversable="false" mnemonicParsing="false" text="Entity" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
                      </children>
                   </AnchorPane>
                </children>
@@ -44,7 +43,7 @@
       </AnchorPane>
       <AnchorPane layoutY="1.0" prefHeight="251.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
-            <AnchorPane opacity="0.0" prefHeight="217.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane fx:id="worldInfoTab" prefHeight="217.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <AnchorPane prefHeight="220.0" prefWidth="200.0" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
@@ -88,7 +87,7 @@
                                              <children>
                                                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                    <children>
-                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                      <Text fx:id="timeElapsed" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                                          <font>
                                                             <Font name="System Bold" size="18.0" />
                                                          </font>
@@ -140,7 +139,7 @@
                                              <children>
                                                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                    <children>
-                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                      <Text fx:id="numCreatures" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                                          <font>
                                                             <Font name="System Bold" size="18.0" />
                                                          </font>
@@ -192,7 +191,7 @@
                                              <children>
                                                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                    <children>
-                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                      <Text fx:id="numBushes" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                                          <font>
                                                             <Font name="System Bold" size="18.0" />
                                                          </font>
@@ -244,7 +243,7 @@
                                              <children>
                                                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                    <children>
-                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                      <Text fx:id="numEntities" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                                          <font>
                                                             <Font name="System Bold" size="18.0" />
                                                          </font>
@@ -297,7 +296,7 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane layoutX="10.0" layoutY="10.0" opacity="0.0" prefHeight="251.0" prefWidth="200.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane fx:id="corpseInfoTab" layoutX="10.0" layoutY="10.0" opacity="0.0" prefHeight="251.0" prefWidth="200.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <GridPane prefHeight="120.0" prefWidth="200.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <columnConstraints>
@@ -469,7 +468,7 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane opacity="0.0" prefHeight="251.0" prefWidth="200.0" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane fx:id="bushInfoTab" opacity="0.0" prefHeight="251.0" prefWidth="200.0" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <GridPane prefHeight="120.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <columnConstraints>
@@ -624,7 +623,7 @@
                   </GridPane>
                </children>
             </AnchorPane>
-            <AnchorPane layoutX="10.0" layoutY="10.0" opacity="0.0" prefHeight="251.0" prefWidth="200.0" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane fx:id="eggInfoTab" layoutX="10.0" layoutY="10.0" opacity="0.0" prefHeight="251.0" prefWidth="200.0" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <GridPane prefHeight="120.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <columnConstraints>
@@ -779,7 +778,7 @@
                   </GridPane>
                </children>
             </AnchorPane>
-            <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="217.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane fx:id="creatureInfoTab" layoutX="10.0" layoutY="10.0" opacity="0.0" prefHeight="217.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <AnchorPane prefHeight="220.0" prefWidth="200.0" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
