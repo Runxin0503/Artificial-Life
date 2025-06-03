@@ -44,7 +44,11 @@ public class ControlPanel implements Initializable {
         speedSlider.valueProperty().addListener(num -> {
             synchronized (speedSlider) {
                 int simSpeed = (int) speedSlider.getValue();
-                speedSliderDisplay.setText(simSpeed == 1000 ? "MAX SPEED" : simSpeed + " steps/sec");
+                speedSliderDisplay.setText(switch (simSpeed) {
+                    case 0 -> "PAUSED";
+                    case 1000 -> "MAX SPEED";
+                    default -> simSpeed + " steps/sec";
+                });
             }
         });
         speedSlider.setOnMouseReleased(event -> {
@@ -55,7 +59,7 @@ public class ControlPanel implements Initializable {
         });
     }
 
-    /** Custom initializer called by {@linkplain GUI}. */
+    /** Custom initializer called by {@linkplain MainView}. */
     public void init(Consumer<Task> addTask) {
         taskAdder = addTask;
     }

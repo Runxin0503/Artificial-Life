@@ -179,7 +179,7 @@ public class CanvasControl implements Initializable {
         }.start();
     }
 
-    /** Custom initializer called by {@linkplain GUI}. */
+    /** Custom initializer called by {@linkplain MainView}. */
     public void init(Ref<GridWorld.ReadOnlyWorld> model) {
         this.model = model;
     }

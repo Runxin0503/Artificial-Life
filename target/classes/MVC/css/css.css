@@ -1,0 +1,6 @@
+.anchor-bordered {
+    -fx-border-color: darkblue;
+    -fx-border-width: 3px;
+    -fx-border-style: solid;
+    -fx-border-radius: 8px;
+}

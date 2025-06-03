@@ -1,7 +1,0 @@
-.scroll-pane .viewport {
-    -fx-padding: 0 0 0 16; /* optional, leaves space for left scrollbar */
-}
-
-.scroll-pane .scroll-bar:vertical {
-    -fx-side: left;
-}

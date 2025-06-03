@@ -10,6 +10,8 @@ import Utils.Ref;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
@@ -63,6 +65,14 @@ public class InfoDisplay implements Initializable {
     @FXML
     private AnchorPane creatureInfoTab;
 
+    /** Custom Scroll Bar for the Creature Info Scroll Pane. */
+    @FXML
+    private ScrollBar creatureInfoScrollBar;
+
+    /** Creature Info's Scroll Pane with a Custom Scroll Bar. */
+    @FXML
+    private ScrollPane creatureInfoScrollPane;
+
     /** Stores the reference to the instance of the model this InfoDisplay displays. */
     private Ref<GridWorld.ReadOnlyWorld> model;
 
@@ -74,9 +84,14 @@ public class InfoDisplay implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         selectInfoTab(0);
         entityInfoToggle.setDisable(true);
+
+        creatureInfoScrollBar.minProperty().bind(creatureInfoScrollPane.vminProperty());
+        creatureInfoScrollBar.maxProperty().bind(creatureInfoScrollPane.vmaxProperty());
+        creatureInfoScrollBar.visibleAmountProperty().bind(creatureInfoScrollPane.heightProperty().divide(480));
+        creatureInfoScrollPane.vvalueProperty().bindBidirectional(creatureInfoScrollBar.valueProperty());
     }
 
-    /** Custom initializer called by {@linkplain GUI}. */
+    /** Custom initializer called by {@linkplain MainView}. */
     public void init(Ref<GridWorld.ReadOnlyWorld> model, Ref<Entity> selectedEntity) {
         this.model = model;
         this.selectedEntity = selectedEntity;
