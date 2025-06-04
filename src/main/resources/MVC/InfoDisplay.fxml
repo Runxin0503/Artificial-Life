@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollBar?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ToggleButton?>
@@ -15,7 +16,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.InfoDisplay">
+<AnchorPane stylesheets="@css/InfoDisplay.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.InfoDisplay">
    <children>
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="41.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -61,7 +62,7 @@
                               <AnchorPane prefHeight="200.0" prefWidth="961.0">
                                  <children>
                                     <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="102.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
-                                    <GridPane AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="15.0">
+                                    <GridPane AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="20.0">
                                        <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                        </columnConstraints>
@@ -71,41 +72,21 @@
                                           <RowConstraints minHeight="10.0" percentHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                        </rowConstraints>
                                        <children>
-                                          <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                              <children>
-                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <ImageView fitHeight="35.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
-                                                         <image>
-                                                            <Image url="@images/clock.png" />
-                                                         </image>
-                                                      </ImageView>
-                                                   </children>
-                                                </HBox>
+                                                <ImageView fitHeight="35.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@images/clock.png" />
+                                                   </image>
+                                                </ImageView>
                                              </children>
-                                          </AnchorPane>
-                                          <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
-                                             <children>
-                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <Text fx:id="timeElapsed" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                         <font>
-                                                            <Font name="System Bold" size="18.0" />
-                                                         </font>
-                                                      </Text>
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                          </AnchorPane>
-                                          <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-                                             <children>
-                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Time Elapsed" textAlignment="CENTER" wrappingWidth="50.0" HBox.hgrow="ALWAYS" />
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                          </AnchorPane>
+                                          </HBox>
+                                          <Text fx:id="timeElapsed" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" wrappingWidth="85.353515625" GridPane.rowIndex="1">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Time Elapsed" textAlignment="CENTER" wrappingWidth="85.5" GridPane.rowIndex="2" />
                                        </children>
                                     </GridPane>
                                  </children>
@@ -113,7 +94,7 @@
                               <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                                  <children>
                                     <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="102.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
-                                    <GridPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="15.0">
+                                    <GridPane prefHeight="70.0" prefWidth="85.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0">
                                        <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                        </columnConstraints>
@@ -123,41 +104,21 @@
                                           <RowConstraints minHeight="10.0" percentHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                        </rowConstraints>
                                        <children>
-                                          <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                              <children>
-                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
-                                                         <image>
-                                                            <Image url="@images/animal.png" />
-                                                         </image>
-                                                      </ImageView>
-                                                   </children>
-                                                </HBox>
+                                                <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@images/animal.png" />
+                                                   </image>
+                                                </ImageView>
                                              </children>
-                                          </AnchorPane>
-                                          <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
-                                             <children>
-                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <Text fx:id="numCreatures" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                         <font>
-                                                            <Font name="System Bold" size="18.0" />
-                                                         </font>
-                                                      </Text>
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                          </AnchorPane>
-                                          <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-                                             <children>
-                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Creatures" textAlignment="CENTER" wrappingWidth="55.5" HBox.hgrow="ALWAYS" />
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                          </AnchorPane>
+                                          </HBox>
+                                          <Text fx:id="numCreatures" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" wrappingWidth="84.603515625" GridPane.rowIndex="1">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Creatures" textAlignment="CENTER" wrappingWidth="85.5" GridPane.rowIndex="2" />
                                        </children>
                                     </GridPane>
                                  </children>
@@ -165,51 +126,31 @@
                               <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                                  <children>
                                     <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="102.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
-                                    <GridPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="15.0">
+                                    <GridPane AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="20.0">
                                        <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                        </columnConstraints>
                                        <rowConstraints>
-                                          <RowConstraints minHeight="10.0" percentHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" percentHeight="45.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" percentHeight="35.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" percentHeight="40.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                           <RowConstraints minHeight="10.0" percentHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                        </rowConstraints>
                                        <children>
-                                          <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                          <AnchorPane>
                                              <children>
-                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <ImageView fitHeight="40.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
-                                                         <image>
-                                                            <Image url="@images/leaves.png" />
-                                                         </image>
-                                                      </ImageView>
-                                                   </children>
-                                                </HBox>
+                                                <ImageView fitHeight="40.0" fitWidth="44.0" layoutX="24.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@images/leaves.png" />
+                                                   </image>
+                                                </ImageView>
                                              </children>
                                           </AnchorPane>
-                                          <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
-                                             <children>
-                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <Text fx:id="numBushes" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                         <font>
-                                                            <Font name="System Bold" size="18.0" />
-                                                         </font>
-                                                      </Text>
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                          </AnchorPane>
-                                          <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-                                             <children>
-                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bushes" textAlignment="CENTER" wrappingWidth="50.0" HBox.hgrow="ALWAYS" />
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                          </AnchorPane>
+                                          <Text fx:id="numBushes" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" wrappingWidth="85.353515625" GridPane.rowIndex="1">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bushes" textAlignment="CENTER" wrappingWidth="85.0" GridPane.rowIndex="2" />
                                        </children>
                                     </GridPane>
                                  </children>
@@ -217,51 +158,31 @@
                               <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <children>
                                     <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="102.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
-                                    <GridPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="15.0">
+                                    <GridPane AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0">
                                        <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                        </columnConstraints>
                                        <rowConstraints>
-                                          <RowConstraints minHeight="10.0" percentHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" percentHeight="45.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" percentHeight="35.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" percentHeight="40.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                           <RowConstraints minHeight="10.0" percentHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                        </rowConstraints>
                                        <children>
                                           <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                              <children>
-                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <ImageView fitHeight="41.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                         <image>
-                                                            <Image url="@images/amoeba.png" />
-                                                         </image>
-                                                      </ImageView>
-                                                   </children>
-                                                </HBox>
+                                                <ImageView fitHeight="41.0" fitWidth="50.0" layoutX="19.5" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@images/amoeba.png" />
+                                                   </image>
+                                                </ImageView>
                                              </children>
                                           </AnchorPane>
-                                          <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
-                                             <children>
-                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <Text fx:id="numEntities" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                         <font>
-                                                            <Font name="System Bold" size="18.0" />
-                                                         </font>
-                                                      </Text>
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                          </AnchorPane>
-                                          <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-                                             <children>
-                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Entities" textAlignment="CENTER" wrappingWidth="50.0" HBox.hgrow="ALWAYS" />
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                          </AnchorPane>
+                                          <Text fx:id="numEntities" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" wrappingWidth="85.103515625" GridPane.rowIndex="1">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Entities" textAlignment="CENTER" wrappingWidth="85.25" GridPane.rowIndex="2" />
                                        </children>
                                     </GridPane>
                                  </children>
@@ -288,7 +209,7 @@
                               </AnchorPane>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <Button mnemonicParsing="false" text="Settings" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0" />
+                                    <Button mnemonicParsing="false" prefWidth="85.0" scaleX="0.9" scaleY="0.9" text="Settings" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0" />
                                  </children>
                               </AnchorPane>
                            </children>
@@ -297,9 +218,9 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="corpseInfoTab" layoutX="10.0" layoutY="10.0" prefHeight="251.0" prefWidth="200.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane fx:id="corpseInfoTab" layoutX="10.0" layoutY="10.0" prefHeight="251.0" prefWidth="200.0" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <GridPane prefHeight="120.0" prefWidth="200.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <GridPane prefHeight="120.0" prefWidth="200.0" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -321,29 +242,21 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                    <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                        <children>
-                                          <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <ImageView fitHeight="19.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@images/size.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                   <font>
-                                                      <Font name="System Bold" size="18.0" />
-                                                   </font>
-                                                </Text>
-                                             </children>
-                                          </HBox>
+                                          <ImageView fitHeight="19.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@images/size.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
                                        </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                       <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Size" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                       </children>
-                                    </AnchorPane>
+                                    </HBox>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Size" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
                            </children>
@@ -360,29 +273,21 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                    <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                        <children>
-                                          <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <ImageView fitHeight="20.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@images/energy.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                   <font>
-                                                      <Font name="System Bold" size="18.0" />
-                                                   </font>
-                                                </Text>
-                                             </children>
-                                          </HBox>
+                                          <ImageView fitHeight="20.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@images/energy.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
                                        </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                       <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Energy" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                       </children>
-                                    </AnchorPane>
+                                    </HBox>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Energy" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
                            </children>
@@ -426,18 +331,14 @@
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                     </Text>
-                                    <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                       <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Velocity" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                       </children>
-                                    </AnchorPane>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Velocity" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
                            </children>
                         </AnchorPane>
                      </children>
                   </GridPane>
-                  <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="130.0">
+                  <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="125.0">
                      <children>
                         <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="47.0" stroke="BLACK" strokeType="INSIDE" width="180.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="2.0" />
                         <GridPane prefHeight="35.0" prefWidth="200.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="2.0">
@@ -456,11 +357,7 @@
                               </Text>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
                                  <children>
-                                    <ImageView fitHeight="31.0" fitWidth="173.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@images/loading_bar%2025%25.png" />
-                                       </image>
-                                    </ImageView>
+                                    <ProgressBar fx:id="rottingBar" prefHeight="18.0" prefWidth="175.0" progress="0.99" stylesheets="@css/CustomProgressBar.css" />
                                  </children>
                               </HBox>
                            </children>
@@ -493,29 +390,21 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                    <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                        <children>
-                                          <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <ImageView fitHeight="20.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@images/size.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                   <font>
-                                                      <Font name="System Bold" size="18.0" />
-                                                   </font>
-                                                </Text>
-                                             </children>
-                                          </HBox>
+                                          <ImageView fitHeight="20.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@images/size.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
                                        </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                       <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Size" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                       </children>
-                                    </AnchorPane>
+                                    </HBox>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Size" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
                            </children>
@@ -532,29 +421,21 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                    <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                        <children>
-                                          <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@images/energy.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                   <font>
-                                                      <Font name="System Bold" size="18.0" />
-                                                   </font>
-                                                </Text>
-                                             </children>
-                                          </HBox>
+                                          <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@images/energy.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
                                        </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                       <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Stored Energy" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                       </children>
-                                    </AnchorPane>
+                                    </HBox>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Stored Energy" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
                            </children>
@@ -593,29 +474,21 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                    <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                        <children>
-                                          <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@images/berry.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                   <font>
-                                                      <Font name="System Bold" size="18.0" />
-                                                   </font>
-                                                </Text>
-                                             </children>
-                                          </HBox>
+                                          <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@images/berry.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
                                        </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                       <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Berries" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                       </children>
-                                    </AnchorPane>
+                                    </HBox>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Berries" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
                            </children>
@@ -648,29 +521,21 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                    <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                        <children>
-                                          <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <ImageView fitHeight="19.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@images/size.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                   <font>
-                                                      <Font name="System Bold" size="18.0" />
-                                                   </font>
-                                                </Text>
-                                             </children>
-                                          </HBox>
+                                          <ImageView fitHeight="19.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@images/size.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
                                        </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                       <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Size" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                       </children>
-                                    </AnchorPane>
+                                    </HBox>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Size" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
                            </children>
@@ -678,7 +543,7 @@
                         <AnchorPane GridPane.columnIndex="1">
                            <children>
                               <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
-                              <GridPane layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0">
+                              <GridPane layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                  </columnConstraints>
@@ -687,33 +552,25 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                    <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                        <children>
-                                          <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <ImageView fitHeight="25.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@images/clock.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                   <font>
-                                                      <Font name="System Bold" size="18.0" />
-                                                   </font>
-                                                </Text>
-                                             </children>
-                                          </HBox>
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                       <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Incubation Time" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <ImageView fitHeight="25.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@images/clock%20no%20background.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                              <font>
-                                                <Font size="10.0" />
+                                                <Font name="System Bold" size="18.0" />
                                              </font>
                                           </Text>
                                        </children>
-                                    </AnchorPane>
+                                    </HBox>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Incubation Time" textAlignment="CENTER" wrappingWidth="85.0" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font size="11.0" />
+                                       </font>
+                                    </Text>
                                  </children>
                               </GridPane>
                            </children>
@@ -766,11 +623,7 @@
                                           </Text>
                                        </children>
                                     </HBox>
-                                    <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                       <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Health" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                       </children>
-                                    </AnchorPane>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Health" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
                            </children>
@@ -815,29 +668,21 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                      <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                                          <children>
-                                                            <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="22.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@images/size.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                                     <font>
-                                                                        <Font name="System Bold" size="18.0" />
-                                                                     </font>
-                                                                  </Text>
-                                                               </children>
-                                                            </HBox>
+                                                            <ImageView fitHeight="22.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/size.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Text>
                                                          </children>
-                                                      </AnchorPane>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                                         <children>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Size" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                         </children>
-                                                      </AnchorPane>
+                                                      </HBox>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Size" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                                    </children>
                                                 </GridPane>
                                              </children>
@@ -854,29 +699,21 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                      <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                                          <children>
-                                                            <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@images/force.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                                     <font>
-                                                                        <Font name="System Bold" size="18.0" />
-                                                                     </font>
-                                                                  </Text>
-                                                               </children>
-                                                            </HBox>
+                                                            <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/force.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Text>
                                                          </children>
-                                                      </AnchorPane>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                                         <children>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Force" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                         </children>
-                                                      </AnchorPane>
+                                                      </HBox>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Force" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                                    </children>
                                                 </GridPane>
                                              </children>
@@ -937,29 +774,21 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                      <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                                          <children>
-                                                            <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="22.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@images/health.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                                     <font>
-                                                                        <Font name="System Bold" size="18.0" />
-                                                                     </font>
-                                                                  </Text>
-                                                               </children>
-                                                            </HBox>
+                                                            <ImageView fitHeight="22.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/health.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Text>
                                                          </children>
-                                                      </AnchorPane>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                                         <children>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Health" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                         </children>
-                                                      </AnchorPane>
+                                                      </HBox>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Health" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                                    </children>
                                                 </GridPane>
                                              </children>
@@ -976,29 +805,21 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                      <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                                          <children>
-                                                            <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@images/energy.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                                     <font>
-                                                                        <Font name="System Bold" size="18.0" />
-                                                                     </font>
-                                                                  </Text>
-                                                               </children>
-                                                            </HBox>
+                                                            <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/energy.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Text>
                                                          </children>
-                                                      </AnchorPane>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                                         <children>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Energy" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                         </children>
-                                                      </AnchorPane>
+                                                      </HBox>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Energy" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                                    </children>
                                                 </GridPane>
                                              </children>
@@ -1015,29 +836,21 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                      <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                                          <children>
-                                                            <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@images/attack.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                                     <font>
-                                                                        <Font name="System Bold" size="18.0" />
-                                                                     </font>
-                                                                  </Text>
-                                                               </children>
-                                                            </HBox>
+                                                            <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/attack.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Text>
                                                          </children>
-                                                      </AnchorPane>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                                         <children>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Strength" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                         </children>
-                                                      </AnchorPane>
+                                                      </HBox>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Strength" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                                    </children>
                                                 </GridPane>
                                              </children>
@@ -1054,29 +867,21 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                      <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                                          <children>
-                                                            <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@images/herbivore.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                                     <font>
-                                                                        <Font name="System Bold" size="18.0" />
-                                                                     </font>
-                                                                  </Text>
-                                                               </children>
-                                                            </HBox>
+                                                            <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/herbivore.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Text>
                                                          </children>
-                                                      </AnchorPane>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                                         <children>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Herbivore" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                         </children>
-                                                      </AnchorPane>
+                                                      </HBox>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Herbivore" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                                    </children>
                                                 </GridPane>
                                              </children>
@@ -1093,29 +898,21 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                      <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                                          <children>
-                                                            <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@images/armour.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                                     <font>
-                                                                        <Font name="System Bold" size="18.0" />
-                                                                     </font>
-                                                                  </Text>
-                                                               </children>
-                                                            </HBox>
+                                                            <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/armour.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Text>
                                                          </children>
-                                                      </AnchorPane>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                                         <children>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Armour" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                         </children>
-                                                      </AnchorPane>
+                                                      </HBox>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Armour" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                                    </children>
                                                 </GridPane>
                                              </children>
@@ -1132,29 +929,21 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                      <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                                          <children>
-                                                            <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@images/carnivore.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                                     <font>
-                                                                        <Font name="System Bold" size="18.0" />
-                                                                     </font>
-                                                                  </Text>
-                                                               </children>
-                                                            </HBox>
+                                                            <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/carnivore.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Text>
                                                          </children>
-                                                      </AnchorPane>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                                         <children>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Carnivore" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                         </children>
-                                                      </AnchorPane>
+                                                      </HBox>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Carnivore" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                                    </children>
                                                 </GridPane>
                                              </children>
@@ -1162,7 +951,7 @@
                                           <AnchorPane GridPane.rowIndex="5">
                                              <children>
                                                 <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
-                                                <GridPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                                <GridPane AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                    </columnConstraints>
@@ -1171,33 +960,25 @@
                                                       <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                      <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                                          <children>
-                                                            <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="25.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@images/offspring_investment.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                                     <font>
-                                                                        <Font name="System Bold" size="18.0" />
-                                                                     </font>
-                                                                  </Text>
-                                                               </children>
-                                                            </HBox>
-                                                         </children>
-                                                      </AnchorPane>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                                         <children>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Offspring Investment" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
+                                                            <ImageView fitHeight="25.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/offspring_investment.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                                                <font>
-                                                                  <Font size="10.0" />
+                                                                  <Font name="System Bold" size="18.0" />
                                                                </font>
                                                             </Text>
                                                          </children>
-                                                      </AnchorPane>
+                                                      </HBox>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Offspring Investment" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1">
+                                                         <font>
+                                                            <Font size="10.0" />
+                                                         </font>
+                                                      </Text>
                                                    </children>
                                                 </GridPane>
                                              </children>
@@ -1214,29 +995,21 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                      <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                                          <children>
-                                                            <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@images/clock.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                                     <font>
-                                                                        <Font name="System Bold" size="18.0" />
-                                                                     </font>
-                                                                  </Text>
-                                                               </children>
-                                                            </HBox>
+                                                            <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/clock%20no%20background.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Text>
                                                          </children>
-                                                      </AnchorPane>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                                         <children>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Maturity" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                         </children>
-                                                      </AnchorPane>
+                                                      </HBox>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Maturity" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                                    </children>
                                                 </GridPane>
                                              </children>
@@ -1253,29 +1026,21 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                      <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                                          <children>
-                                                            <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="20.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@images/vision.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                                     <font>
-                                                                        <Font name="System Bold" size="18.0" />
-                                                                     </font>
-                                                                  </Text>
-                                                               </children>
-                                                            </HBox>
+                                                            <ImageView fitHeight="20.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/vision.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Text>
                                                          </children>
-                                                      </AnchorPane>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                                         <children>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Vision Range" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                         </children>
-                                                      </AnchorPane>
+                                                      </HBox>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Vision Range" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                                    </children>
                                                 </GridPane>
                                              </children>
@@ -1292,29 +1057,21 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                      <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                                          <children>
-                                                            <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@images/alignment.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                                     <font>
-                                                                        <Font name="System Bold" size="18.0" />
-                                                                     </font>
-                                                                  </Text>
-                                                               </children>
-                                                            </HBox>
+                                                            <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/alignment.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Text>
                                                          </children>
-                                                      </AnchorPane>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                                         <children>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alignment" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                         </children>
-                                                      </AnchorPane>
+                                                      </HBox>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alignment" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                                    </children>
                                                 </GridPane>
                                              </children>
@@ -1331,29 +1088,21 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                      <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                                          <children>
-                                                            <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@images/cohesion.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                                     <font>
-                                                                        <Font name="System Bold" size="18.0" />
-                                                                     </font>
-                                                                  </Text>
-                                                               </children>
-                                                            </HBox>
+                                                            <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/cohesion.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Text>
                                                          </children>
-                                                      </AnchorPane>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                                         <children>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cohesion" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                         </children>
-                                                      </AnchorPane>
+                                                      </HBox>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cohesion" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                                    </children>
                                                 </GridPane>
                                              </children>
@@ -1370,29 +1119,21 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                      <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0">
                                                          <children>
-                                                            <HBox alignment="CENTER" prefHeight="25.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@images/separation.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                                                                     <font>
-                                                                        <Font name="System Bold" size="18.0" />
-                                                                     </font>
-                                                                  </Text>
-                                                               </children>
-                                                            </HBox>
+                                                            <ImageView fitHeight="25.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/separation.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Text>
                                                          </children>
-                                                      </AnchorPane>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                                         <children>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Separation" textAlignment="CENTER" wrappingWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                         </children>
-                                                      </AnchorPane>
+                                                      </HBox>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Separation" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                                    </children>
                                                 </GridPane>
                                              </children>
@@ -1419,12 +1160,12 @@
                            <children>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <Button mnemonicParsing="false" text="Stomach" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0" />
+                                    <Button mnemonicParsing="false" scaleX="0.9" scaleY="0.9" text="Stomach" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                                  <children>
-                                    <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Brain" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                                    <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" scaleX="0.9" scaleY="0.9" text="Brain" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
                                  </children>
                               </AnchorPane>
                            </children>

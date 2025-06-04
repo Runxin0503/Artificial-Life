@@ -1,0 +1,117 @@
+/* === GENERAL === */
+.root {
+    -fx-background-color: linear-gradient(to bottom, #0f0f1e, #1c1c3c);
+    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-text-fill: #ffffff;
+}
+
+/* === BUTTON === */
+.button {
+    -fx-background-color: radial-gradient(radius 100%, #2e2e66, #1a1a33);
+    -fx-text-fill: #ffffff;
+    -fx-background-radius: 12;
+    -fx-padding: 8 16;
+    -fx-effect: dropshadow(gaussian, rgba(0, 255, 255, 0.2), 4, 0.1, 0, 2);
+    -fx-border-color: #444688;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #3c3ca0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 255, 255, 0.4), 6, 0.2, 0, 3);
+}
+
+.button:pressed {
+    -fx-background-color: #1e1e44;
+}
+
+/* === TOGGLE BUTTON === */
+.toggle-button {
+    -fx-background-color: #2c2c4f;
+    -fx-text-fill: #aaaaee;
+    -fx-background-radius: 8;
+    -fx-border-color: #444688;
+    -fx-border-radius: 8;
+    -fx-cursor: hand;
+}
+
+.toggle-button:selected {
+    -fx-background-color: #55aaff;
+    -fx-text-fill: #0f0f1e;
+    -fx-effect: dropshadow(gaussian, #55aaff, 8, 0.5, 0, 0);
+}
+
+/* === RECTANGLE BACKGROUND === */
+Rectangle {
+    -fx-fill: linear-gradient(to bottom, #dce5ff, #cfdcff);
+    -fx-stroke: #aabbee;
+    -fx-arc-width: 16;
+    -fx-arc-height: 16;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.3, 0, 0);
+}
+
+/* === SCROLLBAR === */
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 10px;
+    -fx-pref-height: 10px;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: linear-gradient(to bottom, #66ccff, #3399ff);
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.3), 6, 0.2, 0, 0);
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #55aaff;
+}
+
+.scroll-bar .track {
+    -fx-background-color: #1f1f3a;
+    -fx-background-radius: 5;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-padding: 0;
+    -fx-opacity: 0;
+    -fx-shape: "";
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+
+.scroll-pane {
+    -fx-background-color:transparent;
+}
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* === TOOLTIP === */
+.tooltip {
+    -fx-background-color: #222244;
+    -fx-text-fill: #cceeff;
+    -fx-padding: 6;
+    -fx-background-radius: 6;
+    -fx-font-size: 12px;
+}
+
+/* === LABEL === */
+.text {
+    -fx-text-fill: #99ccff;
+    -fx-font-size: 13px;
+}
+
+.grid-pane, .anchor-pane {
+    -fx-background-color: linear-gradient(to bottom, #3a3a59, #33334f); /* just above #2c2c4f */
+    -fx-border-color: #4a4a70;
+    -fx-border-width: 0;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0.15, 0, 0);
+}
+

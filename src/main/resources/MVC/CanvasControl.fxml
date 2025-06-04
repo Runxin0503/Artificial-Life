@@ -11,12 +11,12 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="374.0" prefWidth="392.0" styleClass="anchor-bordered" stylesheets="@css/CanvasControl.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.CanvasControl">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="374.0" prefWidth="392.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.CanvasControl">
    <children>
       <StackPane fx:id="canvasScroller" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Canvas fx:id="canvas" cache="true" cacheHint="SPEED" height="359.0" pickOnBounds="true" width="420.0" />
-            <ImageView fx:id="backgroundImage" fitHeight="332.0" fitWidth="416.0" pickOnBounds="true" preserveRatio="true" />
+            <Canvas fx:id="canvas" cache="true" cacheHint="SPEED" height="353.0" pickOnBounds="true" width="386.0" />
+            <ImageView fx:id="backgroundImage" fitHeight="353.0" fitWidth="386.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </StackPane>
       <AnchorPane prefHeight="15.0" style="-fx-background-color: #f4f4f4;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">

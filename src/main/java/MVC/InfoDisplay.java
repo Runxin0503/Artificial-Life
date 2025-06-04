@@ -10,6 +10,7 @@ import Utils.Ref;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
@@ -44,6 +45,11 @@ public class InfoDisplay implements Initializable {
     /** A function in View that Controller calls to update Text directly */
     @FXML
     private Text numEntities;
+
+    /** A Progress Bar displaying how rotten a Corpse Entity is.
+     * Invariant: Progress ranges from 0 to 99%. */
+    @FXML
+    private ProgressBar rottingBar;
 
     /** Displays various world-related information constantly. */
     @FXML
