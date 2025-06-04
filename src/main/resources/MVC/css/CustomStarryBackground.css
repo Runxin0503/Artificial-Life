@@ -1,0 +1,6 @@
+.custom-background {
+    -fx-background-image: url("../images/starry_night.png");
+    -fx-background-repeat: repeat;
+    -fx-background-size: auto;
+    -fx-background-position: top left;
+}

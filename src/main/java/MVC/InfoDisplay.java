@@ -89,6 +89,8 @@ public class InfoDisplay implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         selectInfoTab(0);
+        // TODO set worldInfoToggle and entityInfoToggle to only be enabled when !selectedEntity.isEmpty()
+        worldInfoToggle.setDisable(true);
         entityInfoToggle.setDisable(true);
 
         creatureInfoScrollBar.minProperty().bind(creatureInfoScrollPane.vminProperty());

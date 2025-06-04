@@ -6,8 +6,19 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Line?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.MainView">
+   <Line endX="200.0" endY="25.0" fill="#444688" startX="200.0" startY="398.5" stroke="#444688" strokeWidth="3.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="24.0" />
+   <SplitPane dividerPositions="0.3411371237458194" layoutX="45.0" layoutY="34.0" prefHeight="376.0" prefWidth="600.0" styleClass="invis-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0">
+      <AnchorPane maxWidth="200.0" minWidth="200.0" prefWidth="200.0">
+         <children>
+            <Pane fx:id="infoDisplayPane" layoutX="-2.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="83.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="0.0" />
+            <Pane fx:id="controlPanelPane" layoutX="10.0" layoutY="9.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="297.0" />
+         </children>
+      </AnchorPane>
+      <Pane fx:id="canvasControlPane" prefHeight="200.0" prefWidth="200.0" />
+   </SplitPane>
    <MenuBar layoutX="5.0" layoutY="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <Menu mnemonicParsing="false" text="File">
          <MenuItem mnemonicParsing="false" text="New" />
@@ -22,13 +33,4 @@
          <MenuItem mnemonicParsing="false" text="Graph Data Points" />
       </Menu>
    </MenuBar>
-   <SplitPane dividerPositions="0.3411371237458194" layoutX="45.0" layoutY="34.0" prefHeight="376.0" prefWidth="600.0" styleClass="invis-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0">
-      <AnchorPane maxWidth="200.0" minWidth="200.0" prefWidth="200.0">
-         <children>
-            <Pane fx:id="infoDisplayPane" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="83.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-            <Pane fx:id="controlPanelPane" layoutX="10.0" layoutY="9.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="297.0" />
-         </children>
-      </AnchorPane>
-      <Pane fx:id="canvasControlPane" prefHeight="200.0" prefWidth="200.0" />
-   </SplitPane>
 </AnchorPane>

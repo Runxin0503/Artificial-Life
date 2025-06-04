@@ -144,8 +144,8 @@ public class Constants implements Serializable {
      * UI and window-related constants for controlling layout and rendering.
      */
     public static class WindowConstants {
-        public static final int MIN_STAGE_WIDTH = 600;
-        public static final int MIN_STAGE_HEIGHT = 400;
+        public static final double MIN_STAGE_WIDTH = 613;
+        public static final double MIN_STAGE_HEIGHT = 435.5;
         public static final int CANVAS_PADDING = 5;
         public static final double MIN_ZOOM = 0;
         public static final double MAX_ZOOM = 10;

@@ -65,12 +65,12 @@
                <children>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <ToggleButton fx:id="continuousStep" focusTraversable="false" mnemonicParsing="false" text="Play" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0" />
+                        <ToggleButton fx:id="continuousStep" focusTraversable="false" mnemonicParsing="false" prefHeight="28.0" prefWidth="77.0" text="Play" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="10.0" />
                      </children>
                   </AnchorPane>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                      <children>
-                        <Button fx:id="advanceStep" focusTraversable="false" mnemonicParsing="false" prefHeight="10.0" scaleX="0.9" scaleY="0.9" text="Step" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0" />
+                        <Button fx:id="advanceStep" focusTraversable="false" layoutX="9.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="86.0" scaleX="0.9" scaleY="0.85" text="Step" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0" />
                      </children>
                   </AnchorPane>
                </children>

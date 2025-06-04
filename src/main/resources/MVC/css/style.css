@@ -101,21 +101,6 @@
     -fx-background-color: transparent;
 }
 
-/* === TOOLTIP === */
-.tooltip {
-    -fx-background-color: #222244;
-    -fx-text-fill: #cceeff;
-    -fx-padding: 6;
-    -fx-background-radius: 6;
-    -fx-font-size: 12px;
-}
-
-/* === LABEL === */
-.text {
-    -fx-text-fill: #99ccff;
-    -fx-font-size: 13px;
-}
-
 .grid-pane, .anchor-pane {
     -fx-background-color: linear-gradient(to bottom, #3a3a59, #33334f); /* just above #2c2c4f */
     -fx-border-color: #4a4a70;
@@ -130,19 +115,14 @@
 }
 
 .split-pane-divider {
-    -fx-background-color: #444688;
-    -fx-border-color: #555577;
-    -fx-border-style: solid;
-    -fx-border-width: 1;
-    /*-fx-effect: none; !* removes glow if you want it sharper *!*/
-    -fx-effect: dropshadow(gaussian, rgba(0, 255, 255, 0.07), 1, 0.3, 0, 0);
+    -fx-background-color: transparent;
 }
 
 .menu-bar {
     -fx-background-color: linear-gradient(to bottom, #2a2a45, #1f1f3a);
 }
 
-.menu .label {
+.menu > .label {
     -fx-text-fill: #e6f2ff;
     -fx-background-color: transparent;
 }
@@ -151,31 +131,31 @@
     -fx-background-color: #3a3a6e;
 }
 
-.menu:hover .label {
+.menu:hover > .label {
     -fx-text-fill: #aaaaee;
+}
+
+/* === MenuItem Styling (in popup skin) === */
+.context-menu {
+    -fx-background-color: #1e1e3c;
+    -fx-border-color: #444688;
 }
 
 .menu-item {
     -fx-background-color: #1e1e3c;
 }
 
-.menu-item .label {
+.menu-item > .label {
     -fx-text-fill: #e6f2ff;
-    -fx-font-size: 13px;
 }
 
-.menu-item:hover {
-    -fx-background-color: #3c3c60;
-}
-
-.menu-item:hover .label {
-    -fx-text-fill: #ffffff;
-}
-
+.menu-item:hover,
 .menu-item:focused {
-    -fx-background-color: #2c2c4f;
+    -fx-background-color: #3c3c60;
+    -fx-text-fill: #aaaaee;
 }
 
-.menu-item:focused .label {
-    -fx-text-fill: #ffffff;
+.menu-item:hover > .label,
+.menu-item:focused > .label {
+    -fx-text-fill: #aaaaee;
 }

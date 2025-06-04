@@ -61,7 +61,7 @@
                            <children>
                               <AnchorPane prefHeight="200.0" prefWidth="961.0">
                                  <children>
-                                    <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="102.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                    <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="102.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                     <GridPane AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="20.0">
                                        <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -93,7 +93,7 @@
                               </AnchorPane>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                                  <children>
-                                    <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="102.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
+                                    <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="102.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
                                     <GridPane prefHeight="70.0" prefWidth="85.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0">
                                        <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -125,7 +125,7 @@
                               </AnchorPane>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                                  <children>
-                                    <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="102.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                    <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="102.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                     <GridPane AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="20.0">
                                        <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -157,7 +157,7 @@
                               </AnchorPane>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <children>
-                                    <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="102.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
+                                    <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="102.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
                                     <GridPane AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0">
                                        <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -232,7 +232,7 @@
                      <children>
                         <AnchorPane>
                            <children>
-                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                               <GridPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -263,7 +263,7 @@
                         </AnchorPane>
                         <AnchorPane GridPane.columnIndex="1">
                            <children>
-                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
+                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
                               <GridPane layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -294,7 +294,7 @@
                         </AnchorPane>
                         <AnchorPane GridPane.rowIndex="1">
                            <children>
-                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                               <GridPane layoutX="20.0" layoutY="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -316,7 +316,7 @@
                         </AnchorPane>
                         <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
-                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
+                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
                               <GridPane layoutX="20.0" layoutY="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -340,7 +340,7 @@
                   </GridPane>
                   <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="125.0">
                      <children>
-                        <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="47.0" stroke="BLACK" strokeType="INSIDE" width="180.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="2.0" />
+                        <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="47.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="180.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="2.0" />
                         <GridPane prefHeight="35.0" prefWidth="200.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="2.0">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -357,7 +357,7 @@
                               </Text>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
                                  <children>
-                                    <ProgressBar fx:id="rottingBar" prefHeight="18.0" prefWidth="175.0" progress="0.99" stylesheets="@css/CustomProgressBar.css" />
+                                    <ProgressBar fx:id="rottingBar" prefHeight="18.0" prefWidth="175.0" progress="0.0" stylesheets="@css/CustomProgressBar.css" />
                                  </children>
                               </HBox>
                            </children>
@@ -380,7 +380,7 @@
                      <children>
                         <AnchorPane>
                            <children>
-                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                               <GridPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -411,7 +411,7 @@
                         </AnchorPane>
                         <AnchorPane GridPane.columnIndex="1">
                            <children>
-                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
+                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
                               <GridPane layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -442,7 +442,7 @@
                         </AnchorPane>
                         <AnchorPane GridPane.rowIndex="1">
                            <children>
-                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                               <GridPane layoutX="20.0" layoutY="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -464,7 +464,7 @@
                         </AnchorPane>
                         <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
-                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
+                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
                               <GridPane layoutX="20.0" layoutY="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -511,7 +511,7 @@
                      <children>
                         <AnchorPane>
                            <children>
-                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                               <GridPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -542,7 +542,7 @@
                         </AnchorPane>
                         <AnchorPane GridPane.columnIndex="1">
                            <children>
-                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
+                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
                               <GridPane layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -577,7 +577,7 @@
                         </AnchorPane>
                         <AnchorPane GridPane.rowIndex="1">
                            <children>
-                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                               <GridPane layoutX="20.0" layoutY="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -599,7 +599,7 @@
                         </AnchorPane>
                         <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
-                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
+                              <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
                               <GridPane layoutX="20.0" layoutY="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -658,7 +658,7 @@
                                        <children>
                                           <AnchorPane>
                                              <children>
-                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                                 <GridPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -689,7 +689,7 @@
                                           </AnchorPane>
                                           <AnchorPane GridPane.columnIndex="1">
                                              <children>
-                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="5.0" />
+                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="5.0" />
                                                 <GridPane layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -720,7 +720,7 @@
                                           </AnchorPane>
                                           <AnchorPane GridPane.rowIndex="1">
                                              <children>
-                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                                 <GridPane layoutX="20.0" layoutY="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -742,7 +742,7 @@
                                           </AnchorPane>
                                           <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="1">
                                              <children>
-                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="5.0" />
+                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="5.0" />
                                                 <GridPane layoutX="20.0" layoutY="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -764,7 +764,7 @@
                                           </AnchorPane>
                                           <AnchorPane GridPane.rowIndex="2">
                                              <children>
-                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                                 <GridPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -795,7 +795,7 @@
                                           </AnchorPane>
                                           <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="2">
                                              <children>
-                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                                 <GridPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -826,7 +826,7 @@
                                           </AnchorPane>
                                           <AnchorPane GridPane.rowIndex="3">
                                              <children>
-                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                                 <GridPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -857,7 +857,7 @@
                                           </AnchorPane>
                                           <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="3">
                                              <children>
-                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                                 <GridPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -888,7 +888,7 @@
                                           </AnchorPane>
                                           <AnchorPane GridPane.rowIndex="4">
                                              <children>
-                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                                 <GridPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -919,7 +919,7 @@
                                           </AnchorPane>
                                           <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="4">
                                              <children>
-                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                                 <GridPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -950,7 +950,7 @@
                                           </AnchorPane>
                                           <AnchorPane GridPane.rowIndex="5">
                                              <children>
-                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                                 <GridPane AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -985,7 +985,7 @@
                                           </AnchorPane>
                                           <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="5">
                                              <children>
-                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                                 <GridPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -1016,7 +1016,7 @@
                                           </AnchorPane>
                                           <AnchorPane GridPane.rowIndex="6">
                                              <children>
-                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                                 <GridPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -1047,7 +1047,7 @@
                                           </AnchorPane>
                                           <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="6">
                                              <children>
-                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                                 <GridPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -1078,7 +1078,7 @@
                                           </AnchorPane>
                                           <AnchorPane GridPane.rowIndex="7">
                                              <children>
-                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                                 <GridPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -1109,7 +1109,7 @@
                                           </AnchorPane>
                                           <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="7">
                                              <children>
-                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#e0e0e0" height="50.0" stroke="BLACK" strokeType="INSIDE" styleClass="background-rect" width="85.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                                 <GridPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

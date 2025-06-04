@@ -11,6 +11,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -37,11 +38,7 @@ public class CanvasControl implements Initializable {
 
     /** The Panel or pane used to detect mouse actions on the canvas. */
     @FXML
-    private StackPane canvasScroller;
-
-    /** Just a background image. */
-    @FXML
-    private ImageView backgroundImage;
+    private AnchorPane canvasScroller;
 
     /** The text display that shows the frames-per-second rendering speed at a periodic interval. */
     @FXML
@@ -56,41 +53,11 @@ public class CanvasControl implements Initializable {
     /** Initializer automatically called by JavaFX right after FXML injected all dependencies. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        canvasScroller.widthProperty().addListener((obs, oldVal, newVal) -> {
-            Rectangle2D currentViewport = backgroundImage.getViewport();
-            double newWidth = newVal.doubleValue();
-            double newHeight = canvasScroller.getHeight();
-            backgroundImage.setViewport(new Rectangle2D(
-                    currentViewport.getMinX(),
-                    currentViewport.getMinY(),
-                    newWidth,
-                    newHeight
-            ));
-        });
-
-        backgroundImage.setPreserveRatio(true);
-        backgroundImage.setViewport(new Rectangle2D(0, 0, backgroundImage.getFitWidth(), backgroundImage.getFitHeight()));
-
-        canvasScroller.heightProperty().addListener((obs, oldVal, newVal) -> {
-            Rectangle2D currentViewport = backgroundImage.getViewport();
-            double newWidth = canvasScroller.getWidth();
-            double newHeight = newVal.doubleValue();
-            backgroundImage.setViewport(new Rectangle2D(
-                    currentViewport.getMinX(),
-                    currentViewport.getMinY(),
-                    newWidth,
-                    newHeight
-            ));
-        });
-
         canvas.widthProperty().bind(canvasScroller.widthProperty().add(Constants.WindowConstants.CANVAS_PADDING * 2));
         canvas.heightProperty().bind(canvasScroller.heightProperty().add(Constants.WindowConstants.CANVAS_PADDING * 2));
 
         canvas.widthProperty().addListener(event -> redrawCanvas());
         canvas.heightProperty().addListener(event -> redrawCanvas());
-
-        backgroundImage.fitWidthProperty().bind(canvas.widthProperty());
-        backgroundImage.fitHeightProperty().bind(canvas.heightProperty());
 
         canvasScroller.setOnScroll(ae -> {
             if (ae.getDeltaY() != 0) {  // Only react to vertical scroll
