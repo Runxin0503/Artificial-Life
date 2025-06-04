@@ -66,6 +66,7 @@ public class MainView extends Application implements Initializable {
             Parent root = mainLoader.load();
 
             final Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/MVC/css/style.css").toExternalForm());
             stage.setScene(scene);
             stage.sizeToScene();
             stage.show();
