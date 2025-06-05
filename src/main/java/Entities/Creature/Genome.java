@@ -175,10 +175,6 @@ class Genome implements Serializable {
         this.armour = Math.min(Combat.sizeToMaxArmour(maxSize), armour + Combat.damageArmourIncrease);
     }
 
-    public double getVisionRange() {
-        return Math.toDegrees(visionConeAngle);
-    }
-
     public double getReproductionCost() {
         return Combat.sizeToMaxHealth(minSize) * offspringInvestment * 2 + Energy.sizeToMaxEnergyFormula(minSize) * offspringInvestment * 2 + Energy.armourGrowthMultiplier(armour) * (minSize - Reproduce.babySize);
     }

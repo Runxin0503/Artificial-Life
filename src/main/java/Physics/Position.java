@@ -15,7 +15,7 @@ public abstract class Position extends EntityFactory.EntityFactoryObject {
     public int x, y;
 
     /** The bounding box of this Position, used to dictate if two Position objects collide or not. */
-    Rectangle boundingBox;
+    public Rectangle boundingBox;
 
     /** The image of this particular Position object, used for rendering in {@code JavaFX}. */
     public Image image;

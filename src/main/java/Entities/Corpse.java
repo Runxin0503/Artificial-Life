@@ -1,9 +1,9 @@
 package Entities;
 
 import Entities.Creature.Creature;
+import Physics.Dynamic;
 import Physics.Position;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /** The dead corpse of a {@link Creature}. Passively rots away, decreasing in size and mass.<br>
@@ -57,8 +57,13 @@ public class Corpse extends Entity {
 
     @Override
     public ReadOnlyEntity getReadOnlyCopy(Position pos) {
-        // TODO implement
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (!(pos instanceof Dynamic d)) throw new RuntimeException("Invalid position object");
+        return new ReadOnlyCorpse(
+                d.boundingBox.x, d.boundingBox.y,
+                d.boundingBox.width, d.boundingBox.height,
+                d.velocity.x, d.velocity.y, d.dir.angle(),
+                energy, initialEnergy
+        );
     }
 
     public record ReadOnlyCorpse(

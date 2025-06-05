@@ -19,10 +19,10 @@ public final class Dynamic extends Position {
     final Rectangle prevBoundingBox = new Rectangle();
 
     /** A 2D Vector representing both the direction and magnitude of the velocity of this Dynamic Object. */
-    Vector2D velocity;
+    public Vector2D velocity;
 
     /** A 2D Unit Vector representing the direction this Dynamic Object is facing. */
-    private final UnitVector2D dir = new UnitVector2D(0);
+    public final UnitVector2D dir = new UnitVector2D(0);
 
     /** The velocity of how many radians Counterclockwise to turn per tick. */
     private double angularSpeed;

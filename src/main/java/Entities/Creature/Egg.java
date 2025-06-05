@@ -61,8 +61,9 @@ public class Egg extends Entity {
 
     @Override
     public ReadOnlyEntity getReadOnlyCopy(Position pos) {
-        // TODO implement
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new ReadOnlyEgg(
+                pos.boundingBox.x, pos.boundingBox.y, pos.boundingBox.width, pos.boundingBox.height,
+                incubationTime, creature.health);
     }
 
     public record ReadOnlyEgg(

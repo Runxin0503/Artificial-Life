@@ -35,7 +35,7 @@ public class Creature extends Entity {
     // must also have an output array buffer that stores the most recent BOID information for Velocity calculation
 
     /** Health and Energy of this Creature. */
-    private double health, energy;
+    double health, energy;
 
     /** The maximum health and energy of this Creature. */
     private double maxHealth, maxEnergy;
@@ -235,8 +235,15 @@ public class Creature extends Entity {
 
     @Override
     public ReadOnlyEntity getReadOnlyCopy(Position pos) {
-        // TODO implement
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (!(pos instanceof Dynamic d)) throw new RuntimeException("Invalid position object");
+        return new ReadOnlyCreature(
+                d.boundingBox.x, d.boundingBox.y,
+                d.boundingBox.width, d.boundingBox.height,
+                d.velocity.x, d.velocity.y, d.dir.angle(),
+                health, energy, genome.strength, genome.armour, genome.force,
+                genome.herbivoryAffinity, genome.carnivoryAffinity, genome.offspringInvestment, age,
+                genome.visionDistance, genome.boidSeparationWeight, genome.boidAlignmentWeight, genome.boidCohesionWeight
+        );
     }
 
     public record ReadOnlyCreature(
@@ -245,7 +252,7 @@ public class Creature extends Entity {
             double health, double energy, double strength, double armour, double force,
             double herbivore, double carnivore, double offspringInvestment, double maturity,
             double visionRange, double separation, double alignment, double cohesion
-                                   ) implements ReadOnlyEntity {
+    ) implements ReadOnlyEntity {
 
         public int getSize() {
             return width;

@@ -1,5 +1,6 @@
 package Entities;
 
+import Entities.Bush.ReadOnlyBush;
 import Entities.Creature.Creature;
 import Physics.Position;
 import Utils.Constants.BushConstants;
@@ -98,14 +99,16 @@ public class Bush extends Entity {
 
     @Override
     public ReadOnlyEntity getReadOnlyCopy(Position pos) {
-        // TODO implement
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new ReadOnlyBush(
+                pos.boundingBox.x, pos.boundingBox.y,
+                pos.boundingBox.width, pos.boundingBox.height,
+                berries.size());
     }
 
     public record ReadOnlyBush(
             int x, int y, int width, int height,
             int berries
-            ) implements ReadOnlyEntity {
+    ) implements ReadOnlyEntity {
 
         public int getSize() {
             return width;
