@@ -98,9 +98,29 @@ public class Bush extends Entity {
 
     @Override
     public ReadOnlyEntity getReadOnlyCopy(Position pos) {
+        // TODO implement
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public record ReadOnlyBush() implements ReadOnlyEntity {
-    } // TODO implement
+    public record ReadOnlyBush(
+            int x, int y, int width, int height,
+            int berries
+            ) implements ReadOnlyEntity {
+
+        public int getSize() {
+            return width;
+        }
+
+        public int getX() {
+            return x + width / 2;
+        }
+
+        public int getY() {
+            return y + height / 2;
+        }
+
+        public double getStoredEnergy() {
+            return berries * BushConstants.energy;
+        }
+    }
 }

@@ -28,5 +28,7 @@ public abstract class Entity extends Entities.EntityFactory.EntityFactoryObject 
      * all the information about this Entity including its positional data. */
     public abstract ReadOnlyEntity getReadOnlyCopy(Position pos);
 
+    /** The Read-Only class that all entity's read-only copy should inherit from
+     * to allow for casting and storing in {@linkplain Physics.GridWorld.ReadOnlyWorld}. */
     public interface ReadOnlyEntity {}
 }

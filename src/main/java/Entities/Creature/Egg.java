@@ -17,7 +17,7 @@ public class Egg extends Entity {
 
     /** The total time (ticks) it will take for this Egg to hatch.
      * <br>Egg hatches when {@code timeCount == incubationTime}. */
-    private double incubationTime;
+    private int incubationTime;
     private boolean isEaten;
 
     public Egg(int id, Creature c) {
@@ -61,9 +61,33 @@ public class Egg extends Entity {
 
     @Override
     public ReadOnlyEntity getReadOnlyCopy(Position pos) {
+        // TODO implement
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public record ReadOnlyEgg() implements ReadOnlyEntity {
-    } // TODO implement
+    public record ReadOnlyEgg(
+            int x, int y, int width, int height,
+            int incubationTime, double health
+            ) implements ReadOnlyEntity {
+
+        public int getSize() {
+            return width;
+        }
+
+        public int getX() {
+            return x + width / 2;
+        }
+
+        public int getY() {
+            return y + height / 2;
+        }
+
+        public int getIncubationTime() {
+            return incubationTime;
+        }
+
+        public double getHealth() {
+            return health;
+        }
+    }
 }

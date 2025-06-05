@@ -16,6 +16,10 @@ public class Corpse extends Entity {
      * fully decays. */
     private double energy;
 
+    /** The initial energy of this Corpse, or how much nutrient was initially in the Creature right
+     * before it died. */
+    private double initialEnergy;
+
     /** A Queue for Creatures trying to questionably munch on this corpse in a tick, sorted
      * in decreasing {@code Creature.strength}. */
     private final ArrayList<Creature> queuedQuestionableMunching = new ArrayList<>();
@@ -28,7 +32,8 @@ public class Corpse extends Entity {
 
     /** Resets this {@linkplain Corpse} object for reuse with a new Creature. */
     public void reset(Creature c) {
-        this.energy = c.getEnergyIfConsumed();
+        this.initialEnergy = c.getEnergyIfConsumed();
+        this.energy = this.initialEnergy;
         this.queuedQuestionableMunching.clear();
     }
 
@@ -52,9 +57,30 @@ public class Corpse extends Entity {
 
     @Override
     public ReadOnlyEntity getReadOnlyCopy(Position pos) {
+        // TODO implement
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public record ReadOnlyCorpse() implements ReadOnlyEntity {
-    } // TODO implement
+    public record ReadOnlyCorpse(
+            int x, int y, int width, int height,
+            double velocityX, double velocityY, double rotation,
+            double energy, double initialEnergy
+    ) implements ReadOnlyEntity {
+
+        public int getSize() {
+            return width;
+        }
+
+        public int getX() {
+            return x + width / 2;
+        }
+
+        public int getY() {
+            return y + height / 2;
+        }
+
+        public double getRottenPerct() {
+            return energy / initialEnergy;
+        }
+    }
 }

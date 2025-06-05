@@ -479,14 +479,14 @@ public class GridWorld {
     }
 
     public static class ReadOnlyWorld {
-        public final Entity.ReadOnlyEntity[] readOnlyData;
+        public final Entity.ReadOnlyEntity[] entities;
 
         public ReadOnlyWorld(HashMap<Position, Pair<? extends Entity, ? extends Position>> positionToEntity) {
-            readOnlyData = new Entity.ReadOnlyEntity[positionToEntity.size()];
+            entities = new Entity.ReadOnlyEntity[positionToEntity.size()];
 
             int count = 0;
             for (Pair<? extends Entity, ? extends Position> value : positionToEntity.values())
-                readOnlyData[count++] = value.first().getReadOnlyCopy(value.second());
+                entities[count++] = value.first().getReadOnlyCopy(value.second());
         }
     }
 }

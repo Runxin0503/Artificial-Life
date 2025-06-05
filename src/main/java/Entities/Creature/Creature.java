@@ -130,6 +130,7 @@ public class Creature extends Entity {
      * array (and hence output array) of this Creature's brain won't change.
      */
     public static void runBrain(Creature c) {
+        // TODO implement
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -141,6 +142,7 @@ public class Creature extends Entity {
      * <br>Returns true if this Creature has died. */
     @Override
     public boolean tick() {
+        // TODO implement
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -233,9 +235,28 @@ public class Creature extends Entity {
 
     @Override
     public ReadOnlyEntity getReadOnlyCopy(Position pos) {
+        // TODO implement
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public record ReadOnlyCreature() implements ReadOnlyEntity {
-    } // TODO implement
+    public record ReadOnlyCreature(
+            int x, int y, int width, int height,
+            double velocityX, double velocityY, double rotation,
+            double health, double energy, double strength, double armour, double force,
+            double herbivore, double carnivore, double offspringInvestment, double maturity,
+            double visionRange, double separation, double alignment, double cohesion
+                                   ) implements ReadOnlyEntity {
+
+        public int getSize() {
+            return width;
+        }
+
+        public int getX() {
+            return x + width / 2;
+        }
+
+        public int getY() {
+            return y + height / 2;
+        }
+    }
 }
