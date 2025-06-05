@@ -4,7 +4,11 @@ import Genome.Activation;
 import Genome.Cost;
 import Genome.Optimizer;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -176,6 +180,30 @@ public class Constants implements Serializable {
      * Constants for handling image resources and transformations.
      */
     public static class ImageConstants {
+
+        static {
+            try {
+                bush = ImageIO.read(ImageConstants.class.getResource("/bush.png"));
+                corpse = ImageIO.read(ImageConstants.class.getResource("/deadbird.png"));
+                egg = ImageIO.read(ImageConstants.class.getResource("/egg.png"));
+                berries = ImageIO.read(ImageConstants.class.getResource("/berries.png"));
+                BufferedImage bird = ImageIO.read(ImageConstants.class.getResource("/bird.png"));
+                for (int i = 0; i < 360; i++) {
+                    ImageConstants.birdRotations[i] = new BufferedImage(bird.getWidth(), bird.getHeight(), bird.getType());
+                    Graphics2D g2d = (Graphics2D) ImageConstants.birdRotations[i].getGraphics();
+                    AffineTransform at = AffineTransform.getRotateInstance(Math.toRadians(i), bird.getWidth() / 2.0, bird.getHeight() / 2.0);
+                    if ((i > 90 && i < 270)) {
+                        at.scale(1, -1);
+                        at.translate(0, -bird.getHeight());
+                    }
+                    g2d.drawImage(bird, at, null);
+                    g2d.dispose();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         /** Image for berries. */
         public static Image berries;
         /** Image for bushes. */
@@ -595,7 +623,6 @@ public class Constants implements Serializable {
                 "Velocity", "Angular Vel.", "Energy", "Health", "Size", "Metabolism", "Strength", "Stomach %", "Starving", "ON",
                 "Forward", "Backward", "Left", "Right", "Mate", "Regen", "Eat", "Digestion Rate", "Herd", "Separate", "Reset Clock"};
     }
-
 
 
     /**

@@ -161,6 +161,7 @@
     -fx-text-fill: #aaaaee;
 }
 
+/* pane-border shows border of certain pane objects for GUI debugging. */
 .pane-border {
     -fx-border-color: black;          /* Border color */
     -fx-border-width: 2px;            /* Thickness */

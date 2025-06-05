@@ -199,6 +199,7 @@ public class CanvasControl implements Initializable {
 
         // TODO draw the canvas here with model normally, assuming no translation is needed
 
+
         // TODO draw red line around selected Entity
 
         gc.restore();

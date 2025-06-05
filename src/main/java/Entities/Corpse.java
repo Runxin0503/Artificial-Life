@@ -4,6 +4,7 @@ import Entities.Creature.Creature;
 import Physics.Dynamic;
 import Physics.Position;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /** The dead corpse of a {@link Creature}. Passively rots away, decreasing in size and mass.<br>
@@ -62,14 +63,14 @@ public class Corpse extends Entity {
                 d.boundingBox.x, d.boundingBox.y,
                 d.boundingBox.width, d.boundingBox.height,
                 d.velocity.x, d.velocity.y, d.dir.angle(),
-                energy, initialEnergy
+                energy, initialEnergy, d.image
         );
     }
 
     public record ReadOnlyCorpse(
             int x, int y, int width, int height,
             double velocityX, double velocityY, double rotation,
-            double energy, double initialEnergy
+            double energy, double initialEnergy, Image image
     ) implements ReadOnlyEntity {
 
         public int getSize() {

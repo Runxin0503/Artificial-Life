@@ -242,7 +242,8 @@ public class Creature extends Entity {
                 d.velocity.x, d.velocity.y, d.dir.angle(),
                 health, energy, genome.strength, genome.armour, genome.force,
                 genome.herbivoryAffinity, genome.carnivoryAffinity, genome.offspringInvestment, age,
-                genome.visionDistance, genome.boidSeparationWeight, genome.boidAlignmentWeight, genome.boidCohesionWeight
+                genome.visionDistance, genome.boidSeparationWeight,
+                genome.boidAlignmentWeight, genome.boidCohesionWeight, d.image
         );
     }
 
@@ -251,7 +252,8 @@ public class Creature extends Entity {
             double velocityX, double velocityY, double rotation,
             double health, double energy, double strength, double armour, double force,
             double herbivore, double carnivore, double offspringInvestment, double maturity,
-            double visionRange, double separation, double alignment, double cohesion
+            double visionRange, double separation, double alignment, double cohesion,
+            Image image
     ) implements ReadOnlyEntity {
 
         public int getSize() {

@@ -3,6 +3,8 @@ package Entities.Creature;
 import Entities.Entity;
 import Physics.Position;
 
+import java.awt.*;
+
 /**
  * An Immovable Creature entity in the fragile form of an Egg.
  */
@@ -63,12 +65,13 @@ public class Egg extends Entity {
     public ReadOnlyEntity getReadOnlyCopy(Position pos) {
         return new ReadOnlyEgg(
                 pos.boundingBox.x, pos.boundingBox.y, pos.boundingBox.width, pos.boundingBox.height,
-                incubationTime, creature.health);
+                incubationTime, creature.health, pos.image);
     }
 
     public record ReadOnlyEgg(
             int x, int y, int width, int height,
-            int incubationTime, double health
+            int incubationTime, double health,
+            Image image
             ) implements ReadOnlyEntity {
 
         public int getSize() {

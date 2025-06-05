@@ -102,12 +102,12 @@ public class Bush extends Entity {
         return new ReadOnlyBush(
                 pos.boundingBox.x, pos.boundingBox.y,
                 pos.boundingBox.width, pos.boundingBox.height,
-                berries.size());
+                berries.size(), pos.image);
     }
 
     public record ReadOnlyBush(
             int x, int y, int width, int height,
-            int berries
+            int berries, Image image
     ) implements ReadOnlyEntity {
 
         public int getSize() {
