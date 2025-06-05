@@ -1,0 +1,8 @@
+.see-through-pane {
+    -fx-background-color: rgba(44, 44, 79, 0.8); /* #2c2c4f with 30% opacity */
+    -fx-background-radius: 12;
+    -fx-border-color: #555577;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.4), 8, 0.3, 0, 0);
+}

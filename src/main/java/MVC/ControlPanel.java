@@ -38,6 +38,8 @@ public class ControlPanel implements Initializable {
     /** Initializer automatically called by JavaFX right after FXML injected all dependencies. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        bindProperties();
+
         speedSlider.setValue(100);
         speedSlider.setMax(1000);
         speedSliderDisplay.setText("100 steps/sec");
@@ -62,6 +64,12 @@ public class ControlPanel implements Initializable {
     /** Custom initializer called by {@linkplain MainView}. */
     public void init(Consumer<Task> addTask) {
         taskAdder = addTask;
+    }
+
+    /** Binds the various width and height properties of the JavaFX FXML components correspondent
+     * to this class. */
+    private void bindProperties() {
+        // TODO implement
     }
 
     /** Unselects the continuous step toggle button when a new world is loaded. */

@@ -116,6 +116,7 @@
 
 .split-pane-divider {
     -fx-background-color: transparent;
+    -fx-pref-width: 0;
 }
 
 .menu-bar {
@@ -158,4 +159,11 @@
 .menu-item:hover > .label,
 .menu-item:focused > .label {
     -fx-text-fill: #aaaaee;
+}
+
+.pane-border {
+    -fx-border-color: black;          /* Border color */
+    -fx-border-width: 2px;            /* Thickness */
+    -fx-border-style: solid;          /* Style: solid, dashed, dotted, etc. */
+    -fx-border-radius: 5px;           /* Optional: rounded corners */
 }

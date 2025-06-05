@@ -53,8 +53,9 @@ public class CanvasControl implements Initializable {
     /** Initializer automatically called by JavaFX right after FXML injected all dependencies. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        canvas.widthProperty().bind(canvasScroller.widthProperty().add(Constants.WindowConstants.CANVAS_PADDING * 2));
-        canvas.heightProperty().bind(canvasScroller.heightProperty().add(Constants.WindowConstants.CANVAS_PADDING * 2));
+        bindProperties();
+//        canvas.widthProperty().bind(canvasScroller.widthProperty().add(Constants.WindowConstants.CANVAS_PADDING * 2));
+//        canvas.heightProperty().bind(canvasScroller.heightProperty().add(Constants.WindowConstants.CANVAS_PADDING * 2));
 
         canvas.widthProperty().addListener(event -> redrawCanvas());
         canvas.heightProperty().addListener(event -> redrawCanvas());
@@ -149,6 +150,12 @@ public class CanvasControl implements Initializable {
     /** Custom initializer called by {@linkplain MainView}. */
     public void init(Ref<GridWorld.ReadOnlyWorld> model) {
         this.model = model;
+    }
+
+    /** Binds the various width and height properties of the JavaFX FXML components correspondent
+     * to this class. */
+    private void bindProperties() {
+        // TODO implement
     }
 
     /** A method that draws the Canvas according to {@code model}. */

@@ -5,12 +5,16 @@ import Physics.GridWorld;
 import Utils.Constants;
 import Utils.Ref;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.SplitPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -21,17 +25,24 @@ import java.util.ResourceBundle;
 
 public class MainView extends Application implements Initializable {
 
+    @FXML
+    private Line divider;
+    @FXML
+    private SplitPane splitPane;
+    @FXML
+    private AnchorPane infoPane;
+
     /** The Root node for the Info Display FXML file. */
     @FXML
-    private Pane infoDisplayPane;
+    private AnchorPane infoDisplayPane;
 
     /** The Root node for the Control Panel FXML file. */
     @FXML
-    private Pane controlPanelPane;
+    private AnchorPane controlPanelPane;
 
     /** The Root node for the Canvas Control FXML file. */
     @FXML
-    private Pane canvasControlPane;
+    private AnchorPane canvasControlPane;
 
     /** This class should have an iterator that communicates to Controller the information in TaskQueue */
     private Queue<Task> TaskQueue;
@@ -73,6 +84,11 @@ public class MainView extends Application implements Initializable {
             stage.setMinWidth(Constants.WindowConstants.MIN_STAGE_WIDTH);
             stage.setMinHeight(Constants.WindowConstants.MIN_STAGE_HEIGHT);
 
+            stage.setOnCloseRequest(event -> {
+                Platform.exit();
+                System.exit(0);
+            });
+
             MainView controller = mainLoader.getController();
 
             // Load InfoDisplay.fxml
@@ -80,18 +96,30 @@ public class MainView extends Application implements Initializable {
             Parent infoDisplayRoot = infoLoader.load();
             controller.infoDisplay = infoLoader.getController();
             controller.infoDisplayPane.getChildren().add(infoDisplayRoot);
+            AnchorPane.setTopAnchor(infoDisplayRoot, 0.0);
+            AnchorPane.setRightAnchor(infoDisplayRoot, 0.0);
+            AnchorPane.setBottomAnchor(infoDisplayRoot, 0.0);
+            AnchorPane.setLeftAnchor(infoDisplayRoot, 0.0);
 
             // Load ControlPanel.fxml
             FXMLLoader controlLoader = new FXMLLoader(getClass().getResource("/MVC/ControlPanel.fxml"));
             Parent controlPanelRoot = controlLoader.load();
             controller.controlPanel = controlLoader.getController();
             controller.controlPanelPane.getChildren().add(controlPanelRoot);
+            AnchorPane.setTopAnchor(controlPanelRoot, 0.0);
+            AnchorPane.setRightAnchor(controlPanelRoot, 0.0);
+            AnchorPane.setBottomAnchor(controlPanelRoot, 0.0);
+            AnchorPane.setLeftAnchor(controlPanelRoot, 0.0);
 
             // Load CanvasControl.fxml
             FXMLLoader canvasLoader = new FXMLLoader(getClass().getResource("/MVC/CanvasControl.fxml"));
             Parent canvasControlRoot = canvasLoader.load();
             controller.canvasControl = canvasLoader.getController();
             controller.canvasControlPane.getChildren().add(canvasControlRoot);
+            AnchorPane.setTopAnchor(canvasControlRoot, 0.0);
+            AnchorPane.setRightAnchor(canvasControlRoot, 0.0);
+            AnchorPane.setBottomAnchor(canvasControlRoot, 0.0);
+            AnchorPane.setLeftAnchor(canvasControlRoot, 0.0);
 
             // Init all controller classes
             Ref<GridWorld.ReadOnlyWorld> model = new Ref<>(null);
@@ -112,6 +140,8 @@ public class MainView extends Application implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        bindProperties();
+
         TaskQueue = new LinkedList<>();
 
         // starts the Controller Thread
@@ -122,6 +152,26 @@ public class MainView extends Application implements Initializable {
     public void init(Ref<GridWorld.ReadOnlyWorld> model, Ref<Entity> selectedEntity) {
         this.model = model;
         this.selectedEntity = selectedEntity;
+    }
+
+    /** Binds the various width and height properties of the JavaFX FXML components correspondent
+     * to this class. */
+    private void bindProperties() {
+        // TODO implement
+        divider.startYProperty().bind(splitPane.heightProperty().add(24));
+        infoPane.maxWidthProperty().bind(Bindings.min(
+                splitPane.heightProperty().multiply(200.0 / 376),
+                splitPane.widthProperty().multiply(0.3411)
+        ));
+
+        // TODO implement resizing to fit full screen
+//        infoDisplayPane.minHeightProperty().bind(
+//                infoPane.maxWidthProperty().multiply(294.0 / 200)
+//        );
+//
+//        controlPanelPane.minHeightProperty().bind(
+//                infoPane.maxWidthProperty().multiply(80.0 / 200)
+//        );
     }
 
     /** Adds a task to the {@linkplain #TaskQueue}. Doesn't do

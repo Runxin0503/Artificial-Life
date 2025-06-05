@@ -88,6 +88,8 @@ public class InfoDisplay implements Initializable {
     /** Initializer automatically called by JavaFX right after FXML injected all dependencies. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        bindProperties();
+
         selectInfoTab(0);
         // TODO set worldInfoToggle and entityInfoToggle to only be enabled when !selectedEntity.isEmpty()
         worldInfoToggle.setDisable(true);
@@ -103,6 +105,12 @@ public class InfoDisplay implements Initializable {
     public void init(Ref<GridWorld.ReadOnlyWorld> model, Ref<Entity> selectedEntity) {
         this.model = model;
         this.selectedEntity = selectedEntity;
+    }
+
+    /** Binds the various width and height properties of the JavaFX FXML components correspondent
+     * to this class. */
+    private void bindProperties() {
+        // TODO implement
     }
 
     /** Updates the world info tab when the tab is open and visible. */
