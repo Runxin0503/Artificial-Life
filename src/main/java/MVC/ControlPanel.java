@@ -59,6 +59,20 @@ public class ControlPanel implements Initializable {
                 speedSliderDisplay.setText(simSpeed == 1000 ? "MAX SPEED" : simSpeed + " steps/sec");
             }
         });
+
+        continuousStep.setOnAction(e -> {
+            if (continuousStep.isSelected()) {
+                taskAdder.accept(new Task(Task.TaskType.RUN_CONTINUOUSLY));
+                continuousStep.setText("Pause");
+                advanceStep.setDisable(true);
+            } else {
+                taskAdder.accept(new Task(Task.TaskType.STOP_RUNNING));
+                continuousStep.setText("Play");
+                advanceStep.setDisable(false);
+            }
+        });
+
+        advanceStep.setOnAction(e -> taskAdder.accept(new Task(Task.TaskType.STEP)));
     }
 
     /** Custom initializer called by {@linkplain MainView}. */
@@ -75,24 +89,7 @@ public class ControlPanel implements Initializable {
     /** Unselects the continuous step toggle button when a new world is loaded. */
     public void unselectContinuousStep() {
         continuousStep.setSelected(false);
-        Platform.runLater(() -> handleContinuousStepPressed(null));
-    }
-
-    @FXML
-    private void handleContinuousStepPressed(final ActionEvent e) {
-        if (continuousStep.isSelected()) {
-            taskAdder.accept(new Task(Task.TaskType.RUN_CONTINUOUSLY));
-            continuousStep.setText("Pause");
-            advanceStep.setDisable(true);
-        } else {
-            taskAdder.accept(new Task(Task.TaskType.STOP_RUNNING));
-            continuousStep.setText("Play");
-            advanceStep.setDisable(false);
-        }
-    }
-
-    @FXML
-    private void handleAdvanceStepPressed(final ActionEvent e) {
-        taskAdder.accept(new Task(Task.TaskType.STEP));
+        continuousStep.setText("Play");
+        advanceStep.setDisable(false);
     }
 }

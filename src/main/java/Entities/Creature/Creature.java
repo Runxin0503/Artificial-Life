@@ -253,7 +253,7 @@ public class Creature extends Entity {
             double health, double energy, double strength, double armour, double force,
             double herbivore, double carnivore, double offspringInvestment, double maturity,
             double visionRange, double separation, double alignment, double cohesion,
-            int id
+            int ID
     ) implements ReadOnlyEntity {
 
         public int getSize() {
@@ -270,7 +270,7 @@ public class Creature extends Entity {
 
         @Override
         public int hashCode() {
-            return id;
+            return ID;
         }
     }
 }

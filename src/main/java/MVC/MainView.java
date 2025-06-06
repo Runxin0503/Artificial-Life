@@ -4,6 +4,8 @@ import Entities.Entity;
 import Physics.GridWorld;
 import Utils.Constants;
 import Utils.Ref;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -16,6 +18,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -144,6 +147,18 @@ public class MainView extends Application implements Initializable {
 
         TaskQueue = new LinkedList<>();
 
+
+        Timeline updateCanvasPeriodically = new Timeline(new KeyFrame(
+                Duration.seconds(1.0 / Constants.WindowConstants.MAX_FPS),
+                event -> {
+                    // TODO add all repaint stuff in here
+                    canvasControl.repaint();
+                }
+        ));
+
+        updateCanvasPeriodically.setCycleCount(Timeline.INDEFINITE);
+        updateCanvasPeriodically.play();
+
         // starts the Controller Thread
         new Thread(new Controller(this)).start();
     }
@@ -157,7 +172,6 @@ public class MainView extends Application implements Initializable {
     /** Binds the various width and height properties of the JavaFX FXML components correspondent
      * to this class. */
     private void bindProperties() {
-        // TODO implement
         divider.startYProperty().bind(splitPane.heightProperty().add(24));
         infoPane.maxWidthProperty().bind(Bindings.min(
                 splitPane.heightProperty().multiply(200.0 / 376),

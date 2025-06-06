@@ -71,7 +71,7 @@ public class Egg extends Entity {
     public record ReadOnlyEgg(
             int x, int y, int width, int height,
             int incubationTime, double health,
-            int id
+            int ID
             ) implements ReadOnlyEntity {
 
         public int getSize() {
@@ -96,7 +96,7 @@ public class Egg extends Entity {
 
         @Override
         public int hashCode() {
-            return id;
+            return ID;
         }
     }
 }

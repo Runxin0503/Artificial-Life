@@ -4,9 +4,7 @@ import Entities.Creature.Creature;
 import Physics.Position;
 import Utils.Constants.BushConstants;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * An Immovable Plant Entity that produces berries passively <br>
@@ -19,11 +17,11 @@ public class Bush extends Entity {
     /** The (effectively FINAL) fields for the bounding box of this Bush. Used to generate Berry positions. */
     private int x, y, width, height;
 
-    /** The amount of energy each berries give */
+    /** The amount of energy each berries give. TODO implement this in the future. */
     private double berryEnergy;
 
     /** Stores absolute world positions of the berries themselves. */
-    private final ArrayList<Point> berries = new ArrayList<>();
+    private int numBerries = 0;
 
     /** The list of Creatures (sorted by descending size) of the creatures that
      * interacted with this bush. */
@@ -41,18 +39,9 @@ public class Bush extends Entity {
         this.width = width;
         this.height = height;
 
-        int currentBerries = (int) (Math.random() * maxBerries);
-        for (int i = 0; i < currentBerries; i++)
-            growBerry();
+        numBerries = (int) (Math.random() * maxBerries);
 
-        berries.clear();
         queuedBerryEating.clear();
-    }
-
-    private void growBerry() {
-        berries.add(new Point(
-                x + BushConstants.berriesWidth + (int) (Math.random() * (width - 2 * BushConstants.berriesWidth)),
-                y + BushConstants.berriesHeight + (int) (Math.random() * (height - 2 * BushConstants.berriesHeight))));
     }
 
     /**
@@ -65,30 +54,9 @@ public class Bush extends Entity {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    /** Returns the List of Point Object for drawing berries */
-    List<Point> getBerries() {
-        return berries;
-    }
-
-    /**
-     * Returns Genetic Information: {@code maxBerries}<br>
-     * States the max berries this bush can have.
-     */
-    int getMaxBerries() {
-        return maxBerries;
-    }
-
-    /**
-     * Returns Genetic Information: {@code berryEnergy}<br>
-     * States the energy this bush's berries give
-     */
-    double getBerriesEnergy() {
-        return berryEnergy;
-    }
-
     @Override
     public double getEnergyIfConsumed() {
-        return berryEnergy * berries.size();
+        return berryEnergy * numBerries;
     }
 
     @Override
@@ -101,12 +69,12 @@ public class Bush extends Entity {
         return new ReadOnlyBush(
                 pos.boundingBox.x, pos.boundingBox.y,
                 pos.boundingBox.width, pos.boundingBox.height,
-                berries.size(), ID);
+                numBerries, ID);
     }
 
     public record ReadOnlyBush(
             int x, int y, int width, int height,
-            int berries, int id
+            int numBerries, int ID
     ) implements ReadOnlyEntity {
 
         public int getSize() {
@@ -122,12 +90,12 @@ public class Bush extends Entity {
         }
 
         public double getStoredEnergy() {
-            return berries * BushConstants.energy;
+            return numBerries * BushConstants.energy;
         }
 
         @Override
         public int hashCode() {
-            return id;
+            return ID;
         }
     }
 }

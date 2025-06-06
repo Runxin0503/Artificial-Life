@@ -23,6 +23,7 @@ import javafx.scene.transform.NonInvertibleTransformException;
 import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 
@@ -54,6 +55,8 @@ public class CanvasControl implements Initializable {
     public Text stepsPerSecCounter;
 
     private Ref<GridWorld.ReadOnlyWorld> model;
+
+    private final HashMap<Integer, ArrayList<Point>> bushToBerryLocations = new HashMap<>();
 
     /** Initializer automatically called by JavaFX right after FXML injected all dependencies. */
     @Override
@@ -129,6 +132,7 @@ public class CanvasControl implements Initializable {
 
 
         //TODO move this to MainView.java?
+
         new AnimationTimer() {
             private long lastUpdate = 0;
             private int frameCount = 0;
@@ -163,31 +167,21 @@ public class CanvasControl implements Initializable {
         // TODO implement
     }
 
+    /** Updates and repaints all fields of this GUI according to the most recent data. */
+    public void repaint() {
+        if (!model.isEmpty() && redrawCanvas)
+            drawCanvas();
+    }
+
     /** A method that draws the Canvas according to {@code model}. */
     public synchronized void drawCanvas() {
         GridWorld.ReadOnlyWorld model;
         model = this.model.get();
 
-        int minX = Math.clamp(
-                (int) Math.round((Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTx()) / canvasTransform.getMxx()),
-                Constants.WindowConstants.CANVAS_PADDING,
-                Constants.WorldConstants.xBound
-        );
-        int minY = Math.clamp(
-                (int) Math.round((Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTy()) / canvasTransform.getMyy()),
-                Constants.WindowConstants.CANVAS_PADDING,
-                Constants.WorldConstants.yBound
-        );
-        int maxX = Math.clamp(
-                (int) Math.round((canvas.getWidth() - Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTx()) / canvasTransform.getMxx()),
-                Constants.WindowConstants.CANVAS_PADDING,
-                Constants.WorldConstants.xBound
-        );
-        int maxY = Math.clamp(
-                (int) Math.round((canvas.getHeight() - Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTy()) / canvasTransform.getMyy()),
-                Constants.WindowConstants.CANVAS_PADDING,
-                Constants.WorldConstants.yBound
-        );
+        int minX = Math.clamp((int) Math.round((Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTx()) / canvasTransform.getMxx()), Constants.WindowConstants.CANVAS_PADDING, Constants.WorldConstants.xBound);
+        int minY = Math.clamp((int) Math.round((Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTy()) / canvasTransform.getMyy()), Constants.WindowConstants.CANVAS_PADDING, Constants.WorldConstants.yBound);
+        int maxX = Math.clamp((int) Math.round((canvas.getWidth() - Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTx()) / canvasTransform.getMxx()), Constants.WindowConstants.CANVAS_PADDING, Constants.WorldConstants.xBound);
+        int maxY = Math.clamp((int) Math.round((canvas.getHeight() - Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTy()) / canvasTransform.getMyy()), Constants.WindowConstants.CANVAS_PADDING, Constants.WorldConstants.yBound);
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
@@ -199,7 +193,7 @@ public class CanvasControl implements Initializable {
 
         gc.setStroke(Color.BLACK);
 
-        // TODO draw the canvas here with model normally, assuming no translation is needed
+        // draw the canvas here with model normally, assuming no translation is needed
         ArrayList<Entity.ReadOnlyEntity>[] entities = model.getEntities(minX, minY, maxX, maxY);
         if (entities.length < Constants.WindowConstants.standardOrGridThreshold) {
             HashSet<Entity.ReadOnlyEntity> entitiesSet = new HashSet<>();
@@ -227,30 +221,44 @@ public class CanvasControl implements Initializable {
 
     /** Draws the ReadOnlyEntity {@code entity} on the graphics object {@code gc}. */
     private void drawReadOnlyEntity(Entity.ReadOnlyEntity entity, GraphicsContext gc) {
-        //TODO implement all
+        if (Constants.WorldConstants.Settings.devMode) {
+            gc.setStroke(Color.BLACK);
+            gc.setFill(Color.BLACK);
+            gc.strokeRect(entity.x(), entity.y(), entity.width(), entity.height());
+            gc.fillRect(entity.getX() - 2, entity.getY() - 2, 4, 4);
+        }
         switch (entity) {
             case Bush.ReadOnlyBush bush -> {
-//                gc.drawImage(Constants.ImageConstants.bush, bush.x(), bush.y());
-//                if (Constants.WorldConstants.Settings.devMode) {
-//                    gc.strokeRect(bush.x(), bush.y(), bush.width(), bush.height());
-//                    gc.fillRect(bush.getX() - 2, bush.getY() - 2, 4, 4);
-//                }
-//
-//                ArrayList<Point> berries = new ArrayList<>(bush.getBerries());
-//                for (Point berry : berries)
-//                    gc.drawImage(Constants.ImageConstants.berries, x + berry.x, y + berry.y, this);
-            }
-            case Egg.ReadOnlyEgg egg -> {
+                gc.drawImage(Constants.ImageConstants.bush, bush.x(), bush.y(), bush.width(), bush.height());
 
+                // draw bush's berries from stashed data in bushToBerriesLocation
+                bushToBerryLocations.putIfAbsent(bush.ID(), new ArrayList<>());
+                ArrayList<Point> berries = bushToBerryLocations.get(bush.ID());
+                if (berries.size() != bush.numBerries()) modifyBerriesLocations(bush, berries);
+                for (Point berry : berries)
+                    gc.drawImage(Constants.ImageConstants.berries, berry.x, berry.y, Constants.BushConstants.berriesWidth, Constants.BushConstants.berriesHeight);
             }
+            case Egg.ReadOnlyEgg egg ->
+                    gc.drawImage(Constants.ImageConstants.egg, egg.x(), egg.y(), egg.width(), egg.height());
             case Corpse.ReadOnlyCorpse corpse -> {
-
+                gc.save();
+                gc.translate(corpse.getX() - corpse.x(), corpse.getY() - corpse.y());
+                gc.rotate(Math.toDegrees(corpse.rotation()));
+                gc.drawImage(Constants.ImageConstants.corpse, corpse.x(), corpse.y(), corpse.width(), corpse.height());
+                gc.restore();
             }
-            case Creature.ReadOnlyCreature creature -> {
-
-            }
+            case Creature.ReadOnlyCreature creature ->
+                    gc.drawImage(Constants.ImageConstants.getBirdRotation(creature.rotation()), creature.x(), creature.y(), creature.width(), creature.height());
             case null, default -> throw new IllegalStateException("Unexpected value: " + entity);
         }
+    }
+
+    private void modifyBerriesLocations(Bush.ReadOnlyBush bush, ArrayList<Point> berries) {
+        for (int i = berries.size(); i < bush.numBerries(); i++)
+            berries.add(new Point(bush.x() + Constants.BushConstants.berriesWidth + (int) (Math.random() * (bush.width() - 2 * Constants.BushConstants.berriesWidth)), bush.y() + Constants.BushConstants.berriesHeight + (int) (Math.random() * (bush.height() - 2 * Constants.BushConstants.berriesHeight))));
+
+        for (int i = berries.size(); i > bush.numBerries(); i--)
+            berries.remove(i - 1);
     }
 
     public synchronized void redrawCanvas() {

@@ -192,7 +192,7 @@ public class Constants implements Serializable {
          * @param radianRotation the rotation in radians
          * @return the corresponding rotated image
          */
-        public static Image getRotation(double radianRotation) {
+        public static Image getBirdRotation(double radianRotation) {
             int degreeRotation = (int) Math.round(Math.toDegrees(radianRotation));
             while (degreeRotation < 0) degreeRotation += 360;
             while (degreeRotation >= 360) degreeRotation -= 360;

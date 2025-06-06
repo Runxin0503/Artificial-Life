@@ -70,7 +70,7 @@ public class Corpse extends Entity {
     public record ReadOnlyCorpse(
             int x, int y, int width, int height,
             double velocityX, double velocityY, double rotation,
-            double energy, double initialEnergy, int id
+            double energy, double initialEnergy, int ID
     ) implements ReadOnlyEntity {
 
         public int getSize() {
@@ -91,7 +91,7 @@ public class Corpse extends Entity {
 
         @Override
         public int hashCode() {
-            return id;
+            return ID;
         }
     }
 }

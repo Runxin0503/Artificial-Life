@@ -38,5 +38,9 @@ public abstract class Entity extends Entities.EntityFactory.EntityFactoryObject 
         int width();
 
         int height();
+
+        int getX();
+
+        int getY();
     }
 }
