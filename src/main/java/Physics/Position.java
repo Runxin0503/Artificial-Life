@@ -17,19 +17,15 @@ public abstract class Position extends EntityFactory.EntityFactoryObject {
     /** The bounding box of this Position, used to dictate if two Position objects collide or not. */
     public Rectangle boundingBox;
 
-    /** The image of this particular Position object, used for rendering in {@code JavaFX}. */
-    public Image image;
-
     /** The damage value from the most recent collision, used in {@link #getDamage()}. */
     double damage;
 
     /** The ratio value used in calculating the mass for {@link #getMass()} */
     double sizeToMass;
 
-    protected Position(int id, double width, double height, Image image) {
+    protected Position(int id, double width, double height) {
         super(id);
         boundingBox = new Rectangle((int) Math.round(width), (int) Math.round(height));
-        this.image = image;
     }
 
     /** Returns if bounding box has changed from where it was in the previous tick */

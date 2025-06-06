@@ -63,14 +63,14 @@ public class Corpse extends Entity {
                 d.boundingBox.x, d.boundingBox.y,
                 d.boundingBox.width, d.boundingBox.height,
                 d.velocity.x, d.velocity.y, d.dir.angle(),
-                energy, initialEnergy, d.image
+                energy, initialEnergy, ID
         );
     }
 
     public record ReadOnlyCorpse(
             int x, int y, int width, int height,
             double velocityX, double velocityY, double rotation,
-            double energy, double initialEnergy, Image image
+            double energy, double initialEnergy, int id
     ) implements ReadOnlyEntity {
 
         public int getSize() {
@@ -87,6 +87,11 @@ public class Corpse extends Entity {
 
         public double getRottenPerct() {
             return energy / initialEnergy;
+        }
+
+        @Override
+        public int hashCode() {
+            return id;
         }
     }
 }

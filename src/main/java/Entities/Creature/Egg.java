@@ -65,13 +65,13 @@ public class Egg extends Entity {
     public ReadOnlyEntity getReadOnlyCopy(Position pos) {
         return new ReadOnlyEgg(
                 pos.boundingBox.x, pos.boundingBox.y, pos.boundingBox.width, pos.boundingBox.height,
-                incubationTime, creature.health, pos.image);
+                incubationTime, creature.health, ID);
     }
 
     public record ReadOnlyEgg(
             int x, int y, int width, int height,
             int incubationTime, double health,
-            Image image
+            int id
             ) implements ReadOnlyEntity {
 
         public int getSize() {
@@ -92,6 +92,11 @@ public class Egg extends Entity {
 
         public double getHealth() {
             return health;
+        }
+
+        @Override
+        public int hashCode() {
+            return id;
         }
     }
 }

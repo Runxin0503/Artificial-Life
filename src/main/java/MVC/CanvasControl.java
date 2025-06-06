@@ -1,5 +1,10 @@
 package MVC;
 
+import Entities.Bush;
+import Entities.Corpse;
+import Entities.Creature.Creature;
+import Entities.Creature.Egg;
+import Entities.Entity;
 import Physics.GridWorld;
 import Utils.Constants;
 import Utils.Ref;
@@ -7,18 +12,18 @@ import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 
+import java.awt.*;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.ResourceBundle;
 
 public class CanvasControl implements Initializable {
@@ -163,29 +168,26 @@ public class CanvasControl implements Initializable {
         GridWorld.ReadOnlyWorld model;
         model = this.model.get();
 
-        double minX = Math.clamp(
-                (Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTx()) / canvasTransform.getMxx(),
+        int minX = Math.clamp(
+                (int) Math.round((Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTx()) / canvasTransform.getMxx()),
                 Constants.WindowConstants.CANVAS_PADDING,
                 Constants.WorldConstants.xBound
         );
-        double minY = Math.clamp(
-                (Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTy()) / canvasTransform.getMyy(),
+        int minY = Math.clamp(
+                (int) Math.round((Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTy()) / canvasTransform.getMyy()),
                 Constants.WindowConstants.CANVAS_PADDING,
                 Constants.WorldConstants.yBound
         );
-        double maxX = Math.clamp(
-                (canvas.getWidth() - Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTx()) / canvasTransform.getMxx(),
+        int maxX = Math.clamp(
+                (int) Math.round((canvas.getWidth() - Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTx()) / canvasTransform.getMxx()),
                 Constants.WindowConstants.CANVAS_PADDING,
                 Constants.WorldConstants.xBound
         );
-        double maxY = Math.clamp(
-                (canvas.getHeight() - Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTy()) / canvasTransform.getMyy(),
+        int maxY = Math.clamp(
+                (int) Math.round((canvas.getHeight() - Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTy()) / canvasTransform.getMyy()),
                 Constants.WindowConstants.CANVAS_PADDING,
                 Constants.WorldConstants.yBound
         );
-
-//      Create the bounding box
-        Rectangle2D canvasCameraBoundingBox = new Rectangle2D(minX, minY, maxX - minX, maxY - minY);
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
@@ -198,12 +200,57 @@ public class CanvasControl implements Initializable {
         gc.setStroke(Color.BLACK);
 
         // TODO draw the canvas here with model normally, assuming no translation is needed
+        ArrayList<Entity.ReadOnlyEntity>[] entities = model.getEntities(minX, minY, maxX, maxY);
+        if (entities.length < Constants.WindowConstants.standardOrGridThreshold) {
+            HashSet<Entity.ReadOnlyEntity> entitiesSet = new HashSet<>();
+            for (ArrayList<Entity.ReadOnlyEntity> elist : entities)
+                for (Entity.ReadOnlyEntity roe : elist) {
+                    if (entitiesSet.contains(roe)) continue;
 
+                    drawReadOnlyEntity(roe, gc);
+
+                    entitiesSet.add(roe);
+                }
+        } else {
+            // check for entity-in-scope of camera bounding box in entity-based rendering
+            Rectangle cameraBoundingBox = new Rectangle(minX, minY, maxX - minX, maxY - minY);
+            for (Entity.ReadOnlyEntity roe : model.entities)
+                if (cameraBoundingBox.contains(roe.x(), roe.y(), roe.width(), roe.height()))
+                    drawReadOnlyEntity(roe, gc);
+        }
 
         // TODO draw red line around selected Entity
 
         gc.restore();
         redrawCanvas = false;
+    }
+
+    /** Draws the ReadOnlyEntity {@code entity} on the graphics object {@code gc}. */
+    private void drawReadOnlyEntity(Entity.ReadOnlyEntity entity, GraphicsContext gc) {
+        //TODO implement all
+        switch (entity) {
+            case Bush.ReadOnlyBush bush -> {
+//                gc.drawImage(Constants.ImageConstants.bush, bush.x(), bush.y());
+//                if (Constants.WorldConstants.Settings.devMode) {
+//                    gc.strokeRect(bush.x(), bush.y(), bush.width(), bush.height());
+//                    gc.fillRect(bush.getX() - 2, bush.getY() - 2, 4, 4);
+//                }
+//
+//                ArrayList<Point> berries = new ArrayList<>(bush.getBerries());
+//                for (Point berry : berries)
+//                    gc.drawImage(Constants.ImageConstants.berries, x + berry.x, y + berry.y, this);
+            }
+            case Egg.ReadOnlyEgg egg -> {
+
+            }
+            case Corpse.ReadOnlyCorpse corpse -> {
+
+            }
+            case Creature.ReadOnlyCreature creature -> {
+
+            }
+            case null, default -> throw new IllegalStateException("Unexpected value: " + entity);
+        }
     }
 
     public synchronized void redrawCanvas() {

@@ -1,6 +1,5 @@
 package Entities;
 
-import Entities.Bush.ReadOnlyBush;
 import Entities.Creature.Creature;
 import Physics.Position;
 import Utils.Constants.BushConstants;
@@ -102,12 +101,12 @@ public class Bush extends Entity {
         return new ReadOnlyBush(
                 pos.boundingBox.x, pos.boundingBox.y,
                 pos.boundingBox.width, pos.boundingBox.height,
-                berries.size(), pos.image);
+                berries.size(), ID);
     }
 
     public record ReadOnlyBush(
             int x, int y, int width, int height,
-            int berries, Image image
+            int berries, int id
     ) implements ReadOnlyEntity {
 
         public int getSize() {
@@ -124,6 +123,11 @@ public class Bush extends Entity {
 
         public double getStoredEnergy() {
             return berries * BushConstants.energy;
+        }
+
+        @Override
+        public int hashCode() {
+            return id;
         }
     }
 }

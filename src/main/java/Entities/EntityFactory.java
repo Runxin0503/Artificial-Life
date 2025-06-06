@@ -58,13 +58,13 @@ public class EntityFactory {
     public Pair<Corpse, Dynamic> getCorpsePair(Pair<Creature, Dynamic> cd) {
         if (corpsePair.isEmpty()) {
             Corpse c = new Corpse(objectCounter, cd.first());
-            Dynamic d = new Dynamic(objectCounter, ImageConstants.corpse, cd.second(), CorpseConstants.sizeMovementConstant);
+            Dynamic d = new Dynamic(objectCounter, cd.second(), CorpseConstants.sizeMovementConstant);
             objectCounter++;
             return new Pair<>(c, d);
         } else {
             Pair<Corpse, Dynamic> cod = corpsePair.removeFirst();
             cod.first().reset(cd.first());
-            cod.second().reset(ImageConstants.corpse, cd.second(), CorpseConstants.sizeMovementConstant);
+            cod.second().reset(cd.second(), CorpseConstants.sizeMovementConstant);
             return cod;
         }
     }
@@ -79,7 +79,7 @@ public class EntityFactory {
 
         if (bushPair.isEmpty()) {
             Bush b = new Bush(objectCounter, x, y, width, height);
-            Fixed f = new Fixed(objectCounter, ImageConstants.bush,
+            Fixed f = new Fixed(objectCounter,
                     width, height, x, y, 0);
             objectCounter++;
             return new Pair<>(b, f);
@@ -99,7 +99,7 @@ public class EntityFactory {
             Pair<Creature, Dynamic> cd = getIncubatedCreature();
             Egg e = new Egg(objectCounter, cd.first());
 
-            Fixed f = new Fixed(objectCounter, ImageConstants.egg,
+            Fixed f = new Fixed(objectCounter,
                     cd.second());
             objectCounter++;
             return new Pair<>(e, f);
@@ -121,7 +121,7 @@ public class EntityFactory {
             Pair<Creature, Dynamic> cd = getIncubatedCreature(cd1, cd2);
             Egg e = new Egg(objectCounter, cd.first());
 
-            Fixed f = new Fixed(objectCounter, ImageConstants.egg,
+            Fixed f = new Fixed(objectCounter,
                     cd.second());
             objectCounter++;
             return new Pair<>(e, f);
@@ -147,7 +147,7 @@ public class EntityFactory {
             Creature c = new Creature(objectCounter, NeuralNet.EvolutionConstants);
             Egg e = new Egg(objectCounter, c);
 
-            Dynamic d = new Dynamic(objectCounter, ImageConstants.getRotation(randAngle),
+            Dynamic d = new Dynamic(objectCounter,
                     c.getSize(), c.getSize(),
                     x, y, randAngle, CreatureConstants.Movement.sizeMovementConstant);
             objectCounter++;
@@ -157,8 +157,7 @@ public class EntityFactory {
         } else {
             Pair<Creature, Dynamic> cd = creaturePair.removeFirst();
             cd.first().reset(NeuralNet.EvolutionConstants);
-            cd.second().reset(ImageConstants.getRotation(randAngle),
-                    cd.first().getSize(), cd.first().getSize(),
+            cd.second().reset(cd.first().getSize(), cd.first().getSize(),
                     x, y, randAngle, CreatureConstants.Movement.sizeMovementConstant);
             incubatedCreaturePair.add(cd);
             return cd;
@@ -174,7 +173,7 @@ public class EntityFactory {
 
         if (creaturePair.isEmpty()) {
             Creature c = new Creature(objectCounter, cd1.first(), cd2.first());
-            Dynamic d = new Dynamic(objectCounter, ImageConstants.getRotation(randAngle),
+            Dynamic d = new Dynamic(objectCounter,
                     c.getSize(), c.getSize(),
                     cd1.second().x, cd1.second().y, randAngle, CreatureConstants.Movement.sizeMovementConstant);
             objectCounter++;
@@ -184,8 +183,7 @@ public class EntityFactory {
         } else {
             Pair<Creature, Dynamic> cd = creaturePair.removeFirst();
             cd.first().reset(cd1.first(), cd2.first());
-            cd.second().reset(ImageConstants.getRotation(randAngle),
-                    cd.first().getSize(), cd.first().getSize(),
+            cd.second().reset(cd.first().getSize(), cd.first().getSize(),
                     cd1.second().x, cd1.second().y, randAngle, CreatureConstants.Movement.sizeMovementConstant);
             return cd;
         }
@@ -197,7 +195,7 @@ public class EntityFactory {
      * @param pair the Pair of an entity and its physics object to recycle.
      * @throws RuntimeException if the Pair type is not recognized.
      */
-    public void recycle(Pair<?,?> pair) {
+    public void recycle(Pair<?, ?> pair) {
         if (pair.first() instanceof Creature && pair.second() instanceof Dynamic)
             creaturePair.add((Pair<Creature, Dynamic>) (pair));
         else if (pair.first() instanceof Corpse && pair.second() instanceof Dynamic)
@@ -213,7 +211,7 @@ public class EntityFactory {
 
     /** An interface that must have at least one reset() method that takes in some for {@link EntityFactory} to use. */
     public abstract static class EntityFactoryObject {
-        private final int ID;
+        protected final int ID;
 
         protected EntityFactoryObject(int id) {
             ID = id;

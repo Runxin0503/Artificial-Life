@@ -28,31 +28,30 @@ public final class Dynamic extends Position {
     private double angularSpeed;
 
     /** Constructs a new {@code Dynamic} object with assigned position. */
-    public Dynamic(int id, Image image, double width, double height, int x, int y, double dir, double sizeToMass) {
-        super(id, width, height, image);
-        reset(image, width, height, x, y, dir, sizeToMass);
+    public Dynamic(int id, double width, double height, int x, int y, double dir, double sizeToMass) {
+        super(id, width, height);
+        reset(width, height, x, y, dir, sizeToMass);
     }
 
     /** Resets this {@code Dynamic} object for reuse with new size, image, direction, and position. */
-    public void reset(Image image, double width, double height, int x, int y, double dir, double sizeToMass) {
+    public void reset(double width, double height, int x, int y, double dir, double sizeToMass) {
         boundingBox.setRect(x - width / 2, y - height / 2, width, height);
         prevBoundingBox.setRect(boundingBox);
         this.dir.x = Math.cos(dir);
         this.dir.y = Math.sin(dir);
-        this.image = image;
         this.x = x;
         this.y = y;
         this.sizeToMass = sizeToMass;
     }
 
     /** Constructs a new {@code Dynamic} object with assigned position. */
-    public Dynamic(int id, Image image, Dynamic d, double sizeToMass) {
-        this(id, image, d.boundingBox.width, d.boundingBox.height, d.x, d.y, d.dir.angle(), sizeToMass);
+    public Dynamic(int id, Dynamic d, double sizeToMass) {
+        this(id, d.boundingBox.width, d.boundingBox.height, d.x, d.y, d.dir.angle(), sizeToMass);
     }
 
     /** Resets this {@code Dynamic} object for reuse with new size, image, direction, and position. */
-    public void reset(Image image, Dynamic d, double sizeToMass) {
-        reset(image, d.boundingBox.width, d.boundingBox.height, d.x, d.y, d.dir.angle(), sizeToMass);
+    public void reset(Dynamic d, double sizeToMass) {
+        reset(d.boundingBox.width, d.boundingBox.height, d.x, d.y, d.dir.angle(), sizeToMass);
     }
 
     /** Stashes the current bounding box's dimension and position to the previous bounding Box Object. */
@@ -118,7 +117,6 @@ public final class Dynamic extends Position {
     @Override
     public void setSize(double newSize) {
         boundingBox.setSize((int) Math.round(newSize), (int) Math.round(boundingBox.height * boundingBox.width / newSize));
-        image = image.getScaledInstance(boundingBox.width, boundingBox.height, Constants.ImageConstants.ResizeConstant);
     }
 
     public void setSizeToMass(double newSize) {

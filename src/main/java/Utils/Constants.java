@@ -3,12 +3,14 @@ package Utils;
 import Genome.Activation;
 import Genome.Cost;
 import Genome.Optimizer;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -154,26 +156,18 @@ public class Constants implements Serializable {
         public static final double MIN_ZOOM = 0;
         public static final double MAX_ZOOM = 10;
         public static final double MAX_FPS = 60;
-        public static final int MAX_CRITTER_SPECIES_FONT_SIZE = 11;
-        public static final int MIN_CRITTER_SPECIES_FONT_SIZE = 6;
         public static final int maxThread = 10;
-        public static final int worldWidth = 1200;
-        public static final int worldHeight = 800;
-        public static final int menuWidth = 800;
-        public static final int menuHeight = 800;
-        public static final int titleWidth = 500;
-        public static final int titleHeight = 100;
-        public static final int controlPanelWidth = 400;
-        public static final double minZoom = 0.1;
-        public static final double maxZoom = 10;
         public static final double followZoom = 2;
-        public static final int settingsWidth = 800;
-        public static final int settingsHeight = 600;
         public static final int graphWidth = 800;
         public static final int graphHeight = 800;
         public static final int graphMaxDataSize = 1000;
-        public static final int loadBarWidth = 200;
-        public static final int loadBarHeight = 400;
+
+        /** The number of Grids in scope of camera before switching from Spatial-Partition based
+         * rendering to standard entity based rendering.
+         * <br>
+         * <br>Tradeoff here being that Spatial-Partitioned rendering checks for duplicates in each grid
+         * while standard entity rendering checks if the entity is in scope of the camera. */
+        public static final int standardOrGridThreshold = 50;
     }
 
     /**
@@ -181,37 +175,14 @@ public class Constants implements Serializable {
      */
     public static class ImageConstants {
 
-        static {
-            try {
-                bush = ImageIO.read(ImageConstants.class.getResource("/bush.png"));
-                corpse = ImageIO.read(ImageConstants.class.getResource("/deadbird.png"));
-                egg = ImageIO.read(ImageConstants.class.getResource("/egg.png"));
-                berries = ImageIO.read(ImageConstants.class.getResource("/berries.png"));
-                BufferedImage bird = ImageIO.read(ImageConstants.class.getResource("/bird.png"));
-                for (int i = 0; i < 360; i++) {
-                    ImageConstants.birdRotations[i] = new BufferedImage(bird.getWidth(), bird.getHeight(), bird.getType());
-                    Graphics2D g2d = (Graphics2D) ImageConstants.birdRotations[i].getGraphics();
-                    AffineTransform at = AffineTransform.getRotateInstance(Math.toRadians(i), bird.getWidth() / 2.0, bird.getHeight() / 2.0);
-                    if ((i > 90 && i < 270)) {
-                        at.scale(1, -1);
-                        at.translate(0, -bird.getHeight());
-                    }
-                    g2d.drawImage(bird, at, null);
-                    g2d.dispose();
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
         /** Image for berries. */
-        public static Image berries;
+        public static final Image berries = new Image(ImageConstants.class.getResource("/berries.png").toString());
         /** Image for bushes. */
-        public static Image bush;
+        public static final Image bush = new Image(ImageConstants.class.getResource("/bush.png").toString());
         /** Image for corpses. */
-        public static Image corpse;
+        public static final Image corpse = new Image(ImageConstants.class.getResource("/corpse.png").toString());
         /** Image for eggs. */
-        public static Image egg;
+        public static final Image egg = new Image(ImageConstants.class.getResource("/egg.png").toString());
         /** Cached array of bird images indexed by rotation degree. */
         public static final Image[] birdRotations = new Image[360];
 
@@ -228,8 +199,27 @@ public class Constants implements Serializable {
             return birdRotations[degreeRotation];
         }
 
-        /** The Algorithm used for resizing images. */
-        public static final int ResizeConstant = Image.SCALE_DEFAULT;
+        static {
+            Image bird = new Image(ImageConstants.class.getResource("/bird.png").toString());
+            for (int i = 0; i < 360; i++) {
+                double size = Math.max(bird.getWidth(), bird.getHeight());
+
+                Canvas canvas = new Canvas(size, size);
+                GraphicsContext gc = canvas.getGraphicsContext2D();
+
+                gc.save();
+                gc.translate(size / 2, size / 2);
+                gc.rotate(i);
+                gc.translate(-bird.getWidth() / 2, -bird.getHeight() / 2);
+                gc.drawImage(bird, 0, 0);
+                gc.restore();
+
+                SnapshotParameters params = new SnapshotParameters();
+                params.setFill(Color.TRANSPARENT);
+                WritableImage rotated = new WritableImage((int) size, (int) size);
+                birdRotations[i] = canvas.snapshot(params, rotated);
+            }
+        }
     }
 
     /**

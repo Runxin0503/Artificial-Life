@@ -478,7 +478,9 @@ public class GridWorld {
         return new ReadOnlyWorld(positionToEntityPair);
     }
 
+
     public static class ReadOnlyWorld {
+        //TODO implement spatial partitioning for easier-rendering
         public final Entity.ReadOnlyEntity[] entities;
 
         public ReadOnlyWorld(HashMap<Position, Pair<? extends Entity, ? extends Position>> positionToEntity) {
@@ -487,6 +489,11 @@ public class GridWorld {
             int count = 0;
             for (Pair<? extends Entity, ? extends Position> value : positionToEntity.values())
                 entities[count++] = value.first().getReadOnlyCopy(value.second());
+        }
+
+        /** TODO Document, spacial partition */
+        public ArrayList<Entity.ReadOnlyEntity>[] getEntities(int minX, int minY, int maxX, int maxY) {
+            throw new UnsupportedOperationException("Not supported Yet");
         }
     }
 }

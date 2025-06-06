@@ -7,8 +7,8 @@ import java.awt.*;
 
 public final class Fixed extends Position {
 
-    public Fixed(int id, Image image, double width, double height, int x, int y, double sizeToMass) {
-        super(id, width, height, image);
+    public Fixed(int id, double width, double height, int x, int y, double sizeToMass) {
+        super(id, width, height);
         reset(x, y, width, height, sizeToMass);
     }
 
@@ -19,8 +19,8 @@ public final class Fixed extends Position {
         this.sizeToMass = sizeToMass;
     }
 
-    public Fixed(int id, Image image, Dynamic d) {
-        super(id,d.boundingBox.width,d.boundingBox.height,image);
+    public Fixed(int id, Dynamic d) {
+        super(id, d.boundingBox.width, d.boundingBox.height);
         reset(d);
     }
 
