@@ -167,7 +167,7 @@ public class Constants implements Serializable {
          * <br>
          * <br>Tradeoff here being that Spatial-Partitioned rendering checks for duplicates in each grid
          * while standard entity rendering checks if the entity is in scope of the camera. */
-        public static final int standardOrGridThreshold = 50;
+        public static final int standardOrGridThreshold = 0; // 50
     }
 
     /**
@@ -175,12 +175,19 @@ public class Constants implements Serializable {
      */
     public static class ImageConstants {
 
+        /** A Tile-able Background Image of a starry night. */
+        public static final Image tiledBackground = new Image(ImageConstants.class.getResource("/starry_night.png").toString());
+        /** Tile Width of the starry-night background image. */
+        public static final double tileWidth = tiledBackground.getWidth();
+        /** Tile Height of the starry-night background image. */
+        public static final double tileHeight = tiledBackground.getHeight();
+
         /** Image for berries. */
         public static final Image berries = new Image(ImageConstants.class.getResource("/berries.png").toString());
         /** Image for bushes. */
         public static final Image bush = new Image(ImageConstants.class.getResource("/bush.png").toString());
         /** Image for corpses. */
-        public static final Image corpse = new Image(ImageConstants.class.getResource("/corpse.png").toString());
+        public static final Image corpse = new Image(ImageConstants.class.getResource("/dead_bird.png").toString());
         /** Image for eggs. */
         public static final Image egg = new Image(ImageConstants.class.getResource("/egg.png").toString());
         /** Cached array of bird images indexed by rotation degree. */

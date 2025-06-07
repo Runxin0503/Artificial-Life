@@ -1,7 +1,5 @@
 package MVC;
 
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -43,7 +41,8 @@ public class ControlPanel implements Initializable {
         speedSlider.setValue(100);
         speedSlider.setMax(1000);
         speedSliderDisplay.setText("100 steps/sec");
-        speedSlider.valueProperty().addListener(num -> {
+
+        Runnable onSliderUpdate = () -> {
             synchronized (speedSlider) {
                 int simSpeed = (int) speedSlider.getValue();
                 speedSliderDisplay.setText(switch (simSpeed) {
@@ -52,13 +51,10 @@ public class ControlPanel implements Initializable {
                     default -> simSpeed + " steps/sec";
                 });
             }
-        });
-        speedSlider.setOnMouseReleased(event -> {
-            synchronized (speedSlider) {
-                int simSpeed = (int) speedSlider.getValue();
-                speedSliderDisplay.setText(simSpeed == 1000 ? "MAX SPEED" : simSpeed + " steps/sec");
-            }
-        });
+        };
+
+        speedSlider.valueProperty().addListener(num -> onSliderUpdate.run());
+        speedSlider.setOnMouseReleased(event -> onSliderUpdate.run());
 
         continuousStep.setOnAction(e -> {
             if (continuousStep.isSelected()) {

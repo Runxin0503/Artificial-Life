@@ -8,7 +8,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -62,7 +61,7 @@ public class MainView extends Application implements Initializable {
     /**
      * Stores the reference to the instance of the model this View renders.
      * Controller writes to model via {@link #updateViewModel},
-     * View reads from model via {@link CanvasControl#drawCanvas()}
+     * View reads from model via {@code CanvasControl.drawCanvas()}
      */
     private Ref<GridWorld.ReadOnlyWorld> model;
 
@@ -127,10 +126,10 @@ public class MainView extends Application implements Initializable {
             // Init all controller classes
             Ref<GridWorld.ReadOnlyWorld> model = new Ref<>(null);
             Ref<Entity> selectedEntity = new Ref<>(null);
-            controller.init(model, selectedEntity);
             controller.infoDisplay.init(model, selectedEntity);
             controller.controlPanel.init(controller::addTask);
             controller.canvasControl.init(model);
+            controller.init(model, selectedEntity);
         } catch (final IOException ioe) {
             System.err.println("Can't load FXML file.");
             ioe.printStackTrace();
@@ -228,7 +227,7 @@ public class MainView extends Application implements Initializable {
     public void updateViewModel(GridWorld.ReadOnlyWorld newModel) {
         assert newModel != null;
         model.set(newModel);
-        canvasControl.redrawCanvas();
+        canvasControl.redrawModel();
     }
 
     /**

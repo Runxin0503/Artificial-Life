@@ -24,12 +24,13 @@ import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.ResourceBundle;
 
 public class CanvasControl implements Initializable {
 
-    /** When true, this object will redraw the canvas at the next available tick. */
-    private boolean redrawCanvas = false;
+    /** When true, this object will redraw the world model at the next available tick. */
+    private boolean redrawModel = false;
 
     /**
      * Adds a 'Select Critter' task with a reference to the critter itself to TaskQueue
@@ -37,6 +38,15 @@ public class CanvasControl implements Initializable {
      */
     @FXML
     private Canvas canvas;
+
+    /** When true, this object will redraw the background at the next available tick. */
+    private boolean redrawBackground = false;
+
+    /**
+     * Background Canvas that generates the starry night backdrop.
+     */
+    @FXML
+    private Canvas backgroundCanvas;
 
     /** The transformation applied to the canvas, used in {@linkplain #drawCanvas}. */
     private final Affine canvasTransform = new Affine();
@@ -61,11 +71,15 @@ public class CanvasControl implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         bindProperties();
-//        canvas.widthProperty().bind(canvasScroller.widthProperty().add(Constants.WindowConstants.CANVAS_PADDING * 2));
-//        canvas.heightProperty().bind(canvasScroller.heightProperty().add(Constants.WindowConstants.CANVAS_PADDING * 2));
 
-        canvas.widthProperty().addListener(event -> redrawCanvas());
-        canvas.heightProperty().addListener(event -> redrawCanvas());
+        canvas.widthProperty().addListener(event -> {
+            redrawModel();
+            redrawBackground();
+        });
+        canvas.heightProperty().addListener(event -> {
+            redrawModel();
+            redrawBackground();
+        });
 
         canvasScroller.setOnScroll(ae -> {
             if (ae.getDeltaY() != 0) {  // Only react to vertical scroll
@@ -91,7 +105,8 @@ public class CanvasControl implements Initializable {
                 canvasTransform.setTx(canvasTransform.getTx() - mouseCoords.getX() * (canvasTransform.getMxx() - oldScaleX));
                 canvasTransform.setTy(canvasTransform.getTy() - mouseCoords.getY() * (canvasTransform.getMyy() - oldScaleY));
 
-                redrawCanvas();
+                redrawModel();
+                redrawBackground();
             }
         });
 
@@ -109,7 +124,8 @@ public class CanvasControl implements Initializable {
             canvasTransform.setTx(offsetX);
             canvasTransform.setTy(offsetY);
 
-            redrawCanvas();
+            redrawModel();
+            redrawBackground();
         });
 
         canvasScroller.setOnMouseReleased(ae -> {
@@ -124,13 +140,11 @@ public class CanvasControl implements Initializable {
 
             System.out.println("Coordinates: " + mouseCoords.getX() + ", " + mouseCoords.getY());
 
-            redrawCanvas();
+            redrawModel();
 
             // TODO find the selected entity. If no entity is selected or continuousStep is true,
             //  set selectedEntity to null, otherwise set selectedEntity to that selected Entity
-
         });
-
 
         new AnimationTimer() {
             private long lastUpdate = 0;
@@ -153,6 +167,8 @@ public class CanvasControl implements Initializable {
                 lastUpdate = now;
             }
         }.start();
+
+        redrawBackground();
     }
 
     /** Custom initializer called by {@linkplain MainView}. */
@@ -166,63 +182,99 @@ public class CanvasControl implements Initializable {
         // TODO implement
         canvas.widthProperty().bind(canvasScroller.widthProperty());
         canvas.heightProperty().bind(canvasScroller.heightProperty());
+
+        backgroundCanvas.widthProperty().bind(canvasScroller.widthProperty());
+        backgroundCanvas.heightProperty().bind(canvasScroller.heightProperty());
     }
 
     /** Updates and repaints all fields of this GUI according to the most recent data. */
     public void repaint() {
-        if (!model.isEmpty() && redrawCanvas)
+        if (!model.isEmpty() && redrawModel)
             drawCanvas();
+        if (redrawBackground)
+            drawBackground();
     }
 
-    /** A method that draws the Canvas according to {@code model}. */
-    public synchronized void drawCanvas() {
-        GridWorld.ReadOnlyWorld model;
-        model = this.model.get();
+    /** A method that draws the background according to {@linkplain #canvasTransform}. */
+    private void drawBackground() {
+        synchronized (backgroundCanvas) {
+            int minX = (int) Math.round((-canvasTransform.getTx()) / canvasTransform.getMxx());
+            int minY = (int) Math.round((-canvasTransform.getTy()) / canvasTransform.getMyy());
+            int maxX = (int) Math.round((backgroundCanvas.getWidth() - canvasTransform.getTx()) / canvasTransform.getMxx());
+            int maxY = (int) Math.round((backgroundCanvas.getHeight() - canvasTransform.getTy()) / canvasTransform.getMyy());
 
-        int minX = Math.clamp((int) Math.round((Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTx()) / canvasTransform.getMxx()), Constants.WindowConstants.CANVAS_PADDING, Constants.WorldConstants.xBound);
-        int minY = Math.clamp((int) Math.round((Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTy()) / canvasTransform.getMyy()), Constants.WindowConstants.CANVAS_PADDING, Constants.WorldConstants.yBound);
-        int maxX = Math.clamp((int) Math.round((canvas.getWidth() - Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTx()) / canvasTransform.getMxx()), Constants.WindowConstants.CANVAS_PADDING, Constants.WorldConstants.xBound);
-        int maxY = Math.clamp((int) Math.round((canvas.getHeight() - Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTy()) / canvasTransform.getMyy()), Constants.WindowConstants.CANVAS_PADDING, Constants.WorldConstants.yBound);
+            GraphicsContext gc = backgroundCanvas.getGraphicsContext2D();
+            gc.save();
+            gc.setTransform(canvasTransform); // apply same Affine as foreground
 
-        GraphicsContext gc = canvas.getGraphicsContext2D();
+//            Bounds bounds = backgroundCanvas.getBoundsInLocal();
+//            double minX = bounds.getMinX();
+//            double minY = bounds.getMinY();
+//            double maxX = bounds.getMaxX();
+//            double maxY = bounds.getMaxY();
 
-        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        gc.setStroke(Color.BLACK);
-        gc.strokeRect(0, 0, canvas.getWidth(), canvas.getHeight());
+// Offset the tiling to scroll naturally
+            double startX = Math.floor(minX / Constants.ImageConstants.tileWidth) * Constants.ImageConstants.tileWidth;
+            double startY = Math.floor(minY / Constants.ImageConstants.tileHeight) * Constants.ImageConstants.tileHeight;
 
-        gc.save();
-        gc.translate(canvasTransform.getTx(), canvasTransform.getTy());  // Translate first
-        gc.scale(canvasTransform.getMxx(), canvasTransform.getMyy());  // Then apply scale
+            for (double x = startX; x < maxX; x += Constants.ImageConstants.tileWidth)
+                for (double y = startY; y < maxY; y += Constants.ImageConstants.tileHeight)
+                    gc.drawImage(Constants.ImageConstants.tiledBackground, x, y);
 
-        // draw the canvas here with model normally, assuming no translation is needed
-        gc.setStroke(Color.RED);
-        gc.strokeRect(minX, minY, maxX - minX, maxY - minY);
-        gc.setFill(Color.RED);
-        gc.fillRect(0, 0, 30, 30);
+            gc.restore();
+            redrawBackground = false;
+        }
+    }
 
-//        ArrayList<Entity.ReadOnlyEntity>[] entities = model.getEntities(minX, minY, maxX, maxY);
-//        if (entities.length < Constants.WindowConstants.standardOrGridThreshold) {
-//            HashSet<Entity.ReadOnlyEntity> entitiesSet = new HashSet<>();
-//            for (ArrayList<Entity.ReadOnlyEntity> elist : entities)
-//                for (Entity.ReadOnlyEntity roe : elist) {
-//                    if (entitiesSet.contains(roe)) continue;
-//
-//                    drawReadOnlyEntity(roe, gc);
-//
-//                    entitiesSet.add(roe);
-//                }
-//        } else {
-//            // check for entity-in-scope of camera bounding box in entity-based rendering
-//            Rectangle cameraBoundingBox = new Rectangle(minX, minY, maxX - minX, maxY - minY);
-//            for (Entity.ReadOnlyEntity roe : model.entities)
-//                if (cameraBoundingBox.contains(roe.x(), roe.y(), roe.width(), roe.height()))
-//                    drawReadOnlyEntity(roe, gc);
-//        }
+    /** A method that draws the world model according to {@code model}. */
+    private void drawCanvas() {
+        synchronized (canvas) {
+            GridWorld.ReadOnlyWorld model;
+            model = this.model.get();
 
-        // TODO draw red line around selected Entity
+            int minX = Math.clamp((int) Math.round((Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTx()) / canvasTransform.getMxx()), Constants.WindowConstants.CANVAS_PADDING, Constants.WorldConstants.xBound);
+            int minY = Math.clamp((int) Math.round((Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTy()) / canvasTransform.getMyy()), Constants.WindowConstants.CANVAS_PADDING, Constants.WorldConstants.yBound);
+            int maxX = Math.clamp((int) Math.round((canvas.getWidth() - Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTx()) / canvasTransform.getMxx()), Constants.WindowConstants.CANVAS_PADDING, Constants.WorldConstants.xBound);
+            int maxY = Math.clamp((int) Math.round((canvas.getHeight() - Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTy()) / canvasTransform.getMyy()), Constants.WindowConstants.CANVAS_PADDING, Constants.WorldConstants.yBound);
 
-        gc.restore();
-        redrawCanvas = false;
+            GraphicsContext gc = canvas.getGraphicsContext2D();
+
+            gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+            gc.setStroke(Color.BLACK);
+            gc.strokeRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+            gc.save();
+            gc.translate(canvasTransform.getTx(), canvasTransform.getTy());  // Translate first
+            gc.scale(canvasTransform.getMxx(), canvasTransform.getMyy());  // Then apply scale
+
+            // draw the canvas here with model normally, assuming no translation is needed
+            gc.setStroke(Color.RED);
+            gc.strokeRect(minX, minY, maxX - minX, maxY - minY);
+
+            ArrayList<Entity.ReadOnlyEntity>[] entities = model.getEntities(minX, minY, maxX, maxY);
+            if (entities.length < Constants.WindowConstants.standardOrGridThreshold) {
+                HashSet<Entity.ReadOnlyEntity> entitiesSet = new HashSet<>();
+                for (ArrayList<Entity.ReadOnlyEntity> elist : entities)
+                    for (Entity.ReadOnlyEntity roe : elist) {
+                        if (entitiesSet.contains(roe)) continue;
+
+                        drawReadOnlyEntity(roe, gc);
+
+                        entitiesSet.add(roe);
+                    }
+            } else {
+                // check for entity-in-scope of camera bounding box in entity-based rendering
+                Rectangle cameraBoundingBox = new Rectangle(minX, minY, maxX - minX, maxY - minY);
+                for (Entity.ReadOnlyEntity roe : model.entities)
+                    if (cameraBoundingBox.intersects(roe.x(), roe.y(), roe.width(), roe.height()))
+                        drawReadOnlyEntity(roe, gc);
+            }
+
+            // TODO draw red line around selected Entity
+
+            gc.restore();
+            redrawModel = false;
+        }
     }
 
     /** Draws the ReadOnlyEntity {@code entity} on the graphics object {@code gc}. */
@@ -267,7 +319,15 @@ public class CanvasControl implements Initializable {
             berries.remove(i - 1);
     }
 
-    public synchronized void redrawCanvas() {
-        redrawCanvas = true;
+    public void redrawModel() {
+        synchronized (canvas) {
+            redrawModel = true;
+        }
+    }
+
+    public void redrawBackground() {
+        synchronized (backgroundCanvas) {
+            redrawBackground = true;
+        }
     }
 }

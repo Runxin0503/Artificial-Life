@@ -45,6 +45,9 @@ public class GridWorld {
         creatures = new ArrayList<>();
         positionToEntityPair = new HashMap<>();
         Grids = new ArrayList[WorldConstants.GRID_NUM_X][WorldConstants.GRID_NUM_Y];
+        for (int i = 0; i < WorldConstants.GRID_NUM_X; i++)
+            for (int j = 0; j < WorldConstants.GRID_NUM_Y; j++)
+                Grids[i][j] = new ArrayList<>();
         entityFactory = new EntityFactory();
 
         // Create Bushes
@@ -266,7 +269,7 @@ public class GridWorld {
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 if (isValidGrid(x, y))
-                    Grids[x][y].remove(pos);
+                    Grids[x][y].add(pos);
             }
         }
     }
@@ -281,7 +284,7 @@ public class GridWorld {
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 if (isValidGrid(x, y))
-                    Grids[x][y].add(pos);
+                    Grids[x][y].remove(pos);
             }
         }
     }
@@ -350,6 +353,7 @@ public class GridWorld {
             }
         }
 
+        System.out.println(bushPair.second().boundingBox);
         addPosition(bushPair.second());
         positionToEntityPair.put(bushPair.second(), bushPair);
     }
@@ -475,25 +479,82 @@ public class GridWorld {
 
     /** Returns a read-only copy of this grid world at the current tick. */
     public ReadOnlyWorld getReadOnlyCopy() {
-        return new ReadOnlyWorld(positionToEntityPair);
+        return new ReadOnlyWorld(positionToEntityPair, Grids);
     }
 
-
+    /**
+     * A read-only, immutable snapshot of the world state at a specific moment in time.
+     * <p>
+     * This class is used to safely expose the current state of the world to the view layer
+     * without allowing any mutation. It contains a flattened list of all entities and a spatial
+     * partitioning grid to optimize querying by bounding box.
+     * </p>
+     */
     public static class ReadOnlyWorld {
-        //TODO implement spatial partitioning for easier-rendering
+
+        /**
+         * A flat array containing all read-only entities present in the world at this snapshot.
+         * Intended for full iteration.
+         */
         public final Entity.ReadOnlyEntity[] entities;
 
-        public ReadOnlyWorld(HashMap<Position, Pair<? extends Entity, ? extends Position>> positionToEntity) {
-            entities = new Entity.ReadOnlyEntity[positionToEntity.size()];
+        /**
+         * A 2D spatial partition grid storing references to entities based on their position,
+         * used to efficiently query regions of the world.
+         */
+        private final ArrayList<Entity.ReadOnlyEntity>[][] Grids;
 
-            int count = 0;
+        /**
+         * Constructs a new {@code ReadOnlyWorld} snapshot from the current model.
+         *
+         * @param positionToEntity A mapping from position to entity (with their original, mutable references).
+         * @param Grids A 2D array of grid cells, each holding a list of positions that are used to
+         *              look up corresponding entities and populate the spatial partition.
+         */
+        public ReadOnlyWorld(HashMap<Position, Pair<? extends Entity, ? extends Position>> positionToEntity, ArrayList<Position>[][] Grids) {
+            this.Grids = new ArrayList[Grids.length][Grids[0].length];
+
+            HashMap<Position, Entity.ReadOnlyEntity> posToReadOnlyEntity = new HashMap<>();
             for (Pair<? extends Entity, ? extends Position> value : positionToEntity.values())
-                entities[count++] = value.first().getReadOnlyCopy(value.second());
+                posToReadOnlyEntity.put(value.second(), value.first().getReadOnlyCopy(value.second()));
+
+            this.entities = posToReadOnlyEntity.values().toArray(new Entity.ReadOnlyEntity[0]);
+
+            for (int i = 0; i < Grids.length; i++) {
+                for (int j = 0; j < Grids[0].length; j++) {
+                    this.Grids[i][j] = new ArrayList<>();
+                    for (Position p : Grids[i][j]) {
+                        System.out.println("t");
+                        this.Grids[i][j].add(posToReadOnlyEntity.get(p));
+                    }
+                }
+            }
         }
 
-        /** TODO Document, spacial partition */
+        /**
+         * Returns a collection of read-only entities within the specified rectangular region.
+         * The coordinates are grid cell indices, not pixel or world space units.
+         *
+         * @param minX Minimum X coordinate in world (inclusive)
+         * @param minY Minimum Y coordinate in world (inclusive)
+         * @param maxX Maximum X coordinate in world (exclusive)
+         * @param maxY Maximum Y coordinate in world (exclusive)
+         * @return An array of entity lists located in the specified bounding box.
+         */
+        @SuppressWarnings("unchecked")
         public ArrayList<Entity.ReadOnlyEntity>[] getEntities(int minX, int minY, int maxX, int maxY) {
-            throw new UnsupportedOperationException("Not supported Yet");
+            ArrayList<ArrayList<Entity.ReadOnlyEntity>> result = new ArrayList<>();
+
+            int minXGrid = minX / WorldConstants.GridWidth, minYGrid = minY / WorldConstants.GridHeight,
+                    maxXGrid = maxX / WorldConstants.GridWidth, maxYGrid = maxY / WorldConstants.GridHeight;
+
+            for (int i = minXGrid; i < maxXGrid; i++)
+                for (int j = minYGrid; j < maxYGrid; j++)
+                    if (!Grids[i][j].isEmpty()) result.add(Grids[i][j]);
+
+            System.out.println(result.size());
+
+            return result.toArray(new ArrayList[0]);
         }
     }
 }
