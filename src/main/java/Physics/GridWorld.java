@@ -260,8 +260,8 @@ public class GridWorld {
      * adds references to {@code pos} in every Grid cell that intersects / contains
      * {@code pos's} bounding box. */
     private void addPosition(Position pos) {
-        int minX = Math.max(0, pos.boundingBox.x / WorldConstants.GridWidth), maxX = Math.min(WorldConstants.GRID_NUM_X, (int) Math.ceil(pos.boundingBox.getMaxX() / WorldConstants.GridWidth));
-        int minY = Math.max(0, pos.boundingBox.y / WorldConstants.GridHeight), maxY = Math.min(WorldConstants.GRID_NUM_Y, (int) Math.ceil(pos.boundingBox.getMaxY() / WorldConstants.GridHeight));
+        int minX = Math.max(0, pos.boundingBox.x / WorldConstants.GridWidth), maxX = Math.min(WorldConstants.GRID_NUM_X - 1, (int) Math.ceil(pos.boundingBox.getMaxX() / WorldConstants.GridWidth));
+        int minY = Math.max(0, pos.boundingBox.y / WorldConstants.GridHeight), maxY = Math.min(WorldConstants.GRID_NUM_Y - 1, (int) Math.ceil(pos.boundingBox.getMaxY() / WorldConstants.GridHeight));
 
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {

@@ -72,10 +72,10 @@ public class EntityFactory {
     /** Returns a pair of references to UNUSED Bush and Fixed Objects.<br>
      * Automatically creates new ones if there are no unused Objects left. */
     public Pair<Bush, Fixed> getBushPair() {
-        int x = (int) (Math.random() * WorldConstants.xBound);
-        int y = (int) (Math.random() * WorldConstants.yBound);
         int width = (int) (Math.random() * (BushConstants.initialMaxSize - BushConstants.initialMinSize)) + BushConstants.initialMinSize;
         int height = (int) (width * BushConstants.widthToHeight);
+        int x = (int) (Math.random() * (WorldConstants.xBound - width));
+        int y = (int) (Math.random() * (WorldConstants.yBound - height));
 
         if (bushPair.isEmpty()) {
             Bush b = new Bush(objectCounter, x, y, width, height);

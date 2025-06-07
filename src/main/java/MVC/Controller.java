@@ -25,10 +25,11 @@ class Controller implements Runnable {
 
     public Controller(MainView view) {
         this.view = view;
-        this.world = null;
         this.runContinuously = false;
         stepCounter = 0;
         this.executorService = Executors.newCachedThreadPool();
+
+        createNewWorld();
     }
 
     /** Contains the loop checking and executing relevant tasks from view's TaskQueue */
@@ -37,13 +38,13 @@ class Controller implements Runnable {
         long stepsPerSec = 0;
         long stepsPerSecCatcher = 1001;
         while (true) {
-            System.out.println("test");
             long millis = System.currentTimeMillis();
             if ((stepsPerSecCatcher - stepsPerSec) >= 1000) {
                 stepsPerSec = System.currentTimeMillis();
             }
             Task task;
             while ((task = view.pollTaskQueue()) != null) {
+                System.out.println("NEW TASK: " + task);
                 if (task.getType() == Task.TaskType.RUN_CONTINUOUSLY) {
                     runContinuously = true;
                 } else if (task.getType() == Task.TaskType.STEP) {

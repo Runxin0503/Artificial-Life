@@ -24,7 +24,6 @@ import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.ResourceBundle;
 
 public class CanvasControl implements Initializable {
@@ -114,7 +113,7 @@ public class CanvasControl implements Initializable {
         });
 
         canvasScroller.setOnMouseReleased(ae -> {
-            if (model == null) return;
+            if (model.isEmpty()) return;
 
             Point2D mouseCoords;
             try {
@@ -123,6 +122,8 @@ public class CanvasControl implements Initializable {
                 throw new RuntimeException(e);
             }
 
+            System.out.println("Coordinates: " + mouseCoords.getX() + ", " + mouseCoords.getY());
+
             redrawCanvas();
 
             // TODO find the selected entity. If no entity is selected or continuousStep is true,
@@ -130,8 +131,6 @@ public class CanvasControl implements Initializable {
 
         });
 
-
-        //TODO move this to MainView.java?
 
         new AnimationTimer() {
             private long lastUpdate = 0;
@@ -165,6 +164,8 @@ public class CanvasControl implements Initializable {
      * to this class. */
     private void bindProperties() {
         // TODO implement
+        canvas.widthProperty().bind(canvasScroller.widthProperty());
+        canvas.heightProperty().bind(canvasScroller.heightProperty());
     }
 
     /** Updates and repaints all fields of this GUI according to the most recent data. */
@@ -186,32 +187,37 @@ public class CanvasControl implements Initializable {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        gc.setStroke(Color.BLACK);
+        gc.strokeRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         gc.save();
         gc.translate(canvasTransform.getTx(), canvasTransform.getTy());  // Translate first
         gc.scale(canvasTransform.getMxx(), canvasTransform.getMyy());  // Then apply scale
 
-        gc.setStroke(Color.BLACK);
-
         // draw the canvas here with model normally, assuming no translation is needed
-        ArrayList<Entity.ReadOnlyEntity>[] entities = model.getEntities(minX, minY, maxX, maxY);
-        if (entities.length < Constants.WindowConstants.standardOrGridThreshold) {
-            HashSet<Entity.ReadOnlyEntity> entitiesSet = new HashSet<>();
-            for (ArrayList<Entity.ReadOnlyEntity> elist : entities)
-                for (Entity.ReadOnlyEntity roe : elist) {
-                    if (entitiesSet.contains(roe)) continue;
+        gc.setStroke(Color.RED);
+        gc.strokeRect(minX, minY, maxX - minX, maxY - minY);
+        gc.setFill(Color.RED);
+        gc.fillRect(0, 0, 30, 30);
 
-                    drawReadOnlyEntity(roe, gc);
-
-                    entitiesSet.add(roe);
-                }
-        } else {
-            // check for entity-in-scope of camera bounding box in entity-based rendering
-            Rectangle cameraBoundingBox = new Rectangle(minX, minY, maxX - minX, maxY - minY);
-            for (Entity.ReadOnlyEntity roe : model.entities)
-                if (cameraBoundingBox.contains(roe.x(), roe.y(), roe.width(), roe.height()))
-                    drawReadOnlyEntity(roe, gc);
-        }
+//        ArrayList<Entity.ReadOnlyEntity>[] entities = model.getEntities(minX, minY, maxX, maxY);
+//        if (entities.length < Constants.WindowConstants.standardOrGridThreshold) {
+//            HashSet<Entity.ReadOnlyEntity> entitiesSet = new HashSet<>();
+//            for (ArrayList<Entity.ReadOnlyEntity> elist : entities)
+//                for (Entity.ReadOnlyEntity roe : elist) {
+//                    if (entitiesSet.contains(roe)) continue;
+//
+//                    drawReadOnlyEntity(roe, gc);
+//
+//                    entitiesSet.add(roe);
+//                }
+//        } else {
+//            // check for entity-in-scope of camera bounding box in entity-based rendering
+//            Rectangle cameraBoundingBox = new Rectangle(minX, minY, maxX - minX, maxY - minY);
+//            for (Entity.ReadOnlyEntity roe : model.entities)
+//                if (cameraBoundingBox.contains(roe.x(), roe.y(), roe.width(), roe.height()))
+//                    drawReadOnlyEntity(roe, gc);
+//        }
 
         // TODO draw red line around selected Entity
 

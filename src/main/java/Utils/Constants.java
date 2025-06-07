@@ -24,9 +24,9 @@ public class Constants implements Serializable {
      */
     public static class WorldConstants {
         /** A semi-transparent red color used for highlighting. */
-        public static final Color semiTransparentRed = new Color(255, 0, 0, 128);
+        public static final Color semiTransparentRed = new Color(1, 0, 0, 0.5);
         /** A semi-transparent green color used for highlighting. */
-        public static final Color semiTransparentGreen = new Color(0, 255, 0, 128);
+        public static final Color semiTransparentGreen = new Color(0, 1, 0, 0.5);
         /** X dimension of the world boundary. */
         public static final int xBound = 10000;
         /** Y dimension of the world boundary. */

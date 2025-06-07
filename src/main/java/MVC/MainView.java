@@ -141,11 +141,19 @@ public class MainView extends Application implements Initializable {
         }
     }
 
+    /** This function is called without any of the other View-Controller fields set yet. All
+     * View-Controller initializer code should be in {@linkplain #init(Ref, Ref)}. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         bindProperties();
 
         TaskQueue = new LinkedList<>();
+    }
+
+    /** Custom initializer called by {@linkplain MainView}. */
+    public void init(Ref<GridWorld.ReadOnlyWorld> model, Ref<Entity> selectedEntity) {
+        this.model = model;
+        this.selectedEntity = selectedEntity;
 
 
         Timeline updateCanvasPeriodically = new Timeline(new KeyFrame(
@@ -163,22 +171,16 @@ public class MainView extends Application implements Initializable {
         new Thread(new Controller(this)).start();
     }
 
-    /** Custom initializer called by {@linkplain MainView}. */
-    public void init(Ref<GridWorld.ReadOnlyWorld> model, Ref<Entity> selectedEntity) {
-        this.model = model;
-        this.selectedEntity = selectedEntity;
-    }
-
     /** Binds the various width and height properties of the JavaFX FXML components correspondent
      * to this class. */
     private void bindProperties() {
         divider.startYProperty().bind(splitPane.heightProperty().add(24));
-        infoPane.maxWidthProperty().bind(Bindings.min(
-                splitPane.heightProperty().multiply(200.0 / 376),
-                splitPane.widthProperty().multiply(0.3411)
-        ));
 
         // TODO implement resizing to fit full screen
+//        infoPane.maxWidthProperty().bind(Bindings.min(
+//                splitPane.heightProperty().multiply(200.0 / 376),
+//                splitPane.widthProperty().multiply(0.3411)
+//        ));
 //        infoDisplayPane.minHeightProperty().bind(
 //                infoPane.maxWidthProperty().multiply(294.0 / 200)
 //        );
