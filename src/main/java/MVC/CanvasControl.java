@@ -11,9 +11,11 @@ import Utils.Ref;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -39,14 +41,11 @@ public class CanvasControl implements Initializable {
     @FXML
     private Canvas canvas;
 
-    /** When true, this object will redraw the background at the next available tick. */
-    private boolean redrawBackground = false;
-
     /**
-     * Background Canvas that generates the starry night backdrop.
+     * Background Image that moves with the world canvas.
      */
     @FXML
-    private Canvas backgroundCanvas;
+    private ImageView backgroundImage;
 
     /** The transformation applied to the canvas, used in {@linkplain #drawCanvas}. */
     private final Affine canvasTransform = new Affine();
@@ -72,18 +71,21 @@ public class CanvasControl implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         bindProperties();
 
-        canvas.widthProperty().addListener(event -> {
-            redrawModel();
-            redrawBackground();
-        });
-        canvas.heightProperty().addListener(event -> {
-            redrawModel();
-            redrawBackground();
-        });
+        // Physically scale the imageView's dimensions (not via transform)
+        backgroundImage.setFitWidth(Constants.ImageConstants.backgroundImg.getWidth() * Constants.ImageConstants.bgScaleFactor);
+        backgroundImage.setFitHeight(Constants.ImageConstants.backgroundImg.getHeight() * Constants.ImageConstants.bgScaleFactor);
+
+//        Center it at the world center
+        backgroundImage.setX(Constants.WorldConstants.xBound / 2.0 - backgroundImage.getFitWidth() / 2.0);
+        backgroundImage.setY(Constants.WorldConstants.yBound / 2.0 - backgroundImage.getFitHeight() / 2.0);
+
+//        Apply canvasTransform only (for zooming/panning)
+        backgroundImage.getTransforms().setAll(canvasTransform);
 
         canvasScroller.setOnScroll(ae -> {
             if (ae.getDeltaY() != 0) {  // Only react to vertical scroll
                 double zoomFactor = ae.getDeltaY() > 0 ? 1.1 : 0.9;  // Zoom in or out
+                System.out.println(canvasTransform.getMxx());
                 if ((canvasTransform.getMxx() >= Constants.WindowConstants.MAX_ZOOM / 1.1 || canvasTransform.getMyy() >= Constants.WindowConstants.MAX_ZOOM / 1.1) && zoomFactor > 1)
                     return;
                 if ((canvasTransform.getMxx() <= Constants.WindowConstants.MIN_ZOOM / 0.9 || canvasTransform.getMyy() <= Constants.WindowConstants.MIN_ZOOM / 0.9) && zoomFactor < 1)
@@ -105,8 +107,9 @@ public class CanvasControl implements Initializable {
                 canvasTransform.setTx(canvasTransform.getTx() - mouseCoords.getX() * (canvasTransform.getMxx() - oldScaleX));
                 canvasTransform.setTy(canvasTransform.getTy() - mouseCoords.getY() * (canvasTransform.getMyy() - oldScaleY));
 
+                clampTransform();
+
                 redrawModel();
-                redrawBackground();
             }
         });
 
@@ -124,8 +127,9 @@ public class CanvasControl implements Initializable {
             canvasTransform.setTx(offsetX);
             canvasTransform.setTy(offsetY);
 
+            clampTransform();
+
             redrawModel();
-            redrawBackground();
         });
 
         canvasScroller.setOnMouseReleased(ae -> {
@@ -137,8 +141,6 @@ public class CanvasControl implements Initializable {
             } catch (NonInvertibleTransformException e) {
                 throw new RuntimeException(e);
             }
-
-            System.out.println("Coordinates: " + mouseCoords.getX() + ", " + mouseCoords.getY());
 
             redrawModel();
 
@@ -167,9 +169,29 @@ public class CanvasControl implements Initializable {
                 lastUpdate = now;
             }
         }.start();
-
-        redrawBackground();
     }
+
+    private void clampTransform() {
+        Bounds viewBounds = canvas.getBoundsInParent();
+
+        double scaleX = canvasTransform.getMxx();
+        double scaleY = canvasTransform.getMyy();
+
+        // Clamp the top-left corner to stay within bounds
+        double tx = canvasTransform.getTx();
+        double ty = canvasTransform.getTy();
+
+        double minTx = -Constants.WindowConstants.canvasMaxX * scaleX + viewBounds.getWidth();
+        double maxTx = -Constants.WindowConstants.canvasMinX * scaleX;
+
+        double minTy = -Constants.WindowConstants.canvasMaxY * scaleY + viewBounds.getHeight();
+        double maxTy = -Constants.WindowConstants.canvasMinY * scaleY;
+
+        canvasTransform.setTx(Math.clamp(tx, minTx, maxTx));
+        canvasTransform.setTy(Math.clamp(ty, minTy, maxTy));
+
+    }
+
 
     /** Custom initializer called by {@linkplain MainView}. */
     public void init(Ref<GridWorld.ReadOnlyWorld> model) {
@@ -183,47 +205,14 @@ public class CanvasControl implements Initializable {
         canvas.widthProperty().bind(canvasScroller.widthProperty());
         canvas.heightProperty().bind(canvasScroller.heightProperty());
 
-        backgroundCanvas.widthProperty().bind(canvasScroller.widthProperty());
-        backgroundCanvas.heightProperty().bind(canvasScroller.heightProperty());
+        canvas.widthProperty().addListener((obs, oldVal, newVal) -> clampTransform());
+        canvas.heightProperty().addListener((obs, oldVal, newVal) -> clampTransform());
     }
 
     /** Updates and repaints all fields of this GUI according to the most recent data. */
     public void repaint() {
         if (!model.isEmpty() && redrawModel)
             drawCanvas();
-        if (redrawBackground)
-            drawBackground();
-    }
-
-    /** A method that draws the background according to {@linkplain #canvasTransform}. */
-    private void drawBackground() {
-        synchronized (backgroundCanvas) {
-            int minX = (int) Math.round((-canvasTransform.getTx()) / canvasTransform.getMxx());
-            int minY = (int) Math.round((-canvasTransform.getTy()) / canvasTransform.getMyy());
-            int maxX = (int) Math.round((backgroundCanvas.getWidth() - canvasTransform.getTx()) / canvasTransform.getMxx());
-            int maxY = (int) Math.round((backgroundCanvas.getHeight() - canvasTransform.getTy()) / canvasTransform.getMyy());
-
-            GraphicsContext gc = backgroundCanvas.getGraphicsContext2D();
-            gc.save();
-            gc.setTransform(canvasTransform); // apply same Affine as foreground
-
-//            Bounds bounds = backgroundCanvas.getBoundsInLocal();
-//            double minX = bounds.getMinX();
-//            double minY = bounds.getMinY();
-//            double maxX = bounds.getMaxX();
-//            double maxY = bounds.getMaxY();
-
-// Offset the tiling to scroll naturally
-            double startX = Math.floor(minX / Constants.ImageConstants.tileWidth) * Constants.ImageConstants.tileWidth;
-            double startY = Math.floor(minY / Constants.ImageConstants.tileHeight) * Constants.ImageConstants.tileHeight;
-
-            for (double x = startX; x < maxX; x += Constants.ImageConstants.tileWidth)
-                for (double y = startY; y < maxY; y += Constants.ImageConstants.tileHeight)
-                    gc.drawImage(Constants.ImageConstants.tiledBackground, x, y);
-
-            gc.restore();
-            redrawBackground = false;
-        }
     }
 
     /** A method that draws the world model according to {@code model}. */
@@ -322,12 +311,6 @@ public class CanvasControl implements Initializable {
     public void redrawModel() {
         synchronized (canvas) {
             redrawModel = true;
-        }
-    }
-
-    public void redrawBackground() {
-        synchronized (backgroundCanvas) {
-            redrawBackground = true;
         }
     }
 }

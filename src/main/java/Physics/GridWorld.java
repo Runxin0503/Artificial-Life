@@ -552,8 +552,6 @@ public class GridWorld {
                 for (int j = minYGrid; j < maxYGrid; j++)
                     if (!Grids[i][j].isEmpty()) result.add(Grids[i][j]);
 
-            System.out.println(result.size());
-
             return result.toArray(new ArrayList[0]);
         }
     }

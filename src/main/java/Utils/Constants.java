@@ -152,9 +152,12 @@ public class Constants implements Serializable {
     public static class WindowConstants {
         public static final double MIN_STAGE_WIDTH = 613;
         public static final double MIN_STAGE_HEIGHT = 435.5;
+
+        public static final int canvasMinX = -5000, canvasMaxX = 15000, canvasMinY = -5000, canvasMaxY = 15000;
         public static final int CANVAS_PADDING = 5;
-        public static final double MIN_ZOOM = 0;
-        public static final double MAX_ZOOM = 10;
+        public static final double MIN_ZOOM = 0.05;
+        public static final double MAX_ZOOM = 1.2;
+
         public static final double MAX_FPS = 60;
         public static final int maxThread = 10;
         public static final double followZoom = 2;
@@ -175,12 +178,10 @@ public class Constants implements Serializable {
      */
     public static class ImageConstants {
 
-        /** A Tile-able Background Image of a starry night. */
-        public static final Image tiledBackground = new Image(ImageConstants.class.getResource("/starry_night.png").toString());
-        /** Tile Width of the starry-night background image. */
-        public static final double tileWidth = tiledBackground.getWidth();
-        /** Tile Height of the starry-night background image. */
-        public static final double tileHeight = tiledBackground.getHeight();
+        /** A Tile-able Background Image of a galaxy. */
+        public static final Image backgroundImg = new Image(ImageConstants.class.getResource("/galaxy.png").toString());
+        /** Scale Factor of the galaxy background image. */
+        public static final double bgScaleFactor = 4;
 
         /** Image for berries. */
         public static final Image berries = new Image(ImageConstants.class.getResource("/berries.png").toString());
