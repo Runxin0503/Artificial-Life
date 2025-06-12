@@ -205,8 +205,14 @@ public class CanvasControl implements Initializable {
         canvas.widthProperty().bind(canvasScroller.widthProperty());
         canvas.heightProperty().bind(canvasScroller.heightProperty());
 
-        canvas.widthProperty().addListener((obs, oldVal, newVal) -> clampTransform());
-        canvas.heightProperty().addListener((obs, oldVal, newVal) -> clampTransform());
+        canvas.widthProperty().addListener((obs, oldVal, newVal) -> {
+            clampTransform();
+            redrawModel();
+        });
+        canvas.heightProperty().addListener((obs, oldVal, newVal) -> {
+            clampTransform();
+            redrawModel();
+        });
     }
 
     /** Updates and repaints all fields of this GUI according to the most recent data. */

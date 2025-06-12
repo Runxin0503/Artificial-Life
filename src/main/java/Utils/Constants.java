@@ -155,7 +155,7 @@ public class Constants implements Serializable {
 
         public static final int canvasMinX = -5000, canvasMaxX = 15000, canvasMinY = -5000, canvasMaxY = 15000;
         public static final int CANVAS_PADDING = 5;
-        public static final double MIN_ZOOM = 0.05;
+        public static final double MIN_ZOOM = 0.066;
         public static final double MAX_ZOOM = 1.2;
 
         public static final double MAX_FPS = 60;
