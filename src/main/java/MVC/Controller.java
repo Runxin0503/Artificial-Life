@@ -44,7 +44,7 @@ class Controller implements Runnable {
             }
             Task task;
             while ((task = view.pollTaskQueue()) != null) {
-                System.out.println("NEW TASK: " + task);
+                System.out.println("NEW TASK: " + task.getType());
                 if (task.getType() == Task.TaskType.RUN_CONTINUOUSLY) {
                     runContinuously = true;
                 } else if (task.getType() == Task.TaskType.STEP) {

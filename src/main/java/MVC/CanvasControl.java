@@ -24,10 +24,7 @@ import javafx.scene.transform.NonInvertibleTransformException;
 
 import java.awt.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class CanvasControl implements Initializable {
 
@@ -58,11 +55,13 @@ public class CanvasControl implements Initializable {
     @FXML
     private Text fpsCounter;
 
-    /** A function in View that Controller calls to update Text directly*/
+    /** A function in View that Controller calls to update Text directly */
     @FXML
     public Text stepsPerSecCounter;
 
     private Ref<GridWorld.ReadOnlyWorld> model;
+
+    private Ref<Integer> selectedEntityID;
 
     private final HashMap<Integer, ArrayList<Point>> bushToBerryLocations = new HashMap<>();
 
@@ -135,17 +134,33 @@ public class CanvasControl implements Initializable {
         canvasScroller.setOnMouseReleased(ae -> {
             if (model.isEmpty()) return;
 
-            Point2D mouseCoords;
+            double sceneX = ae.getSceneX();
+            double sceneY = ae.getSceneY();
+
+            // Convert scene coordinates to local canvas coordinates
+            Point2D local = canvas.sceneToLocal(sceneX, sceneY);
+            double localX = local.getX();
+            double localY = local.getY();
+
+            // Invert the transform manually using the inverse of the Affine matrix
+            int worldX, worldY;
             try {
-                mouseCoords = canvasTransform.inverseTransform(canvas.sceneToLocal(ae.getSceneX(), ae.getSceneY()));
+                Affine inverse = canvasTransform.createInverse();
+                worldX = (int) Math.round(inverse.getMxx() * localX + inverse.getMxy() * localY + inverse.getTx());
+                worldY = (int) Math.round(inverse.getMyx() * localX + inverse.getMyy() * localY + inverse.getTy());
+
+                // Now you have worldX and worldY as doubles (same as mouseCoords.getX() and getY())
             } catch (NonInvertibleTransformException e) {
                 throw new RuntimeException(e);
             }
 
-            redrawModel();
-
             // TODO find the selected entity. If no entity is selected or continuousStep is true,
             //  set selectedEntity to null, otherwise set selectedEntity to that selected Entity
+            //  ie. change the selectedEntityID to the appropriate ID value.
+            Entity.ReadOnlyEntity selectedEntity = model.get().getEntity(worldX, worldY);
+            selectedEntityID.set(Objects.isNull(selectedEntity) ? null : selectedEntity.ID());
+
+            redrawModel();
         });
 
         new AnimationTimer() {
@@ -194,8 +209,9 @@ public class CanvasControl implements Initializable {
 
 
     /** Custom initializer called by {@linkplain MainView}. */
-    public void init(Ref<GridWorld.ReadOnlyWorld> model) {
+    public void init(Ref<GridWorld.ReadOnlyWorld> model, Ref<Integer> selectedEntityID) {
         this.model = model;
+        this.selectedEntityID = selectedEntityID;
     }
 
     /** Binds the various width and height properties of the JavaFX FXML components correspondent

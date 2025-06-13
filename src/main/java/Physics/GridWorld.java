@@ -523,10 +523,8 @@ public class GridWorld {
             for (int i = 0; i < Grids.length; i++) {
                 for (int j = 0; j < Grids[0].length; j++) {
                     this.Grids[i][j] = new ArrayList<>();
-                    for (Position p : Grids[i][j]) {
-                        System.out.println("t");
+                    for (Position p : Grids[i][j])
                         this.Grids[i][j].add(posToReadOnlyEntity.get(p));
-                    }
                 }
             }
         }
@@ -553,6 +551,42 @@ public class GridWorld {
                     if (!Grids[i][j].isEmpty()) result.add(Grids[i][j]);
 
             return result.toArray(new ArrayList[0]);
+        }
+
+        /**
+         * Returns the entity at the given pixel coordinate (x, y),
+         * prioritizing entities with smaller hitboxes if multiple are found.
+         *
+         * @param x The x-coordinate in world space (pixels)
+         * @param y The y-coordinate in world space (pixels)
+         * @return The topmost entity at the given point, or null if none found
+         */
+        public Entity.ReadOnlyEntity getEntity(int x, int y) {
+            int gridX = x / WorldConstants.GridWidth;
+            int gridY = y / WorldConstants.GridHeight;
+
+            if (gridX < 0 || gridX >= Grids.length || gridY < 0 || gridY >= Grids[0].length)
+                return null;
+
+            Entity.ReadOnlyEntity selected = null;
+            double smallestArea = Double.MAX_VALUE;
+
+            for (Entity.ReadOnlyEntity entity : Grids[gridX][gridY]) {
+                int ex = entity.x();
+                int ey = entity.y();
+                int w = entity.width();
+                int h = entity.height();
+
+                if (x >= ex && x < ex + w && y >= ey && y < ey + h) {
+                    double area = w * h;
+                    if (area < smallestArea) {
+                        smallestArea = area;
+                        selected = entity;
+                    }
+                }
+            }
+
+            return selected;
         }
     }
 }

@@ -65,8 +65,13 @@ public class MainView extends Application implements Initializable {
      */
     private Ref<GridWorld.ReadOnlyWorld> model;
 
-    /** Stores a reference to the current selected Entity. */
-    private Ref<Entity> selectedEntity;
+    /** Stores a reference to the current selected Entity as a ReadOnlyEntity object.
+     * <br>Read by {@link InfoDisplay} and written to by {@link MainView} when {@linkplain #selectedEntityID} updates. */
+    private Ref<Entity.ReadOnlyEntity> selectedEntity;
+
+    /** Stores a reference to the current selected Entity by its EntityFactory ID property.
+     * <br>Read by {@link MainView} to update {@linkplain #selectedEntity} and updated by {@link CanvasControl}. */
+    private Ref<Integer> selectedEntityID;
 
     public static void main(String[] args) {
         launch(args);
@@ -125,11 +130,12 @@ public class MainView extends Application implements Initializable {
 
             // Init all controller classes
             Ref<GridWorld.ReadOnlyWorld> model = new Ref<>(null);
-            Ref<Entity> selectedEntity = new Ref<>(null);
+            Ref<Entity.ReadOnlyEntity> selectedEntity = new Ref<>(null);
+            Ref<Integer> selectedEntityID = new Ref<>(null);
             controller.infoDisplay.init(model, selectedEntity);
             controller.controlPanel.init(controller::addTask);
-            controller.canvasControl.init(model);
-            controller.init(model, selectedEntity);
+            controller.canvasControl.init(model, selectedEntityID);
+            controller.init(model, selectedEntity, selectedEntityID);
         } catch (final IOException ioe) {
             System.err.println("Can't load FXML file.");
             ioe.printStackTrace();
@@ -141,7 +147,7 @@ public class MainView extends Application implements Initializable {
     }
 
     /** This function is called without any of the other View-Controller fields set yet. All
-     * View-Controller initializer code should be in {@linkplain #init(Ref, Ref)}. */
+     * View-Controller initializer code should be in {@link #init}. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         bindProperties();
@@ -150,15 +156,16 @@ public class MainView extends Application implements Initializable {
     }
 
     /** Custom initializer called by {@linkplain MainView}. */
-    public void init(Ref<GridWorld.ReadOnlyWorld> model, Ref<Entity> selectedEntity) {
+    public void init(Ref<GridWorld.ReadOnlyWorld> model, Ref<Entity.ReadOnlyEntity> selectedEntity, Ref<Integer> selectedEntityID) {
         this.model = model;
         this.selectedEntity = selectedEntity;
-
+        this.selectedEntityID = selectedEntityID;
 
         Timeline updateCanvasPeriodically = new Timeline(new KeyFrame(
                 Duration.seconds(1.0 / Constants.WindowConstants.MAX_FPS),
                 event -> {
                     // TODO add all repaint stuff in here
+
                     canvasControl.repaint();
                 }
         ));
@@ -174,6 +181,24 @@ public class MainView extends Application implements Initializable {
      * to this class. */
     private void bindProperties() {
         divider.startYProperty().bind(splitPane.heightProperty().add(24));
+
+        selectedEntityID.onUpdate(newID -> {
+            if (model.isEmpty()) throw new IllegalStateException("Model is empty");
+
+            for (Entity.ReadOnlyEntity roe : model.get().entities)
+                if (roe.ID() == newID) {
+                    selectedEntity.set(roe);
+                    break;
+                }
+        });
+
+        model.onUpdate(newModel -> {
+            for (Entity.ReadOnlyEntity roe : newModel.entities)
+                if (roe.ID() == selectedEntityID.get()) {
+                    selectedEntity.set(roe);
+                    break;
+                }
+        });
 
         // TODO implement resizing to fit full screen
 //        infoPane.maxWidthProperty().bind(Bindings.min(
@@ -239,6 +264,7 @@ public class MainView extends Application implements Initializable {
 
         controlPanel.unselectContinuousStep();
         selectedEntity.clear();
+        selectedEntityID.clear();
 
         updateViewModel(newModel);
     }

@@ -79,11 +79,9 @@ public class InfoDisplay implements Initializable {
     @FXML
     private ScrollPane creatureInfoScrollPane;
 
-    /** Stores the reference to the instance of the model this InfoDisplay displays. */
     private Ref<GridWorld.ReadOnlyWorld> model;
 
-    /** Stores a reference to the current selected Entity. */
-    private Ref<Entity> selectedEntity;
+    private Ref<Entity.ReadOnlyEntity> selectedEntity;
 
     /** Initializer automatically called by JavaFX right after FXML injected all dependencies. */
     @Override
@@ -102,7 +100,7 @@ public class InfoDisplay implements Initializable {
     }
 
     /** Custom initializer called by {@linkplain MainView}. */
-    public void init(Ref<GridWorld.ReadOnlyWorld> model, Ref<Entity> selectedEntity) {
+    public void init(Ref<GridWorld.ReadOnlyWorld> model, Ref<Entity.ReadOnlyEntity> selectedEntity) {
         this.model = model;
         this.selectedEntity = selectedEntity;
     }

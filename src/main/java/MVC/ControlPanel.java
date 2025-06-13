@@ -42,20 +42,6 @@ public class ControlPanel implements Initializable {
         speedSlider.setMax(1000);
         speedSliderDisplay.setText("100 steps/sec");
 
-        Runnable onSliderUpdate = () -> {
-            synchronized (speedSlider) {
-                int simSpeed = (int) speedSlider.getValue();
-                speedSliderDisplay.setText(switch (simSpeed) {
-                    case 0 -> "PAUSED";
-                    case 1000 -> "MAX SPEED";
-                    default -> simSpeed + " steps/sec";
-                });
-            }
-        };
-
-        speedSlider.valueProperty().addListener(num -> onSliderUpdate.run());
-        speedSlider.setOnMouseReleased(event -> onSliderUpdate.run());
-
         continuousStep.setOnAction(e -> {
             if (continuousStep.isSelected()) {
                 taskAdder.accept(new Task(Task.TaskType.RUN_CONTINUOUSLY));
@@ -79,7 +65,19 @@ public class ControlPanel implements Initializable {
     /** Binds the various width and height properties of the JavaFX FXML components correspondent
      * to this class. */
     private void bindProperties() {
-        // TODO implement
+        Runnable onSliderUpdate = () -> {
+            synchronized (speedSlider) {
+                int simSpeed = (int) speedSlider.getValue();
+                speedSliderDisplay.setText(switch (simSpeed) {
+                    case 0 -> "PAUSED";
+                    case 1000 -> "MAX SPEED";
+                    default -> simSpeed + " steps/sec";
+                });
+            }
+        };
+
+        speedSlider.valueProperty().addListener(num -> onSliderUpdate.run());
+        speedSlider.setOnMouseReleased(event -> onSliderUpdate.run());
     }
 
     /** Unselects the continuous step toggle button when a new world is loaded. */

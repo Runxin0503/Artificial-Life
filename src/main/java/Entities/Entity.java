@@ -42,5 +42,7 @@ public abstract class Entity extends Entities.EntityFactory.EntityFactoryObject 
         int getX();
 
         int getY();
+
+        int ID();
     }
 }
