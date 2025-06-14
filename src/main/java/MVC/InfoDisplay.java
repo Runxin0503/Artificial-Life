@@ -88,8 +88,7 @@ public class InfoDisplay implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         bindProperties();
 
-        selectInfoTab(0);
-        // TODO set worldInfoToggle and entityInfoToggle to only be enabled when !selectedEntity.isEmpty()
+        selectInfoTab(null);
         worldInfoToggle.setDisable(true);
         entityInfoToggle.setDisable(true);
 
@@ -103,6 +102,24 @@ public class InfoDisplay implements Initializable {
     public void init(Ref<GridWorld.ReadOnlyWorld> model, Ref<Entity.ReadOnlyEntity> selectedEntity) {
         this.model = model;
         this.selectedEntity = selectedEntity;
+
+        // set worldInfoToggle and entityInfoToggle to only be enabled when !selectedEntity.isEmpty()
+        selectedEntity.onUpdate(roe -> {
+            if (roe == null) {
+                worldInfoToggle.setDisable(true);
+                entityInfoToggle.setDisable(true);
+                selectInfoTab(null);
+            } else {
+                worldInfoToggle.setDisable(false);
+                entityInfoToggle.setDisable(false);
+
+                // check whether entity or world info tab is open before updating information for optimization.
+                if (!worldInfoTab.isVisible())
+                    updateEntityInfo();
+            }
+        });
+
+        model.onUpdate(this::updateWorldInfo);
     }
 
     /** Binds the various width and height properties of the JavaFX FXML components correspondent
@@ -111,56 +128,72 @@ public class InfoDisplay implements Initializable {
         // TODO implement
     }
 
-    /** Updates the world info tab when the tab is open and visible. */
-    private void updateWorldInfo() {
-        if (worldInfoTab.isVisible()) {
-            // TODO update world info tab
+    /** Updates the world info tab whenever {@linkplain #model} gets an update */
+    private void updateWorldInfo(GridWorld.ReadOnlyWorld newModel) {
+        // update world info tab
+        timeElapsed.setText(String.valueOf(newModel.timeElapsed));
+        int numCreaturesInModel = 0, numBushesInModel = 0;
+        for (Entity.ReadOnlyEntity roe : newModel.entities)
+            if (roe instanceof Creature.ReadOnlyCreature || roe instanceof Egg.ReadOnlyEgg) numCreaturesInModel++;
+            else if (roe instanceof Bush.ReadOnlyBush) numBushesInModel++;
 
-        }
+        numCreatures.setText(String.valueOf(numCreaturesInModel));
+        numBushes.setText(String.valueOf(numBushesInModel));
+        numEntities.setText(String.valueOf(newModel.entities.length));
     }
 
-    /** Updates the Entity Information on the selected entity, or closes the info tab if no entity is selected. */
+    /** Updates the Entity Information on the selected entity */
     private void updateEntityInfo() {
-        // TODO check whether entity or world info tab is open before updating information for optimization.
-        if (!selectedEntity.isEmpty() && !worldInfoTab.isVisible()) {
-            // TODO list information about the selected entity here
-//            ReadOnlyCritter readOnlyCritter;
-//            try {
-//                readOnlyCritter = model.getReadOnlyCritter(selectedTileCoords[0], selectedTileCoords[1]).get();
-//            } catch (NoMaybeValue e) {
-//                throw new RuntimeException("Unexpected outcome whilst trying to obtain Maybe value");
-//            }
-//
-//            int[] critterMem = readOnlyCritter.getMemory();
-//            memsizeText.setText(String.valueOf(critterMem[0]));
-//            defenseText.setText(String.valueOf(critterMem[1]));
-//            attackText.setText(String.valueOf(critterMem[2]));
-//            sizeText.setText(String.valueOf(critterMem[3]));
-//            energyText.setText(String.valueOf(critterMem[4]));
-//            passnumText.setText(String.valueOf(critterMem[5]));
-//            postureText.setText(String.valueOf(critterMem[6]));
-//            lastRuleDone.setText(readOnlyCritter.getLastRuleString()
-//                    .orElse("This Critter hasn't executed any rules yet..."));
-//            critterProgram.setText(readOnlyCritter.getProgramString());
-        } else {
-            selectInfoTab(0);
-            entityInfoToggle.setDisable(true);
+        // list information about the selected entity here
+        switch (selectedEntity.get()) {
+            case Corpse.ReadOnlyCorpse corpse -> {
+                ((Text) corpseInfoTab.lookup("#size")).setText(" " + corpse.getSize());
+                ((Text) corpseInfoTab.lookup("#energy")).setText(" " + corpse.energy());
+                ((Text) corpseInfoTab.lookup("#coordinate")).setText(corpse.getX() + ", " + corpse.getY());
+                ((Text) corpseInfoTab.lookup("#velocity")).setText(corpse.velocityX() + ", " + corpse.velocityY());
+                rottingBar.setProgress(corpse.getRottenPerct());
+            }
+            case Bush.ReadOnlyBush bush -> {
+                ((Text) bushInfoTab.lookup("#size")).setText(" " + bush.getSize());
+                ((Text) bushInfoTab.lookup("#stored-energy")).setText(" " + bush.getStoredEnergy());
+                ((Text) bushInfoTab.lookup("#coordinate")).setText(bush.getX() + ", " + bush.getY());
+                ((Text) bushInfoTab.lookup("#berries")).setText(" " + bush.numBerries());
+            }
+            case Egg.ReadOnlyEgg egg -> {
+                ((Text) eggInfoTab.lookup("#size")).setText(" " + egg.getSize());
+                ((Text) eggInfoTab.lookup("#incubation-time")).setText(" " + egg.incubationTime());
+                ((Text) eggInfoTab.lookup("#coordinate")).setText(egg.getX() + ", " + egg.getY());
+                ((Text) eggInfoTab.lookup("#health")).setText(" " + egg.health());
+            }
+            case Creature.ReadOnlyCreature creature -> {
+                ((Text) creatureInfoTab.lookup("#size")).setText(" " + creature.getSize());
+                ((Text) creatureInfoTab.lookup("#force")).setText(" " + creature.force());
+                ((Text) creatureInfoTab.lookup("#coordinate")).setText(creature.getX() + ", " + creature.getY());
+                ((Text) creatureInfoTab.lookup("#velocity")).setText(creature.velocityX() + ", " + creature.velocityY());
+                ((Text) creatureInfoTab.lookup("#health")).setText(" " + creature.health());
+                ((Text) creatureInfoTab.lookup("#energy")).setText(" " + creature.energy());
+                ((Text) creatureInfoTab.lookup("#strength")).setText(" " + creature.strength());
+                ((Text) creatureInfoTab.lookup("#armour")).setText(" " + creature.armour());
+                ((Text) creatureInfoTab.lookup("#herbivore")).setText(" " + creature.herbivore());
+                ((Text) creatureInfoTab.lookup("#carnivore")).setText(" " + creature.carnivore());
+                ((Text) creatureInfoTab.lookup("#offspring-investment")).setText(" " + creature.offspringInvestment());
+                ((Text) creatureInfoTab.lookup("#maturity")).setText(" " + creature.maturity());
+                ((Text) creatureInfoTab.lookup("#vision-range")).setText(" " + creature.visionRange());
+                ((Text) creatureInfoTab.lookup("#alignment")).setText(" " + creature.alignment());
+                ((Text) creatureInfoTab.lookup("#cohesion")).setText(" " + creature.cohesion());
+                ((Text) creatureInfoTab.lookup("#separation")).setText(" " + creature.separation());
+            }
+            case null, default -> throw new IllegalStateException("Unexpected value: " + selectedEntity.get());
         }
     }
 
     @FXML
     private void handleWorldEntityTogglePressed(final ActionEvent e) {
         if (e.getSource() == worldInfoToggle) {
-            selectInfoTab(0);
+            selectInfoTab(null);
         } else if (e.getSource() == entityInfoToggle) {
             // selected Entity must not be null if entity-info-toggle was pressed.
-            switch (selectedEntity.get()) {
-                case Corpse ignored -> selectInfoTab(1);
-                case Bush ignored -> selectInfoTab(2);
-                case Egg ignored -> selectInfoTab(3);
-                case Creature ignored -> selectInfoTab(4);
-                case null, default -> throw new IllegalStateException("Unexpected value: " + selectedEntity.get());
-            }
+            selectInfoTab(selectedEntity.get());
         }
     }
 
@@ -171,17 +204,24 @@ public class InfoDisplay implements Initializable {
      * egg, creature) and toggles the selection state of the info toggle buttons accordingly.
      * </p>
      *
-     * @param i an integer representing the type of information to display:
+     * @param roe a Read-only entity object representing the type of information to display:
      *          <ul>
-     *              <li>0 - World Info</li>
-     *              <li>1 - Corpse Info</li>
-     *              <li>2 - Bush Info</li>
-     *              <li>3 - Egg Info</li>
-     *              <li>4 - Creature Info</li>
+     *              <li>{@code null} - World Info</li>
+     *              <li>{@code ReadOnlyCorpse} - Corpse Info</li>
+     *              <li>{@code ReadOnlyBush} - Bush Info</li>
+     *              <li>{@code ReadOnlyEgg} - Egg Info</li>
+     *              <li>{@code ReadOnlyCreature} - Creature Info</li>
      *          </ul>
      */
-    private void selectInfoTab(int i) {
-        if (i < 0 || i > 4) throw new RuntimeException("Unsupported tab selection {" + i + "}.");
+    private void selectInfoTab(Entity.ReadOnlyEntity roe) {
+        int i = switch (roe) {
+            case null -> 0;
+            case Corpse.ReadOnlyCorpse ignored -> 1;
+            case Bush.ReadOnlyBush ignored -> 2;
+            case Egg.ReadOnlyEgg ignored -> 3;
+            case Creature.ReadOnlyCreature ignored -> 4;
+            default -> throw new IllegalStateException("Unexpected value: " + selectedEntity.get());
+        };
 
         worldInfoToggle.setSelected(i == 0);
         entityInfoToggle.setSelected(i != 0);
@@ -191,5 +231,17 @@ public class InfoDisplay implements Initializable {
         bushInfoTab.setVisible(i == 2);
         eggInfoTab.setVisible(i == 3);
         creatureInfoTab.setVisible(i == 4);
+    }
+
+
+    /** Selects the entity info tab when a new Entity is selected. */
+    public void selectEntityInfoTab() {
+        if (selectedEntity.isEmpty()) return;
+        worldInfoToggle.setDisable(false);
+        entityInfoToggle.setDisable(false);
+
+        selectInfoTab(selectedEntity.get());
+
+        updateEntityInfo();
     }
 }

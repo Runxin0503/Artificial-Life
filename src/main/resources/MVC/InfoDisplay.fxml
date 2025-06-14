@@ -31,12 +31,12 @@
                <children>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <ToggleButton fx:id="worldInfoToggle" focusTraversable="false" mnemonicParsing="false" text="World" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0" />
+                        <ToggleButton fx:id="worldInfoToggle" focusTraversable="false" mnemonicParsing="false" onAction="#handleWorldEntityTogglePressed" text="World" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0" />
                      </children>
                   </AnchorPane>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                      <children>
-                        <ToggleButton fx:id="entityInfoToggle" focusTraversable="false" mnemonicParsing="false" text="Entity" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                        <ToggleButton fx:id="entityInfoToggle" focusTraversable="false" mnemonicParsing="false" onAction="#handleWorldEntityTogglePressed" text="Entity" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
                      </children>
                   </AnchorPane>
                </children>
@@ -249,7 +249,7 @@
                                                 <Image url="@images/size.png" />
                                              </image>
                                           </ImageView>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                          <Text id="size" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
@@ -280,7 +280,7 @@
                                                 <Image url="@images/energy.png" />
                                              </image>
                                           </ImageView>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                          <Text id="energy" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
@@ -304,7 +304,7 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
+                                    <Text id="coordinate" strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
@@ -326,7 +326,7 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.353515625">
+                                    <Text id="velocity" strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.353515625">
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
@@ -397,7 +397,7 @@
                                                 <Image url="@images/size.png" />
                                              </image>
                                           </ImageView>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                          <Text id="size" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
@@ -428,7 +428,7 @@
                                                 <Image url="@images/energy.png" />
                                              </image>
                                           </ImageView>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                          <Text id="stored-energy" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
@@ -452,7 +452,7 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
+                                    <Text id="coordinate" strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
@@ -481,7 +481,7 @@
                                                 <Image url="@images/berry.png" />
                                              </image>
                                           </ImageView>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                          <Text id="berries" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
@@ -528,7 +528,7 @@
                                                 <Image url="@images/size.png" />
                                              </image>
                                           </ImageView>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                          <Text id="size" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
@@ -559,7 +559,7 @@
                                                 <Image url="@images/clock%20no%20background.png" />
                                              </image>
                                           </ImageView>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                          <Text id="incubation-time" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
@@ -587,7 +587,7 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
+                                    <Text id="coordinate" strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
@@ -616,7 +616,7 @@
                                                 <Image url="@images/health.png" />
                                              </image>
                                           </ImageView>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                          <Text id="health" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
@@ -675,7 +675,7 @@
                                                                   <Image url="@images/size.png" />
                                                                </image>
                                                             </ImageView>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                            <Text id="size" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                                                <font>
                                                                   <Font name="System Bold" size="18.0" />
                                                                </font>
@@ -706,7 +706,7 @@
                                                                   <Image url="@images/force.png" />
                                                                </image>
                                                             </ImageView>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                            <Text id="force" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                                                <font>
                                                                   <Font name="System Bold" size="18.0" />
                                                                </font>
@@ -730,7 +730,7 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
+                                                      <Text id="coordinate" strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
                                                          <font>
                                                             <Font name="System Bold" size="18.0" />
                                                          </font>
@@ -752,7 +752,7 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
+                                                      <Text id="velocity" strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
                                                          <font>
                                                             <Font name="System Bold" size="18.0" />
                                                          </font>
@@ -781,7 +781,7 @@
                                                                   <Image url="@images/health.png" />
                                                                </image>
                                                             </ImageView>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                            <Text id="health" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                                                <font>
                                                                   <Font name="System Bold" size="18.0" />
                                                                </font>
@@ -812,7 +812,7 @@
                                                                   <Image url="@images/energy.png" />
                                                                </image>
                                                             </ImageView>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                            <Text id="energy" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                                                <font>
                                                                   <Font name="System Bold" size="18.0" />
                                                                </font>
@@ -843,7 +843,7 @@
                                                                   <Image url="@images/attack.png" />
                                                                </image>
                                                             </ImageView>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                            <Text id="strength" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                                                <font>
                                                                   <Font name="System Bold" size="18.0" />
                                                                </font>
@@ -874,7 +874,7 @@
                                                                   <Image url="@images/herbivore.png" />
                                                                </image>
                                                             </ImageView>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                            <Text id="herbivore" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                                                <font>
                                                                   <Font name="System Bold" size="18.0" />
                                                                </font>
@@ -905,7 +905,7 @@
                                                                   <Image url="@images/armour.png" />
                                                                </image>
                                                             </ImageView>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                            <Text id="armour" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                                                <font>
                                                                   <Font name="System Bold" size="18.0" />
                                                                </font>
@@ -936,7 +936,7 @@
                                                                   <Image url="@images/carnivore.png" />
                                                                </image>
                                                             </ImageView>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                            <Text id="carnivore" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                                                <font>
                                                                   <Font name="System Bold" size="18.0" />
                                                                </font>
@@ -967,7 +967,7 @@
                                                                   <Image url="@images/offspring_investment.png" />
                                                                </image>
                                                             </ImageView>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                            <Text id="offspring-investment" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                                                <font>
                                                                   <Font name="System Bold" size="18.0" />
                                                                </font>
@@ -1002,7 +1002,7 @@
                                                                   <Image url="@images/clock%20no%20background.png" />
                                                                </image>
                                                             </ImageView>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                            <Text id="maturity" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                                                <font>
                                                                   <Font name="System Bold" size="18.0" />
                                                                </font>
@@ -1033,7 +1033,7 @@
                                                                   <Image url="@images/vision.png" />
                                                                </image>
                                                             </ImageView>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                            <Text id="vision-range" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                                                <font>
                                                                   <Font name="System Bold" size="18.0" />
                                                                </font>
@@ -1064,7 +1064,7 @@
                                                                   <Image url="@images/alignment.png" />
                                                                </image>
                                                             </ImageView>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                            <Text id="alignment" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                                                <font>
                                                                   <Font name="System Bold" size="18.0" />
                                                                </font>
@@ -1095,7 +1095,7 @@
                                                                   <Image url="@images/cohesion.png" />
                                                                </image>
                                                             </ImageView>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                            <Text id="cohesion" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                                                <font>
                                                                   <Font name="System Bold" size="18.0" />
                                                                </font>
@@ -1126,7 +1126,7 @@
                                                                   <Image url="@images/separation.png" />
                                                                </image>
                                                             </ImageView>
-                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                            <Text id="separation" strokeType="OUTSIDE" strokeWidth="0.0" text=" 0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                                                <font>
                                                                   <Font name="System Bold" size="18.0" />
                                                                </font>

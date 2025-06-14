@@ -86,14 +86,6 @@ public class Egg extends Entity {
             return y + height / 2;
         }
 
-        public int getIncubationTime() {
-            return incubationTime;
-        }
-
-        public double getHealth() {
-            return health;
-        }
-
         @Override
         public int hashCode() {
             return ID;

@@ -41,6 +41,9 @@ public class GridWorld {
     /** The Entity Factory object used to create its factory-objects for less object-creation resource overhead. */
     private final EntityFactory entityFactory;
 
+    /** The amount of ticks that has passed since this GridWorld's creation. */
+    private final int timeElapsed;
+
     public GridWorld() {
         creatures = new ArrayList<>();
         positionToEntityPair = new HashMap<>();
@@ -53,6 +56,8 @@ public class GridWorld {
         // Create Bushes
         for (int i = 0; i < WorldConstants.WorldGen.numBushes; i++)
             addBush();
+
+        timeElapsed = 0;
     }
 
     /** TODO write specs */
@@ -353,7 +358,6 @@ public class GridWorld {
             }
         }
 
-        System.out.println(bushPair.second().boundingBox);
         addPosition(bushPair.second());
         positionToEntityPair.put(bushPair.second(), bushPair);
     }
@@ -473,13 +477,13 @@ public class GridWorld {
 
     /** Returns true if {@code gx} and {@code gy} is valid coordinates within the 2D array {@linkplain #Grids}. */
     private boolean isValidGrid(int gx, int gy) {
-        return gx < 0 || WorldConstants.GRID_NUM_X <= gx ||
-                gy < 0 || WorldConstants.GRID_NUM_Y <= gy;
+        return 0 <= gx && gx < WorldConstants.GRID_NUM_X &&
+                0 <= gy && gy < WorldConstants.GRID_NUM_Y;
     }
 
     /** Returns a read-only copy of this grid world at the current tick. */
     public ReadOnlyWorld getReadOnlyCopy() {
-        return new ReadOnlyWorld(positionToEntityPair, Grids);
+        return new ReadOnlyWorld(this);
     }
 
     /**
@@ -504,18 +508,19 @@ public class GridWorld {
          */
         private final ArrayList<Entity.ReadOnlyEntity>[][] Grids;
 
+        /** The amount of ticks that has passed since this GridWorld's creation. */
+        public final int timeElapsed;
+
         /**
          * Constructs a new {@code ReadOnlyWorld} snapshot from the current model.
          *
-         * @param positionToEntity A mapping from position to entity (with their original, mutable references).
-         * @param Grids A 2D array of grid cells, each holding a list of positions that are used to
-         *              look up corresponding entities and populate the spatial partition.
+         * @param GridWorld the GridWorld this Read-Only copy is made from.
          */
-        public ReadOnlyWorld(HashMap<Position, Pair<? extends Entity, ? extends Position>> positionToEntity, ArrayList<Position>[][] Grids) {
-            this.Grids = new ArrayList[Grids.length][Grids[0].length];
+        private ReadOnlyWorld(GridWorld GridWorld) {
+            this.Grids = new ArrayList[GridWorld.Grids.length][GridWorld.Grids[0].length];
 
             HashMap<Position, Entity.ReadOnlyEntity> posToReadOnlyEntity = new HashMap<>();
-            for (Pair<? extends Entity, ? extends Position> value : positionToEntity.values())
+            for (Pair<? extends Entity, ? extends Position> value : GridWorld.positionToEntityPair.values())
                 posToReadOnlyEntity.put(value.second(), value.first().getReadOnlyCopy(value.second()));
 
             this.entities = posToReadOnlyEntity.values().toArray(new Entity.ReadOnlyEntity[0]);
@@ -523,10 +528,12 @@ public class GridWorld {
             for (int i = 0; i < Grids.length; i++) {
                 for (int j = 0; j < Grids[0].length; j++) {
                     this.Grids[i][j] = new ArrayList<>();
-                    for (Position p : Grids[i][j])
+                    for (Position p : GridWorld.Grids[i][j])
                         this.Grids[i][j].add(posToReadOnlyEntity.get(p));
                 }
             }
+
+            this.timeElapsed = GridWorld.timeElapsed;
         }
 
         /**
@@ -565,7 +572,7 @@ public class GridWorld {
             int gridX = x / WorldConstants.GridWidth;
             int gridY = y / WorldConstants.GridHeight;
 
-            if (gridX < 0 || gridX >= Grids.length || gridY < 0 || gridY >= Grids[0].length)
+            if (gridX < 0 || gridX >= WorldConstants.GRID_NUM_X || gridY < 0 || gridY >= WorldConstants.GRID_NUM_Y)
                 return null;
 
             Entity.ReadOnlyEntity selected = null;
@@ -577,7 +584,7 @@ public class GridWorld {
                 int w = entity.width();
                 int h = entity.height();
 
-                if (x >= ex && x < ex + w && y >= ey && y < ey + h) {
+                if (ex <= x && x <= ex + w && ey <= y && y <= ey + h) {
                     double area = w * h;
                     if (area < smallestArea) {
                         smallestArea = area;

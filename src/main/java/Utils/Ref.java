@@ -50,7 +50,7 @@ public class Ref<T> {
      * Clears the referenced value by setting it to {@code null}.
      */
     public synchronized void clear() {
-        this.value = null;
+        this.set(null);
     }
 
     /**

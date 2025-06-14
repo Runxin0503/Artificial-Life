@@ -161,14 +161,33 @@ public class MainView extends Application implements Initializable {
         this.selectedEntity = selectedEntity;
         this.selectedEntityID = selectedEntityID;
 
-        Timeline updateCanvasPeriodically = new Timeline(new KeyFrame(
-                Duration.seconds(1.0 / Constants.WindowConstants.MAX_FPS),
-                event -> {
-                    // TODO add all repaint stuff in here
+        selectedEntityID.onUpdate(newID -> {
+            if (model.isEmpty()) throw new IllegalStateException("Model is empty");
 
-                    canvasControl.repaint();
+            if (newID != null) {
+                for (Entity.ReadOnlyEntity roe : model.get().entities) {
+                    if (roe.ID() == newID) {
+                        selectedEntity.set(roe);
+                        break;
+                    }
                 }
-        ));
+                infoDisplay.selectEntityInfoTab();
+            } else selectedEntity.clear();
+        });
+
+        model.onUpdate(newModel -> {
+            if (!selectedEntityID.isEmpty()) for (Entity.ReadOnlyEntity roe : newModel.entities)
+                if (roe.ID() == selectedEntityID.get()) {
+                    selectedEntity.set(roe);
+                    break;
+                }
+        });
+
+        Timeline updateCanvasPeriodically = new Timeline(new KeyFrame(Duration.seconds(1.0 / Constants.WindowConstants.MAX_FPS), event -> {
+            // TODO add all repaint stuff in here
+
+            canvasControl.repaint();
+        }));
 
         updateCanvasPeriodically.setCycleCount(Timeline.INDEFINITE);
         updateCanvasPeriodically.play();
@@ -181,24 +200,6 @@ public class MainView extends Application implements Initializable {
      * to this class. */
     private void bindProperties() {
         divider.startYProperty().bind(splitPane.heightProperty().add(24));
-
-        selectedEntityID.onUpdate(newID -> {
-            if (model.isEmpty()) throw new IllegalStateException("Model is empty");
-
-            for (Entity.ReadOnlyEntity roe : model.get().entities)
-                if (roe.ID() == newID) {
-                    selectedEntity.set(roe);
-                    break;
-                }
-        });
-
-        model.onUpdate(newModel -> {
-            for (Entity.ReadOnlyEntity roe : newModel.entities)
-                if (roe.ID() == selectedEntityID.get()) {
-                    selectedEntity.set(roe);
-                    break;
-                }
-        });
 
         // TODO implement resizing to fit full screen
 //        infoPane.maxWidthProperty().bind(Bindings.min(
@@ -263,9 +264,10 @@ public class MainView extends Application implements Initializable {
         assert newModel != null;
 
         controlPanel.unselectContinuousStep();
-        selectedEntity.clear();
-        selectedEntityID.clear();
 
         updateViewModel(newModel);
+
+        selectedEntity.clear();
+        selectedEntityID.clear();
     }
 }

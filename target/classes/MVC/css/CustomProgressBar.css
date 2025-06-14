@@ -14,6 +14,6 @@
     -fx-background-image: url("../images/loading_bar_full.png");
     -fx-background-repeat: stretch;
     -fx-background-size: cover;
-    -fx-background-position: center-left;
+    -fx-background-position: left center;
     -fx-background-color: transparent;
 }

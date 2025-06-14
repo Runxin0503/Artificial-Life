@@ -9,6 +9,7 @@ import Physics.GridWorld;
 import Utils.Constants;
 import Utils.Ref;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
@@ -81,10 +82,35 @@ public class CanvasControl implements Initializable {
 //        Apply canvasTransform only (for zooming/panning)
         backgroundImage.getTransforms().setAll(canvasTransform);
 
+        Platform.runLater(this::setupCanvas);
+
+        new AnimationTimer() {
+            private long lastUpdate = 0;
+            private int frameCount = 0;
+            private long lastFrameTime = 0;
+
+            @Override
+            public void handle(long now) {
+                if (lastUpdate > 0) {
+                    frameCount++;
+
+                    // Update FPS every 0.2 seconds
+                    if (now - lastFrameTime >= 200_000_000) { // 0.5 seconds = 500,000,000 nanoseconds
+                        double fps = frameCount / ((now - lastFrameTime) / 1_000_000_000.0);
+                        fpsCounter.setText(String.valueOf(((int) fps * 100) / 100.0));
+                        frameCount = 0;
+                        lastFrameTime = now;
+                    }
+                }
+                lastUpdate = now;
+            }
+        }.start();
+    }
+
+    private void setupCanvas() {
         canvasScroller.setOnScroll(ae -> {
             if (ae.getDeltaY() != 0) {  // Only react to vertical scroll
                 double zoomFactor = ae.getDeltaY() > 0 ? 1.1 : 0.9;  // Zoom in or out
-                System.out.println(canvasTransform.getMxx());
                 if ((canvasTransform.getMxx() >= Constants.WindowConstants.MAX_ZOOM / 1.1 || canvasTransform.getMyy() >= Constants.WindowConstants.MAX_ZOOM / 1.1) && zoomFactor > 1)
                     return;
                 if ((canvasTransform.getMxx() <= Constants.WindowConstants.MIN_ZOOM / 0.9 || canvasTransform.getMyy() <= Constants.WindowConstants.MIN_ZOOM / 0.9) && zoomFactor < 1)
@@ -154,36 +180,17 @@ public class CanvasControl implements Initializable {
                 throw new RuntimeException(e);
             }
 
-            // TODO find the selected entity. If no entity is selected or continuousStep is true,
+            // find the selected entity. If no entity is selected or continuousStep is true,
             //  set selectedEntity to null, otherwise set selectedEntity to that selected Entity
             //  ie. change the selectedEntityID to the appropriate ID value.
             Entity.ReadOnlyEntity selectedEntity = model.get().getEntity(worldX, worldY);
             selectedEntityID.set(Objects.isNull(selectedEntity) ? null : selectedEntity.ID());
 
+            System.out.println(worldX + " " + worldY + ", " + selectedEntity);
+
             redrawModel();
         });
 
-        new AnimationTimer() {
-            private long lastUpdate = 0;
-            private int frameCount = 0;
-            private long lastFrameTime = 0;
-
-            @Override
-            public void handle(long now) {
-                if (lastUpdate > 0) {
-                    frameCount++;
-
-                    // Update FPS every 0.2 seconds
-                    if (now - lastFrameTime >= 200_000_000) { // 0.5 seconds = 500,000,000 nanoseconds
-                        double fps = frameCount / ((now - lastFrameTime) / 1_000_000_000.0);
-                        fpsCounter.setText(String.valueOf(((int) fps * 100) / 100.0));
-                        frameCount = 0;
-                        lastFrameTime = now;
-                    }
-                }
-                lastUpdate = now;
-            }
-        }.start();
     }
 
     private void clampTransform() {
