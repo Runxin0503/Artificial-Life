@@ -240,8 +240,7 @@ public class CanvasControl implements Initializable {
 
     /** Updates and repaints all fields of this GUI according to the most recent data. */
     public void repaint() {
-        if (!model.isEmpty() && redrawModel)
-            drawCanvas();
+        if (!model.isEmpty() && redrawModel) drawCanvas();
     }
 
     /** A method that draws the world model according to {@code model}. */
@@ -284,11 +283,22 @@ public class CanvasControl implements Initializable {
                 // check for entity-in-scope of camera bounding box in entity-based rendering
                 Rectangle cameraBoundingBox = new Rectangle(minX, minY, maxX - minX, maxY - minY);
                 for (Entity.ReadOnlyEntity roe : model.entities)
-                    if (cameraBoundingBox.intersects(roe.x(), roe.y(), roe.width(), roe.height()))
+                    if (cameraBoundingBox.intersects(roe.x(), roe.y(), roe.width(), roe.height())) {
+                        // draws black bounding box outline (red if selected) and black dot coordinate around entity
+                        if (!selectedEntityID.isEmpty() && selectedEntityID.get().equals(roe.ID())) {
+                            gc.setStroke(Color.RED);
+                            gc.setFill(Color.BLACK);
+                            gc.strokeRect(roe.x(), roe.y(), roe.width(), roe.height());
+                            gc.fillRect(roe.getX() - 2, roe.getY() - 2, 4, 4);
+                        } else if (Constants.WorldConstants.Settings.devMode) {
+                            gc.setStroke(Color.BLACK);
+                            gc.setFill(Color.BLACK);
+                            gc.strokeRect(roe.x(), roe.y(), roe.width(), roe.height());
+                            gc.fillRect(roe.getX() - 2, roe.getY() - 2, 4, 4);
+                        }
                         drawReadOnlyEntity(roe, gc);
+                    }
             }
-
-            // TODO draw red line around selected Entity
 
             gc.restore();
             redrawModel = false;
@@ -297,12 +307,6 @@ public class CanvasControl implements Initializable {
 
     /** Draws the ReadOnlyEntity {@code entity} on the graphics object {@code gc}. */
     private void drawReadOnlyEntity(Entity.ReadOnlyEntity entity, GraphicsContext gc) {
-        if (Constants.WorldConstants.Settings.devMode) {
-            gc.setStroke(Color.BLACK);
-            gc.setFill(Color.BLACK);
-            gc.strokeRect(entity.x(), entity.y(), entity.width(), entity.height());
-            gc.fillRect(entity.getX() - 2, entity.getY() - 2, 4, 4);
-        }
         switch (entity) {
             case Bush.ReadOnlyBush bush -> {
                 gc.drawImage(Constants.ImageConstants.bush, bush.x(), bush.y(), bush.width(), bush.height());
