@@ -304,11 +304,15 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <Text id="coordinate" strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
-                                       <font>
-                                          <Font name="System Bold" size="18.0" />
-                                       </font>
-                                    </Text>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <Text id="coordinate" strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </HBox>
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Coordinate" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
@@ -326,11 +330,15 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <Text id="velocity" strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.353515625">
-                                       <font>
-                                          <Font name="System Bold" size="18.0" />
-                                       </font>
-                                    </Text>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <Text id="velocity" strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.353515625">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </HBox>
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Velocity" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
@@ -452,11 +460,15 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <Text id="coordinate" strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
-                                       <font>
-                                          <Font name="System Bold" size="18.0" />
-                                       </font>
-                                    </Text>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <Text id="coordinate" strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </HBox>
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Coordinate" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
@@ -587,11 +599,15 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <Text id="coordinate" strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
-                                       <font>
-                                          <Font name="System Bold" size="18.0" />
-                                       </font>
-                                    </Text>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <Text id="coordinate" strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </HBox>
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Coordinate" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
@@ -730,11 +746,15 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <Text id="coordinate" strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
-                                                         <font>
-                                                            <Font name="System Bold" size="18.0" />
-                                                         </font>
-                                                      </Text>
+                                                      <HBox alignment="CENTER">
+                                                         <children>
+                                                            <Text id="coordinate" strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Text>
+                                                         </children>
+                                                      </HBox>
                                                       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Coordinate" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                                    </children>
                                                 </GridPane>
@@ -752,11 +772,15 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <Text id="velocity" strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
-                                                         <font>
-                                                            <Font name="System Bold" size="18.0" />
-                                                         </font>
-                                                      </Text>
+                                                      <HBox alignment="CENTER">
+                                                         <children>
+                                                            <Text id="velocity" strokeType="OUTSIDE" strokeWidth="0.0" text="0, 0" textAlignment="CENTER" wrappingWidth="78.853515625">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Text>
+                                                         </children>
+                                                      </HBox>
                                                       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Velocity" textAlignment="CENTER" wrappingWidth="75.0" GridPane.rowIndex="1" />
                                                    </children>
                                                 </GridPane>

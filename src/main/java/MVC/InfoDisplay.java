@@ -10,15 +10,19 @@ import Utils.Ref;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class InfoDisplay implements Initializable {
 
@@ -114,8 +118,7 @@ public class InfoDisplay implements Initializable {
                 entityInfoToggle.setDisable(false);
 
                 // check whether entity or world info tab is open before updating information for optimization.
-                if (!worldInfoTab.isVisible())
-                    updateEntityInfo();
+                if (!worldInfoTab.isVisible()) updateEntityInfo();
             }
         });
 
@@ -126,6 +129,28 @@ public class InfoDisplay implements Initializable {
      * to this class. */
     private void bindProperties() {
         // TODO implement
+
+        for (AnchorPane infoTab : new AnchorPane[]{creatureInfoTab, corpseInfoTab, bushInfoTab, eggInfoTab}) {
+            for (String selector : new String[]{"#coordinate", "#velocity"}) {
+                Set<Node> nodeSet = infoTab.lookupAll(selector);
+                for (Node node : nodeSet) {
+                    ((Text) node).setWrappingWidth(0);
+                    ((Text) node).textProperty().addListener((observable, oldValue, newValue) -> {
+                        bindTextResize(((Text) node), node.getParent().getLayoutBounds().getWidth() * 0.9);
+                    });
+                }
+            }
+        }
+    }
+
+    private void bindTextResize(Text text, double maxWidth) {
+        double fontSize = 18;
+        text.setFont(Font.font("System", FontWeight.BOLD, fontSize));
+
+        while (text.getLayoutBounds().getWidth() > maxWidth && fontSize > 1) {
+            fontSize -= 0.5;
+            text.setFont(Font.font("System", FontWeight.BOLD, fontSize));
+        }
     }
 
     /** Updates the world info tab whenever {@linkplain #model} gets an update */
@@ -232,7 +257,6 @@ public class InfoDisplay implements Initializable {
         eggInfoTab.setVisible(i == 3);
         creatureInfoTab.setVisible(i == 4);
     }
-
 
     /** Selects the entity info tab when a new Entity is selected. */
     public void selectEntityInfoTab() {
