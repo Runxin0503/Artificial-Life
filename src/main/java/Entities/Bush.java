@@ -2,6 +2,7 @@ package Entities;
 
 import Entities.Creature.Creature;
 import Physics.Position;
+import Utils.Constants;
 import Utils.Constants.BushConstants;
 
 import java.util.ArrayList;
@@ -14,11 +15,8 @@ public class Bush extends Entity {
     /** The max amount of berries possible. */
     private int maxBerries;
 
-    /** The (effectively FINAL) fields for the bounding box of this Bush. Used to generate Berry positions. */
-    private int x, y, width, height;
-
     /** The amount of energy each berries give. TODO implement this in the future. */
-    private double berryEnergy;
+    private double berryEnergy = BushConstants.energy;
 
     /** Stores absolute world positions of the berries themselves. */
     private int numBerries = 0;
@@ -27,17 +25,13 @@ public class Bush extends Entity {
      * interacted with this bush. */
     private final ArrayList<Creature> queuedBerryEating = new ArrayList<>();
 
-    public Bush(int id, int x, int y, int width, int height) {
+    public Bush(int id, int maxBerries) {
         super(id);
-        reset(x, y, width, height);
+        reset(maxBerries);
     }
 
-    public void reset(int x, int y, int width, int height) {
-        this.maxBerries = width / BushConstants.initialMaxSize * BushConstants.maxBerries;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+    public void reset(int maxBerries) {
+        this.maxBerries = maxBerries;
 
         numBerries = (int) (Math.random() * maxBerries);
 
@@ -50,8 +44,21 @@ public class Bush extends Entity {
      * Attempts to grow berries if sufficient energy<br>
      * Returns true if this Entity has to be removed
      */
-    public boolean tick() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public boolean tick(Position pos) {
+        if (numBerries < maxBerries && Math.random() < BushConstants.berriesGrowProbability * maxBerries) {
+            numBerries++;
+        }
+
+        queuedBerryEating.sort((o1, o2) -> (int) (100 * (o1.getSize() - o2.getSize())));
+        while (numBerries > 0 && !queuedBerryEating.isEmpty()) {
+            Creature c = queuedBerryEating.removeLast();
+            // TODO add berry to Creature Stomach
+//            if (c.addPlantMass(BushConstants.energy / Constants.CreatureConstants.Digestion.plantMassToEnergy))
+//                numBerries--;
+        }
+        queuedBerryEating.clear();
+
+        return false;
     }
 
     @Override

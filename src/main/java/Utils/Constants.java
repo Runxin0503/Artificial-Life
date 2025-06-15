@@ -107,8 +107,8 @@ public class Constants implements Serializable {
      * Constants related to the decomposition and behavior of corpses.
      */
     public static class CorpseConstants {
-        /** The rate at which corpses decay each tick. */
-        public static final double corpseDecayRate = 0.0001;
+        /** The rate at which corpses decay each tick according to the Half-Life principle. */
+        public static final double corpseDecayRate = 0.7;
         /** The percentage at which a corpse is considered rotten and is removed from the world. */
         public static final double corpseRottenPercentage = 0.2;
         /** Minimum size a corpse can shrink to before being removed from the world. */

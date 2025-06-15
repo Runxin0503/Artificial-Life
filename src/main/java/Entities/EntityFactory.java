@@ -78,14 +78,14 @@ public class EntityFactory {
         int y = (int) (Math.random() * (WorldConstants.yBound - height));
 
         if (bushPair.isEmpty()) {
-            Bush b = new Bush(objectCounter, x, y, width, height);
+            Bush b = new Bush(objectCounter, width / BushConstants.initialMaxSize * BushConstants.maxBerries);
             Fixed f = new Fixed(objectCounter,
                     width, height, x, y, 0);
             objectCounter++;
             return new Pair<>(b, f);
         } else {
             Pair<Bush, Fixed> bf = bushPair.removeFirst();
-            bf.first().reset(x, y, width, height);
+            bf.first().reset(width / BushConstants.initialMaxSize * BushConstants.maxBerries);
             bf.second().reset(x, y, width, height, 0);
             return bf;
         }

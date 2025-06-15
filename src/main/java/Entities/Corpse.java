@@ -3,8 +3,9 @@ package Entities;
 import Entities.Creature.Creature;
 import Physics.Dynamic;
 import Physics.Position;
+import Utils.Constants;
+import Utils.Constants.CorpseConstants;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /** The dead corpse of a {@link Creature}. Passively rots away, decreasing in size and mass.<br>
@@ -44,9 +45,22 @@ public class Corpse extends Entity {
     }
 
     @Override
-    public boolean tick() {
+    public boolean tick(Position pos) {
         //TODO decay with half-life principle, then clear the queue for questionable munching
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.energy *= CorpseConstants.corpseDecayRate;
+        if (energy <= initialEnergy * CorpseConstants.corpseRottenPercentage || pos.boundingBox.width < CorpseConstants.minCorpseSize)
+            return true;
+
+        queuedQuestionableMunching.sort((o1, o2) -> (int) (100 * (o1.getDamage() - o2.getDamage())));
+        while (energy > 0 && !queuedQuestionableMunching.isEmpty()) {
+            Creature c = queuedQuestionableMunching.removeLast();
+            double damageDealt = Math.min(energy, c.getDamage());
+            if (c.addMeatMass(damageDealt / Constants.CreatureConstants.Digestion.meatMassToEnergy))
+                setEnergy(energy - damageDealt);
+        }
+        queuedQuestionableMunching.clear();
+
+        return false;
     }
 
     @Override
@@ -59,19 +73,12 @@ public class Corpse extends Entity {
     @Override
     public ReadOnlyEntity getReadOnlyCopy(Position pos) {
         if (!(pos instanceof Dynamic d)) throw new RuntimeException("Invalid position object");
-        return new ReadOnlyCorpse(
-                d.boundingBox.x, d.boundingBox.y,
-                d.boundingBox.width, d.boundingBox.height,
-                d.velocity.x, d.velocity.y, d.dir.angle(),
-                energy, initialEnergy, ID
-        );
+        return new ReadOnlyCorpse(d.boundingBox.x, d.boundingBox.y, d.boundingBox.width, d.boundingBox.height, d.velocity.x, d.velocity.y, d.dir.angle(), energy, initialEnergy, ID);
     }
 
-    public record ReadOnlyCorpse(
-            int x, int y, int width, int height,
-            double velocityX, double velocityY, double rotation,
-            double energy, double initialEnergy, int ID
-    ) implements ReadOnlyEntity {
+    public record ReadOnlyCorpse(int x, int y, int width, int height, double velocityX, double velocityY,
+                                 double rotation, double energy, double initialEnergy,
+                                 int ID) implements ReadOnlyEntity {
 
         public int getSize() {
             return width;

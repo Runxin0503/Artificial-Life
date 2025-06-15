@@ -19,7 +19,7 @@ public abstract class Entity extends Entities.EntityFactory.EntityFactoryObject 
      * Allow the Entity to perform all actions in a tick<br>
      * Returns true if this Entity has to be removed.
      */
-    public abstract boolean tick();
+    public abstract boolean tick(Position pos);
 
     /** Dictates what happens when a Creature's mouth hitbox intersects with this object */
     public abstract void creatureInteract(Creature c);

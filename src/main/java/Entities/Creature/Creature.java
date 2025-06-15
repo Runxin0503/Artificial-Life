@@ -141,9 +141,10 @@ public class Creature extends Entity {
      * like digesting, regenerating, metabolizing, growing stomach, etc.
      * <br>Returns true if this Creature has died. */
     @Override
-    public boolean tick() {
+    public boolean tick(Position pos) {
         // TODO implement
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.energy -= metabolism;
+
     }
 
     /** Completely resets and creates a new set of fixed relative vision rays according to the
@@ -156,24 +157,12 @@ public class Creature extends Entity {
         }
     }
 
-    /** Updates the fixed relative vision rays according to the current angle of {@code dynamic}
-     * and {@linkplain Genome#visionAvailable} in the {@code genome} field. */
-    private void updateRelativeRay(Dynamic dynamic) {
-        //measures angle change between latest leftmost ray and the current calculated leftmost ray
-        double angleDiff = relativeRays.getFirst().angle() - (dynamic.getDirection().angle() - genome.visionConeAngle * 0.5);
-
-        //change the angle of each ray by angleDiff to update, also change the length of each ray
-        for (Vector2D ray : relativeRays) {
-            ray.rotate(angleDiff);
-            ray.multiply(ray.length() / genome.visionAvailable);
-        }
-    }
-
     /**
      * Clears and instantiates {@code rays} with accurate coordinates of the two ends of the rays
      * according to this Creature's genome, the position {@code pos} data, and the size of this Creature.
      */
     public void getVisionRays(ArrayList<Line2D> rays, Dynamic pos) {
+        updateRelativeRay(pos);
         for (Vector2D ray : relativeRays) {
             rays.add(new Line2D.Double(pos.x, pos.y, pos.x + ray.x, pos.y + ray.y));
             while (!WorldConstants.worldBorder.contains(rays.getLast().getP2())) {
@@ -190,6 +179,19 @@ public class Creature extends Entity {
                     System.out.println("Exception Occurred. Raycasting end point at " + lineBefore.getX2() + "," + lineBefore.getY2());
                 }
             }
+        }
+    }
+
+    /** Updates the fixed relative vision rays according to the current angle of {@code dynamic}
+     * and {@linkplain Genome#visionAvailable} in the {@code genome} field. */
+    private void updateRelativeRay(Dynamic dynamic) {
+        //measures angle change between latest leftmost ray and the current calculated leftmost ray
+        double angleDiff = relativeRays.getFirst().angle() - (dynamic.getDirection().angle() - genome.visionConeAngle * 0.5);
+
+        //change the angle of each ray by angleDiff to update, also change the length of each ray
+        for (Vector2D ray : relativeRays) {
+            ray.rotate(angleDiff);
+            ray.multiply(ray.length() / genome.visionAvailable);
         }
     }
 

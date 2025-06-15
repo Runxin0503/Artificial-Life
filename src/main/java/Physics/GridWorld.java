@@ -89,12 +89,7 @@ public class GridWorld {
     /** Completes all actions required of the world in one tick. */
     public void tick(ExecutorService executor) {
         // Count down latch for 1 & 2
-        CountDownLatch latch1 = new CountDownLatch(creatures.size() * 2),
-                latch2 = new CountDownLatch(creatures.size() * 2),
-                latch3 = new CountDownLatch(positionToEntityPair.size()),
-                latch4 = new CountDownLatch(creatures.size()),
-                latch5 = new CountDownLatch(positionToEntityPair.size()),
-                latch6 = new CountDownLatch(positionToEntityPair.size());
+        CountDownLatch latch1 = new CountDownLatch(creatures.size() * 2), latch2 = new CountDownLatch(creatures.size() * 2), latch3 = new CountDownLatch(positionToEntityPair.size()), latch4 = new CountDownLatch(creatures.size()), latch5 = new CountDownLatch(positionToEntityPair.size()), latch6 = new CountDownLatch(positionToEntityPair.size());
 
         ArrayList<Pair<? extends Entity, ? extends Position>> newEntities = new ArrayList<>();
 
@@ -120,7 +115,7 @@ public class GridWorld {
                     });
                     executor.submit(() -> {
                         try {
-                            if (cd.first().tick()) {
+                            if (cd.first().tick(cd.second())) {
                                 synchronized (deadCreatures) {
                                     deadCreatures.add(cd);
                                 }
@@ -148,16 +143,15 @@ public class GridWorld {
 
         // 3. Update Position (Dynamic)
         for (Position p : positionToEntityPair.keySet()) {
-            if (p instanceof Dynamic d && d.isMoving())
-                executor.submit(() -> {
-                    try {
-                        d.stashBoundingBox();
-                        d.updatePos();
-                        updatePosition(d);
-                    } finally {
-                        latch3.countDown();
-                    }
-                });
+            if (p instanceof Dynamic d && d.isMoving()) executor.submit(() -> {
+                try {
+                    d.stashBoundingBox();
+                    d.updatePos();
+                    updatePosition(d);
+                } finally {
+                    latch3.countDown();
+                }
+            });
             else latch3.countDown();
         }
 
@@ -181,15 +175,13 @@ public class GridWorld {
         // 5. Tick all entities EXCEPT creature, remove
         ArrayList<Position> removedPositions = new ArrayList<>();
         for (Pair<? extends Entity, ? extends Position> value : positionToEntityPair.values())
-            if (!(value.first() instanceof Creature))
-                executor.submit(() -> {
-                    try {
-                        if (value.first().tick())
-                            removedPositions.add(value.second());
-                    } finally {
-                        latch5.countDown();
-                    }
-                });
+            if (!(value.first() instanceof Creature)) executor.submit(() -> {
+                try {
+                    if (value.first().tick(value.second())) removedPositions.add(value.second());
+                } finally {
+                    latch5.countDown();
+                }
+            });
             else latch5.countDown();
 
         // await latch 5
@@ -217,8 +209,7 @@ public class GridWorld {
                     }
                     case Egg egg -> {
                         // determine if it should hatch or not
-                        if (egg.isHatchable())
-                            newEntities.add(entityFactory.getCreaturePair((Pair<Egg, Fixed>) pair));
+                        if (egg.isHatchable()) newEntities.add(entityFactory.getCreaturePair((Pair<Egg, Fixed>) pair));
                         else numCreatures--;
                     }
                     default ->
@@ -259,8 +250,7 @@ public class GridWorld {
             if (pair.first() instanceof Creature) {
                 creatures.add((Pair<Creature, Dynamic>) pair);
                 numCreatures++;
-            } else if (pair.first() instanceof Egg)
-                numCreatures++;
+            } else if (pair.first() instanceof Egg) numCreatures++;
         }
     }
 
@@ -273,8 +263,7 @@ public class GridWorld {
 
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
-                if (isValidGrid(x, y))
-                    Grids[x][y].add(pos);
+                if (isValidGrid(x, y)) Grids[x][y].add(pos);
             }
         }
     }
@@ -288,8 +277,7 @@ public class GridWorld {
 
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
-                if (isValidGrid(x, y))
-                    Grids[x][y].remove(pos);
+                if (isValidGrid(x, y)) Grids[x][y].remove(pos);
             }
         }
     }
@@ -430,8 +418,8 @@ public class GridWorld {
                         if (minY < 0) minY = 0;
                         if (maxY > WorldConstants.GRID_NUM_Y) maxY = WorldConstants.GRID_NUM_Y;
 
-                        for (int x = minX; x < maxX; x++)
-                            for (int y = minY; y < maxY; y++)
+                        for (int x = minX; x <= maxX; x++)
+                            for (int y = minY; y <= maxY; y++)
                                 for (Position p : Grids[x][y])
                                     if (p != cd.second())
                                         positionToEntityPair.get(p).first().creatureInteract(cd.first());
@@ -448,37 +436,35 @@ public class GridWorld {
      * on both Position objects. */
     private void handleCollision(ExecutorService executor, CountDownLatch latch) {
         for (Pair<? extends Entity, ? extends Position> pair : positionToEntityPair.values())
-            if (!(pair.first() instanceof Bush) && pair.second() instanceof Dynamic d)
-                executor.submit(() -> {
-                    try {
-                        int startGridX = d.boundingBox.x / WorldConstants.GridWidth;
-                        int endGridX = (d.boundingBox.x + d.boundingBox.width) / WorldConstants.GridWidth;
-                        int startGridY = d.boundingBox.y / WorldConstants.GridHeight;
-                        int endGridY = (d.boundingBox.y + d.boundingBox.height) / WorldConstants.GridHeight;
+            if (!(pair.first() instanceof Bush) && pair.second() instanceof Dynamic d) executor.submit(() -> {
+                try {
+                    int startGridX = d.boundingBox.x / WorldConstants.GridWidth;
+                    int endGridX = (d.boundingBox.x + d.boundingBox.width) / WorldConstants.GridWidth;
+                    int startGridY = d.boundingBox.y / WorldConstants.GridHeight;
+                    int endGridY = (d.boundingBox.y + d.boundingBox.height) / WorldConstants.GridHeight;
 
-                        for (int gx = startGridX; gx <= endGridX; gx++) {
-                            for (int gy = startGridY; gy <= endGridY; gy++) {
-                                if (!isValidGrid(gx, gy)) continue;
+                    for (int gx = startGridX; gx <= endGridX; gx++) {
+                        for (int gy = startGridY; gy <= endGridY; gy++) {
+                            if (!isValidGrid(gx, gy)) continue;
 
-                                for (Position o : Grids[gx][gy]) {
-                                    if (o == d) continue;
-                                    if (d.boundingBox.intersects(o.boundingBox)) {
-                                        o.collision(d);
-                                    }
+                            for (Position o : Grids[gx][gy]) {
+                                if (o == d) continue;
+                                if (d.boundingBox.intersects(o.boundingBox)) {
+                                    o.collision(d);
                                 }
                             }
                         }
-                    } finally {
-                        latch.countDown();
                     }
-                });
+                } finally {
+                    latch.countDown();
+                }
+            });
             else latch.countDown();
     }
 
     /** Returns true if {@code gx} and {@code gy} is valid coordinates within the 2D array {@linkplain #Grids}. */
     private boolean isValidGrid(int gx, int gy) {
-        return 0 <= gx && gx < WorldConstants.GRID_NUM_X &&
-                0 <= gy && gy < WorldConstants.GRID_NUM_Y;
+        return 0 <= gx && gx < WorldConstants.GRID_NUM_X && 0 <= gy && gy < WorldConstants.GRID_NUM_Y;
     }
 
     /** Returns a read-only copy of this grid world at the current tick. */
@@ -550,8 +536,7 @@ public class GridWorld {
         public ArrayList<Entity.ReadOnlyEntity>[] getEntities(int minX, int minY, int maxX, int maxY) {
             ArrayList<ArrayList<Entity.ReadOnlyEntity>> result = new ArrayList<>();
 
-            int minXGrid = minX / WorldConstants.GridWidth, minYGrid = minY / WorldConstants.GridHeight,
-                    maxXGrid = maxX / WorldConstants.GridWidth, maxYGrid = maxY / WorldConstants.GridHeight;
+            int minXGrid = minX / WorldConstants.GridWidth, minYGrid = minY / WorldConstants.GridHeight, maxXGrid = maxX / WorldConstants.GridWidth, maxYGrid = maxY / WorldConstants.GridHeight;
 
             for (int i = minXGrid; i < maxXGrid; i++)
                 for (int j = minYGrid; j < maxYGrid; j++)

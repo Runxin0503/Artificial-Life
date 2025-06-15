@@ -3,8 +3,6 @@ package Entities.Creature;
 import Entities.Entity;
 import Physics.Position;
 
-import java.awt.*;
-
 /**
  * An Immovable Creature entity in the fragile form of an Egg.
  */
@@ -47,18 +45,21 @@ public class Egg extends Entity {
 
     @Override
     public double getEnergyIfConsumed() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return creature.getEnergyIfConsumed() * timeCount / incubationTime;
     }
 
     /** Returns true if this Entity has to be removed */
     @Override
-    public boolean tick() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public boolean tick(Position pos) {
+        if (isEaten) return true;
+        return ++timeCount == incubationTime;
     }
 
     @Override
     public void creatureInteract(Creature c) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //if it hasn't been eaten already and the creature has space for the egg's meat-mass : delete itself
+//        if (!isEaten && !c.addMeatMass(getEnergyIfConsumed() / Constants.CreatureConstants.Digestion.meatMassToEnergy))
+//            isEaten = true;
     }
 
     @Override
@@ -72,7 +73,7 @@ public class Egg extends Entity {
             int x, int y, int width, int height,
             int incubationTime, double health,
             int ID
-            ) implements ReadOnlyEntity {
+    ) implements ReadOnlyEntity {
 
         public int getSize() {
             return width;
