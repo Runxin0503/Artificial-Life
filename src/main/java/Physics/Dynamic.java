@@ -25,7 +25,7 @@ public final class Dynamic extends Position {
     public final UnitVector2D dir = new UnitVector2D(0);
 
     /** The velocity of how many radians Counterclockwise to turn per tick. */
-    private double angularSpeed;
+    public double angularSpeed;
 
     /** Constructs a new {@code Dynamic} object with assigned position. */
     public Dynamic(int id, double width, double height, int x, int y, double dir, double sizeToMass) {

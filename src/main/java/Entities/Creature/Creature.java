@@ -143,8 +143,74 @@ public class Creature extends Entity {
     @Override
     public boolean tick(Position pos) {
         // TODO implement
-        this.energy -= metabolism;
+        age++;
+        double deltaEnergy = -metabolism;
 
+        //see
+//        stashedSeenEntities
+
+        //run this parallel with brain calculation
+        //change speed & boid herding
+        deltaEnergy -= updateVel(brainOutput[0], brainOutput[1], brainOutput[2], brainOutput[3], brainOutput[8], brainOutput[9], (Dynamic) pos);
+
+        if (health < maxHealth && brainOutput[5] > 0.5) deltaEnergy -= regenHealth();
+
+        //grow size
+        deltaEnergy -= growSize();
+
+        //interact with entity (Eat or Attack)
+        isEating = brainOutput[6] > 0.5;
+
+        //digest food
+        deltaEnergy += stomach.digest(brainOutput[7]);
+
+        //update metabolism
+//        metabolism = Energy.energyCostFormula(stomachFluid, size, strengthAvailable, brain.nodes.size(), brain.synapses.size());
+
+        //update stomach size
+        stomach.updateSize();
+
+        //reset clock when brainOutput[10] > 0.5
+
+        //add delta energy
+        energy = Math.min(maxEnergy, energy + deltaEnergy);
+        if (energy < 0) {
+            health += energy;
+            energy = 0;
+        }
+
+        //check for death (Health 0?)
+//        if (!isPlayer)
+        if (health <= 0 || age >= Utils.Constants.CreatureConstants.Reproduce.maturityDeath)
+            return true;
+
+        //try to reproduce
+        if (brainOutput[4] > 0.5) tryReproduce();
+
+        return false;
+    }
+
+    /** TODO document */
+    private double updateVel(double moveForward, double moveBackward, double turnLeft, double turnRight, double herdYes, double herdNo, Dynamic pos) {
+        // TODO implement
+        return 0;
+    }
+
+    /** TODO document */
+    private double regenHealth() {
+        // TODO implement
+        return 0;
+    }
+
+    /** TODO document */
+    private double growSize() {
+        // TODO implement
+        return 0;
+    }
+
+    /** TODO document */
+    private void tryReproduce() {
+        // TODO implement
     }
 
     /** Completely resets and creates a new set of fixed relative vision rays according to the
@@ -238,25 +304,14 @@ public class Creature extends Entity {
     @Override
     public ReadOnlyEntity getReadOnlyCopy(Position pos) {
         if (!(pos instanceof Dynamic d)) throw new RuntimeException("Invalid position object");
-        return new ReadOnlyCreature(
-                d.boundingBox.x, d.boundingBox.y,
-                d.boundingBox.width, d.boundingBox.height,
-                d.velocity.x, d.velocity.y, d.dir.angle(),
-                health, energy, genome.strength, genome.armour, genome.force,
-                genome.herbivoryAffinity, genome.carnivoryAffinity, genome.offspringInvestment, age,
-                genome.visionDistance, genome.boidSeparationWeight,
-                genome.boidAlignmentWeight, genome.boidCohesionWeight, ID
-        );
+        return new ReadOnlyCreature(d.boundingBox.x, d.boundingBox.y, d.boundingBox.width, d.boundingBox.height, d.velocity.x, d.velocity.y, d.dir.angle(), health, energy, genome.strength, genome.armour, genome.force, genome.herbivoryAffinity, genome.carnivoryAffinity, genome.offspringInvestment, age, genome.visionDistance, genome.boidSeparationWeight, genome.boidAlignmentWeight, genome.boidCohesionWeight, ID);
     }
 
-    public record ReadOnlyCreature(
-            int x, int y, int width, int height,
-            double velocityX, double velocityY, double rotation,
-            double health, double energy, double strength, double armour, double force,
-            double herbivore, double carnivore, double offspringInvestment, double maturity,
-            double visionRange, double separation, double alignment, double cohesion,
-            int ID
-    ) implements ReadOnlyEntity {
+    public record ReadOnlyCreature(int x, int y, int width, int height, double velocityX, double velocityY,
+                                   double rotation, double health, double energy, double strength, double armour,
+                                   double force, double herbivore, double carnivore, double offspringInvestment,
+                                   double maturity, double visionRange, double separation, double alignment,
+                                   double cohesion, int ID) implements ReadOnlyEntity {
 
         public int getSize() {
             return width;
