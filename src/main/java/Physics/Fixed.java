@@ -37,7 +37,7 @@ public final class Fixed extends Position {
     }
 
     @Override
-    double getMass() {
+    public double getMass() {
         return sizeToMass * boundingBox.width * boundingBox.height;
     }
 

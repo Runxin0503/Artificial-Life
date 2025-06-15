@@ -46,7 +46,7 @@ public class Corpse extends Entity {
 
     @Override
     public boolean tick(Position pos) {
-        //TODO decay with half-life principle, then clear the queue for questionable munching
+        // decay with half-life principle, then clear the queue for questionable munching
         this.energy *= CorpseConstants.corpseDecayRate;
         if (energy <= initialEnergy * CorpseConstants.corpseRottenPercentage || pos.boundingBox.width < CorpseConstants.minCorpseSize)
             return true;

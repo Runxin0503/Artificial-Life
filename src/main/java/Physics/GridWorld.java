@@ -120,7 +120,7 @@ public class GridWorld {
                                     deadCreatures.add(cd);
                                 }
                             }
-                            // TODO check if Creature wants to lay an egg.
+                            // TODO check if Creature wants to lay an egg with cd.first().layingEgg boolean var
                         } finally {
                             latch2.countDown();
                         }

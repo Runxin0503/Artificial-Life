@@ -5,10 +5,16 @@ import Utils.Constants.CreatureConstants.*;
 
 class Stomach {
 
-
+    /** TODO document */
     private double stomachSize;
+
+    /** TODO document */
     private double plantMass;
+
+    /** TODO document */
     private double meatMass;
+
+    /** TODO document */
     private double stomachFluid;
 
     Stomach(double size) {
@@ -23,13 +29,13 @@ class Stomach {
     }
 
     /** TODO document */
-    double digest(double deltaStomachFluid) {
-        //TODO implement
-        throw new UnsupportedOperationException("Not supported yet.");
+    void updateSize(double size) {
+        // TODO implement
     }
 
     /** TODO document */
-    void updateSize() {
-        // TODO implement
+    double digest(double deltaStomachFluid) {
+        //TODO implement
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

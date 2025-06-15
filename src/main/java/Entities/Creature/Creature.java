@@ -54,6 +54,9 @@ public class Creature extends Entity {
      * for this Creature in the world. */
     private boolean isEating;
 
+    /** Whether this Creature wants to lay an egg or not. */
+    public boolean layingEgg;
+
     /** Vision Ray Vectors centered at the creature's origin.
      * When {@linkplain #getVisionRays} is called, the function simply shifts the vectors to their
      * world-position. */
@@ -97,6 +100,8 @@ public class Creature extends Entity {
         this.energy = maxEnergy;
         this.health = maxHealth;
 
+        this.layingEgg = false;
+
         this.stomach.reset(size);
 
         resetRelativeRay();
@@ -114,6 +119,8 @@ public class Creature extends Entity {
         this.age = 0;
         this.metabolism = Energy.energyCostFormula(maxHealth, size, genome.strength, brain.getComplexity());
 
+        this.layingEgg = false;
+
         this.stomach.reset(size);
 
         this.energy = maxEnergy * (parentOne.genome.offspringInvestment + parentTwo.genome.offspringInvestment);
@@ -121,7 +128,6 @@ public class Creature extends Entity {
 
         resetRelativeRay();
     }
-
 
     /**
      * Once called, runs the Creature's brain with the Creature {@code c}'s current information stash.
@@ -142,7 +148,6 @@ public class Creature extends Entity {
      * <br>Returns true if this Creature has died. */
     @Override
     public boolean tick(Position pos) {
-        // TODO implement
         age++;
         double deltaEnergy = -metabolism;
 
@@ -156,7 +161,7 @@ public class Creature extends Entity {
         if (health < maxHealth && brainOutput[5] > 0.5) deltaEnergy -= regenHealth();
 
         //grow size
-        deltaEnergy -= growSize();
+        deltaEnergy -= growSize((Dynamic) pos);
 
         //interact with entity (Eat or Attack)
         isEating = brainOutput[6] > 0.5;
@@ -168,7 +173,7 @@ public class Creature extends Entity {
 //        metabolism = Energy.energyCostFormula(stomachFluid, size, strengthAvailable, brain.nodes.size(), brain.synapses.size());
 
         //update stomach size
-        stomach.updateSize();
+        stomach.updateSize(size);
 
         //reset clock when brainOutput[10] > 0.5
 
@@ -185,32 +190,112 @@ public class Creature extends Entity {
             return true;
 
         //try to reproduce
-        if (brainOutput[4] > 0.5) tryReproduce();
+        layingEgg = brainOutput[4] > 0.5;
 
         return false;
     }
 
-    /** TODO document */
+    /**
+     * Updates the creature's linear and angular velocity based on the neural network outputs.
+     *
+     * <p>This method interprets brain output signals to adjust the creature's movement:
+     * forward/backward movement, turning left/right, and herding behavior.
+     * Depending on the values passed, it modifies the velocity vector and angular speed
+     * of the {@link Dynamic} position object.</p>
+     *
+     * @param moveForward Brain output signal for moving forward.
+     * @param moveBackward Brain output signal for moving backward.
+     * @param turnLeft Brain output signal for turning left.
+     * @param turnRight Brain output signal for turning right.
+     * @param herdYes Brain output signal for initiating herding behavior.
+     * @param herdNo Brain output signal for resisting herding behavior.
+     * @param pos The dynamic position and motion state of the creature to be updated.
+     * @return The kinetic energy cost incurred from the applied movement update.
+     */
     private double updateVel(double moveForward, double moveBackward, double turnLeft, double turnRight, double herdYes, double herdNo, Dynamic pos) {
-        // TODO implement
-        return 0;
+        double mass = pos.getMass();
+
+        double deltaVelocity = genome.forceAvailable / mass;
+        double deltaOmega = genome.forceAvailable * (Math.PI / 180) / mass;
+
+//        if (((herdNo > 0.5 && !boids.isEmpty()) || herdYes > 0.5)) {
+//            Vector2D herdingVector = getHerdingVector(boids, (herdYes > 0.5 && herdNo > 0.5) ? (herdYes > herdNo) : (herdYes > 0.5));
+//            double deltaTheta = Equations.angleDistance(pos.dir.angle(), herdingVector.angle());
+//            //if deltaTheta is far away from angularSpeed, adjust angularSpeed towards deltaTheta
+//            if (deltaTheta < 0 != pos.angularSpeed < 0 || Math.abs(deltaTheta) > Boids.angleAdjustmentThreshold) {
+//                //turns to the direction of the herding vector
+//                if (deltaTheta > 0 && pos.angularSpeed < deltaTheta) {
+//                }//keep accelerating positive
+//                else if (deltaTheta < 0 && pos.angularSpeed > deltaTheta) deltaOmega *= -1;
+//            } else {
+//                deltaOmega = 0;
+//            }
+//
+//            //decelerate when velocity vector length is bigger than herding vector length
+//            if (getVelocity() > herdingVector.length() && Math.abs(Equations.angleDistance(speed.angle(), herdingVector.angle())) < Math.toRadians(10))
+//                deltaVelocity *= -1;
+//                //decelerate when velocity vector and herding vector are too far apart
+//            else if (Math.abs(deltaTheta) > Math.toRadians(90) && Math.abs(Equations.angleDistance(direction, speed.angle())) < Math.toRadians(10))
+//                deltaVelocity *= -1;
+//                //stop accelerating when velocity vector and herding velocity vector are close to the same
+//            else if (Math.abs(herdingVector.length() - speed.length()) < deltaVelocity) {
+//                deltaVelocity = 0;
+//            }
+//        } else
+        {
+            if (moveForward > 0.5 && moveBackward > 0.5) {
+                if (moveForward < moveBackward)
+                    deltaVelocity = -deltaVelocity / 2;
+            } else if (moveBackward > 0.5) deltaVelocity = -deltaVelocity / 2;
+            else if (moveForward <= 0.5) deltaVelocity = 0;
+
+            if (turnLeft > 0.5 && turnRight > 0.5) {
+                if (turnRight < turnLeft)
+                    deltaOmega = -deltaOmega;
+            } else if (turnLeft > 0.5) deltaOmega = -deltaOmega;
+            else if (turnRight <= 0.5) deltaOmega = 0;
+        }
+
+        pos.velocity.add(pos.dir.multiplied(deltaVelocity));
+        pos.angularSpeed += deltaOmega;
+        return 0.5 * mass * (deltaVelocity * deltaVelocity + deltaOmega * deltaOmega);
     }
 
-    /** TODO document */
+    /**
+     * Regenerates the creature's health based on a constant health regeneration rate.
+     *
+     * <p>The method increases the creature's health by a fixed amount,
+     * but clamps it to {@code maxHealth} if the regenerated health exceeds the maximum.
+     * It returns the effective energy cost of the health regeneration.</p>
+     *
+     * @return The energy cost spent on regenerating health.
+     */
     private double regenHealth() {
-        // TODO implement
-        return 0;
+        health += Combat.healthRegen;
+        double cost = Combat.healthRegen - Math.max(0, health - maxHealth);
+        health = Math.min(maxHealth, health);
+        return cost;
     }
 
-    /** TODO document */
-    private double growSize() {
-        // TODO implement
-        return 0;
-    }
-
-    /** TODO document */
-    private void tryReproduce() {
-        // TODO implement
+    /**
+     * Grows the creature's size based on its age and genetic growth configuration.
+     *
+     * <p>This method adjusts the creature's size using its genome's logic,
+     * recalculates its maximum health and energy, and applies momentum conservation
+     * by adjusting the velocity according to the mass change.
+     * It returns the energy cost associated with the size increase.</p>
+     *
+     * @param pos The dynamic position of the creature which contains its size and velocity.
+     * @return The energy cost of growing in size, scaled by an armor multiplier.
+     */
+    private double growSize(Dynamic pos) {
+        double sizeBefore = size;
+        double massBefore = pos.getMass();
+        maxEnergy = Energy.sizeToMaxEnergyFormula(size);
+        maxHealth = Combat.sizeToMaxHealth(size);
+        pos.setSize(genome.updateCreatureSize(age));
+        pos.velocity.multiply(pos.getMass() / massBefore);
+        return (size - sizeBefore) * genome.armourMultiplier;
     }
 
     /** Completely resets and creates a new set of fixed relative vision rays according to the
@@ -282,6 +367,7 @@ public class Creature extends Entity {
 
     @Override
     public double getEnergyIfConsumed() {
+        // TODO implement
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -291,6 +377,7 @@ public class Creature extends Entity {
 
     @Override
     public void creatureInteract(Creature c) {
+        // TODO implement
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

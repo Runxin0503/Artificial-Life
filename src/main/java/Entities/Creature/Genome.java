@@ -24,8 +24,8 @@ class Genome implements Serializable {
     /** Immutable value that only changes in the event of a {@linkplain #reset} call */
     double strength, force, armour, armourMultiplier;
 
-    /** mutable value that changes whenever {@linkplain #updateSize} is called. */
-    double visionAvailable;
+    /** mutable value that changes whenever {@linkplain #updateCreatureSize} is called. */
+    double visionAvailable, armourAvailable, forceAvailable, strengthAvailable;
 
     public Genome() {
         reset();
@@ -52,10 +52,6 @@ class Genome implements Serializable {
         this.visionConeAngle = Vision.visionConeAngle(visionValue);
         this.visionRayCount = Vision.visionRayCount(visionValue);
         this.armourMultiplier = Energy.armourGrowthMultiplier(armour);
-    }
-
-    public Genome(Genome dominant, Genome other) {
-        reset(dominant, other);
     }
 
     public void reset(Genome dominant, Genome other) {
@@ -146,25 +142,14 @@ class Genome implements Serializable {
             boidCohesionWeight = Math.random() * Math.abs(first.boidCohesionWeight - second.boidCohesionWeight) + Math.min(first.offspringInvestment, second.offspringInvestment);
     }
 
-    public double updateStrength(double size) {
-        return strength / Combat.sizeToMaxStrength(maxSize) * Combat.sizeToMaxStrength(size);
-    }
-
-    public double updateArmour(double size) {
-        return armour / Combat.sizeToMaxArmour(maxSize) * Combat.sizeToMaxArmour(size);
-    }
-
-    public double updateForce(double size) {
-        return force / Movement.sizeToMaxForce(maxSize) * Movement.sizeToMaxForce(size);
-    }
-
-    public double updateSize(int maturity) {
-        //TODO update mutable fields like armourAvailable, forceAvailable, strengthAvailable, visionAvailable, etc.
-        return Energy.maturingSizeFormula(maturity, minSize, maxSize, growthWeight, growthBias);
-    }
-
-    public int visionUpdate(double size) {
-        return (int) Math.round(Math.min(Vision.maxVisionDistance, visionDistance * Reproduce.scalesWithMaturity(minSize, maxSize, size) + size));
+    public double updateCreatureSize(int maturity) {
+        // update mutable fields like armourAvailable, forceAvailable, strengthAvailable, visionAvailable, etc.
+        double size = Energy.maturingSizeFormula(maturity, minSize, maxSize, growthWeight, growthBias);
+        forceAvailable = force / Movement.sizeToMaxForce(maxSize) * Movement.sizeToMaxForce(size);
+        armourAvailable = armour / Combat.sizeToMaxArmour(maxSize) * Combat.sizeToMaxArmour(size);
+        strengthAvailable = strength / Combat.sizeToMaxStrength(maxSize) * Combat.sizeToMaxStrength(size);
+        visionAvailable = Math.round(Math.min(Vision.maxVisionDistance, visionDistance * Reproduce.scalesWithMaturity(minSize, maxSize, size) + size));
+        return size;
     }
 
     public void biteStrengthIncrease() {

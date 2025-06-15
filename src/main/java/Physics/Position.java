@@ -32,7 +32,7 @@ public abstract class Position extends EntityFactory.EntityFactoryObject {
     abstract boolean isBoundingBoxChange();
 
     /** Returns the mass of this Position for collision calculation. */
-    abstract double getMass();
+    public abstract double getMass();
 
     /**
      * Returns the damage to this Position object from recent collisions.<br>
