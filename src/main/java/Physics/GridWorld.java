@@ -42,7 +42,7 @@ public class GridWorld {
     private final EntityFactory entityFactory;
 
     /** The amount of ticks that has passed since this GridWorld's creation. */
-    private final int timeElapsed;
+    private int timeElapsed;
 
     public GridWorld() {
         creatures = new ArrayList<>();
@@ -83,7 +83,7 @@ public class GridWorld {
             }
         }
 
-        return positionToEntityPair.get(minAreaPosition).first();
+        return minAreaPosition != null ? positionToEntityPair.get(minAreaPosition).first() : null;
     }
 
     /** Completes all actions required of the world in one tick. */
@@ -177,7 +177,9 @@ public class GridWorld {
         for (Pair<? extends Entity, ? extends Position> value : positionToEntityPair.values())
             if (!(value.first() instanceof Creature)) executor.submit(() -> {
                 try {
-                    if (value.first().tick(value.second())) removedPositions.add(value.second());
+                    synchronized (removedPositions) {
+                        if (value.first().tick(value.second())) removedPositions.add(value.second());
+                    }
                 } finally {
                     latch5.countDown();
                 }
@@ -252,6 +254,8 @@ public class GridWorld {
                 numCreatures++;
             } else if (pair.first() instanceof Egg) numCreatures++;
         }
+
+        timeElapsed++;
     }
 
     /** Adds the {@code pos} position object to Grid. In other words,
@@ -263,7 +267,8 @@ public class GridWorld {
 
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
-                if (isValidGrid(x, y)) Grids[x][y].add(pos);
+                assert isValidGrid(x, y) : "Grid coordinates out of bounds: (" + x + ", " + y + ")";
+                Grids[x][y].add(pos);
             }
         }
     }
@@ -272,12 +277,13 @@ public class GridWorld {
      * removes all references to {@code pos} in every Grid cell that intersects / contains
      * {@code pos's} bounding box. */
     private void removePosition(Position pos) {
-        int minX = Math.max(0, pos.boundingBox.x / WorldConstants.GridWidth), maxX = Math.min(WorldConstants.GRID_NUM_X, (int) Math.ceil(pos.boundingBox.getMaxX() / WorldConstants.GridWidth));
-        int minY = Math.max(0, pos.boundingBox.y / WorldConstants.GridHeight), maxY = Math.min(WorldConstants.GRID_NUM_Y, (int) Math.ceil(pos.boundingBox.getMaxY() / WorldConstants.GridHeight));
+        int minX = Math.max(0, pos.boundingBox.x / WorldConstants.GridWidth), maxX = Math.min(WorldConstants.GRID_NUM_X - 1, (int) Math.ceil(pos.boundingBox.getMaxX() / WorldConstants.GridWidth));
+        int minY = Math.max(0, pos.boundingBox.y / WorldConstants.GridHeight), maxY = Math.min(WorldConstants.GRID_NUM_Y - 1, (int) Math.ceil(pos.boundingBox.getMaxY() / WorldConstants.GridHeight));
 
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
-                if (isValidGrid(x, y)) Grids[x][y].remove(pos);
+                assert isValidGrid(x, y) : "Grid coordinates out of bounds: (" + x + ", " + y + ")";
+                Grids[x][y].remove(pos);
             }
         }
     }

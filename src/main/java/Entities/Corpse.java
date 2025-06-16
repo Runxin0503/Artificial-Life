@@ -3,7 +3,6 @@ package Entities;
 import Entities.Creature.Creature;
 import Physics.Dynamic;
 import Physics.Position;
-import Utils.Constants;
 import Utils.Constants.CorpseConstants;
 
 import java.util.ArrayList;
@@ -51,14 +50,14 @@ public class Corpse extends Entity {
         if (energy <= initialEnergy * CorpseConstants.corpseRottenPercentage || pos.boundingBox.width < CorpseConstants.minCorpseSize)
             return true;
 
-        queuedQuestionableMunching.sort((o1, o2) -> (int) (100 * (o1.getDamage() - o2.getDamage())));
-        while (energy > 0 && !queuedQuestionableMunching.isEmpty()) {
-            Creature c = queuedQuestionableMunching.removeLast();
-            double damageDealt = Math.min(energy, c.getDamage());
-            if (c.addMeatMass(damageDealt / Constants.CreatureConstants.Digestion.meatMassToEnergy))
-                setEnergy(energy - damageDealt);
-        }
-        queuedQuestionableMunching.clear();
+        // queuedQuestionableMunching.sort((o1, o2) -> (int) (100 * (o1.getDamage() - o2.getDamage())));
+        // while (energy > 0 && !queuedQuestionableMunching.isEmpty()) {
+        //     Creature c = queuedQuestionableMunching.removeLast();
+        //     double damageDealt = Math.min(energy, c.getDamage());
+        //     if (c.addMeatMass(damageDealt / Constants.CreatureConstants.Digestion.meatMassToEnergy))
+        //         setEnergy(energy - damageDealt);
+        // }
+        // queuedQuestionableMunching.clear();
 
         return false;
     }
