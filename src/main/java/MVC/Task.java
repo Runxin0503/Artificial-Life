@@ -1,6 +1,6 @@
 package MVC;
 
-class Task {
+final class Task {
     private final TaskType taskType;
     private final Object[] value;
 

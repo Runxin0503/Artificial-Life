@@ -1,11 +1,10 @@
 package Entities;
 
+import java.util.ArrayList;
+
 import Entities.Creature.Creature;
 import Physics.Position;
-import Utils.Constants;
 import Utils.Constants.BushConstants;
-
-import java.util.ArrayList;
 
 /**
  * An Immovable Plant Entity that produces berries passively <br>
@@ -29,7 +28,13 @@ public class Bush extends Entity {
         super(id);
         reset(maxBerries);
     }
-
+    
+    /**
+     * Resets the bush to a new maxBerries value and randomizes the number of berries
+     * currently on the bush.
+     *
+     * @param maxBerries The maximum number of berries this bush can have.
+     */
     public void reset(int maxBerries) {
         this.maxBerries = maxBerries;
 

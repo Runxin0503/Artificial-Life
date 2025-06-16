@@ -1,5 +1,14 @@
 package MVC;
 
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.ResourceBundle;
+
 import Entities.Bush;
 import Entities.Corpse;
 import Entities.Creature.Creature;
@@ -23,11 +32,7 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 
-import java.awt.*;
-import java.net.URL;
-import java.util.*;
-
-public class CanvasControl implements Initializable {
+public final class CanvasControl implements Initializable {
 
     /** When true, this object will redraw the world model at the next available tick. */
     private boolean redrawModel = false;
@@ -246,8 +251,7 @@ public class CanvasControl implements Initializable {
     /** A method that draws the world model according to {@code model}. */
     private void drawCanvas() {
         synchronized (canvas) {
-            GridWorld.ReadOnlyWorld model;
-            model = this.model.get();
+            GridWorld.ReadOnlyWorld model = this.model.get();
 
             int minX = Math.clamp((int) Math.round((Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTx()) / canvasTransform.getMxx()), Constants.WindowConstants.CANVAS_PADDING, Constants.WorldConstants.xBound);
             int minY = Math.clamp((int) Math.round((Constants.WindowConstants.CANVAS_PADDING - canvasTransform.getTy()) / canvasTransform.getMyy()), Constants.WindowConstants.CANVAS_PADDING, Constants.WorldConstants.yBound);

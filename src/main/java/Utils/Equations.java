@@ -4,7 +4,7 @@ package Utils;
  * Utility class for common mathematical equations used in simulations,
  * particularly in biological and physical modeling.
  */
-public class Equations {
+public final class Equations {
 
     /**
      * Computes a sigmoid function bounded by lower and upper values.

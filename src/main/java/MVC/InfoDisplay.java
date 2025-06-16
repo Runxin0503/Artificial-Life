@@ -1,5 +1,9 @@
 package MVC;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.Set;
+
 import Entities.Bush;
 import Entities.Corpse;
 import Entities.Creature.Creature;
@@ -20,11 +24,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.Set;
-
-public class InfoDisplay implements Initializable {
+public final class InfoDisplay implements Initializable {
 
     /** Updates the view to show world info */
     @FXML

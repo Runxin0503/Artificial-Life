@@ -10,7 +10,7 @@ import Utils.Pair;
 import java.util.ArrayList;
 
 /** A static Factory class that re-uses Entity and Position objects to minimize pressure on Java's garbage collector. */
-public class EntityFactory {
+public final class EntityFactory {
 
     /** Stores how many objects this class has created that's both used and unused. */
     private int objectCounter = 0;
@@ -145,7 +145,6 @@ public class EntityFactory {
 
         if (creaturePair.isEmpty()) {
             Creature c = new Creature(objectCounter, NeuralNet.EvolutionConstants);
-            Egg e = new Egg(objectCounter, c);
 
             Dynamic d = new Dynamic(objectCounter,
                     c.getSize(), c.getSize(),

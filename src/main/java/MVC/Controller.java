@@ -1,11 +1,11 @@
 package MVC;
 
-import Physics.GridWorld;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-class Controller implements Runnable {
+import Physics.GridWorld;
+
+final class Controller implements Runnable {
 
     /** The view module associated with this Controller in the MVC pairing */
     private final MainView view;
@@ -45,18 +45,20 @@ class Controller implements Runnable {
             Task task;
             while ((task = view.pollTaskQueue()) != null) {
                 System.out.println("NEW TASK: " + task.getType());
-                if (task.getType() == Task.TaskType.RUN_CONTINUOUSLY) {
-                    runContinuously = true;
-                } else if (task.getType() == Task.TaskType.STEP) {
-                    stepWorld();
-                    updateViewWorld(false);
-                } else if (task.getType() == Task.TaskType.STOP_RUNNING) {
-                    updateViewWorld(false);
-                    runContinuously = false;
-                } else if (task.getType() == Task.TaskType.CREATE_NEW_WORLD) {
-                    createNewWorld();
-                } else if (task.getType() == Task.TaskType.LOAD_WORLD) {
-                    loadWorld((String) task.getValue()[0]);
+                if (null != task.getType()) switch (task.getType()) {
+                    case RUN_CONTINUOUSLY -> runContinuously = true;
+                    case STEP -> {
+                        stepWorld();
+                        updateViewWorld(false);
+                    }
+                    case STOP_RUNNING -> {
+                        updateViewWorld(false);
+                        runContinuously = false;
+                    }
+                    case CREATE_NEW_WORLD -> createNewWorld();
+                    case LOAD_WORLD -> loadWorld((String) task.getValue()[0]);
+                    default -> {
+                    }
                 }
             }
 

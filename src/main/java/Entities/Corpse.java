@@ -1,17 +1,17 @@
 package Entities;
 
+import java.util.ArrayList;
+
 import Entities.Creature.Creature;
 import Physics.Dynamic;
 import Physics.Position;
 import Utils.Constants.CorpseConstants;
 
-import java.util.ArrayList;
-
 /** The dead corpse of a {@link Creature}. Passively rots away, decreasing in size and mass.<br>
  * The decay rate follows some perct of the current mass, meaning it will follow the curve 1/x, decaying
  * much faster initially than at the end.<br>
  * */
-public class Corpse extends Entity {
+public final class Corpse extends Entity {
 
     /** The current energy bar of this Corpse, or how much nutrient is left in this Corpse before it
      * fully decays. */
@@ -75,18 +75,22 @@ public class Corpse extends Entity {
         return new ReadOnlyCorpse(d.boundingBox.x, d.boundingBox.y, d.boundingBox.width, d.boundingBox.height, d.velocity.x, d.velocity.y, d.dir.angle(), energy, initialEnergy, ID);
     }
 
+    /** A read-only view of a Corpse's state at a point in time. */
     public record ReadOnlyCorpse(int x, int y, int width, int height, double velocityX, double velocityY,
                                  double rotation, double energy, double initialEnergy,
                                  int ID) implements ReadOnlyEntity {
 
+        /** Returns the width of the corpse as its size. */
         public int getSize() {
             return width;
         }
 
+        @Override
         public int getX() {
             return x + width / 2;
         }
 
+        @Override
         public int getY() {
             return y + height / 2;
         }

@@ -29,3 +29,7 @@ bin/
 .DS_Store
 **/.gradle/
 **/build/
+
+### Maven ###
+/target/
+**/target/

@@ -1,5 +1,13 @@
 package Physics;
 
+import java.awt.Rectangle;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+
 import Entities.Bush;
 import Entities.Corpse;
 import Entities.Creature.Creature;
@@ -10,19 +18,11 @@ import Utils.Constants.WorldConstants;
 import Utils.Equations;
 import Utils.Pair;
 
-import java.awt.*;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-
 /**
  *  The main world object containing every entity existing in this world.
  * <br>A 2D world of grid cells where {@link Position} are stored and spatial partitioned
  * for more efficient collision processing. */
-public class GridWorld {
+public final class GridWorld {
 
     /** Keeps track of the total number of Creatures (and Eggs) in this world. */
     private int numCreatures;

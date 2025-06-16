@@ -1,5 +1,9 @@
 package MVC;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.function.Consumer;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -7,11 +11,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.text.Text;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.function.Consumer;
-
-public class ControlPanel implements Initializable {
+public final class ControlPanel implements Initializable {
 
     /** disables {@link #advanceStep} when its toggled, adds a runContinuously/stopRunning Task to Controller TaskQueue  */
     @FXML

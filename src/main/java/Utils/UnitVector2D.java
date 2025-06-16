@@ -1,7 +1,7 @@
 package Utils;
 
 
-public class UnitVector2D extends Vector2D {
+public final class UnitVector2D extends Vector2D {
 
     public UnitVector2D(double angle) {
         super(Math.cos(angle), Math.sin(angle));

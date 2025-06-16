@@ -1,5 +1,11 @@
 package MVC;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.ResourceBundle;
+
 import Entities.Entity;
 import Physics.GridWorld;
 import Utils.Constants;
@@ -19,13 +25,7 @@ import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.ResourceBundle;
-
-public class MainView extends Application implements Initializable {
+public final class MainView extends Application implements Initializable {
 
     @FXML
     private Line divider;

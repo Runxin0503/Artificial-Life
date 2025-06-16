@@ -13,7 +13,7 @@ import java.util.function.Consumer;
  *
  * @param <T> the type of the referenced value
  */
-public class Ref<T> {
+public final class Ref<T> {
     private T value;
     private ArrayList<Consumer<T>> onUpdates;
 
