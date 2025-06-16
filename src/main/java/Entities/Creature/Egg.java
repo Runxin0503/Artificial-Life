@@ -18,7 +18,8 @@ public class Egg extends Entity {
     /** The total time (ticks) it will take for this Egg to hatch.
      * <br>Egg hatches when {@code timeCount == incubationTime}. */
     private int incubationTime;
-    private boolean isEaten;
+    private boolean isEaten;    /** Time left until egg hatches */
+    protected int timeLeft;
 
     public Egg(int id, Creature c) {
         super(id);

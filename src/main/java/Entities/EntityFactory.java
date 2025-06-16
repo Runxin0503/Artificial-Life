@@ -1,13 +1,16 @@
 package Entities;
 
+import java.util.ArrayList;
+
 import Entities.Creature.Creature;
 import Entities.Creature.Egg;
 import Physics.Dynamic;
 import Physics.Fixed;
-import Utils.Constants.*;
+import Utils.Constants.BushConstants;
+import Utils.Constants.CorpseConstants;
+import Utils.Constants.CreatureConstants;
+import Utils.Constants.WorldConstants;
 import Utils.Pair;
-
-import java.util.ArrayList;
 
 /** A static Factory class that re-uses Entity and Position objects to minimize pressure on Java's garbage collector. */
 public final class EntityFactory {
@@ -144,7 +147,7 @@ public final class EntityFactory {
         int y = (int) (Math.random() * WorldConstants.yBound);
 
         if (creaturePair.isEmpty()) {
-            Creature c = new Creature(objectCounter, NeuralNet.EvolutionConstants);
+            Creature c = new Creature(objectCounter);
 
             Dynamic d = new Dynamic(objectCounter,
                     c.getSize(), c.getSize(),
@@ -155,7 +158,7 @@ public final class EntityFactory {
             return cd;
         } else {
             Pair<Creature, Dynamic> cd = creaturePair.removeFirst();
-            cd.first().reset(NeuralNet.EvolutionConstants);
+            cd.first().reset();
             cd.second().reset(cd.first().getSize(), cd.first().getSize(),
                     x, y, randAngle, CreatureConstants.Movement.sizeMovementConstant);
             incubatedCreaturePair.add(cd);

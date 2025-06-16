@@ -1,5 +1,9 @@
 package Utils;
 
+import java.awt.Polygon;
+import java.awt.Rectangle;
+import java.io.Serializable;
+
 import Genome.Activation;
 import Genome.Cost;
 import Genome.Optimizer;
@@ -9,9 +13,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
-
-import java.awt.*;
-import java.io.Serializable;
 
 /**
  * Contains constants used across the simulation, including configuration for creatures,
@@ -65,7 +66,7 @@ public class Constants implements Serializable {
          * Configuration settings for the world simulation, including speed, frame rate, and debug mode.
          */
         public static class Settings {
-            /** Maximum movement speed for any creature or process. */
+            /** Maximum movement speed for any creature. */
             public static final int maxSpeed = 100;
             /** Maximum number of threads allowed for processing. */
             public static final int maxThread = 100;
@@ -595,6 +596,8 @@ public class Constants implements Serializable {
     public static class NeuralNet {
         /** How frequently per tick to prompt the Neural Network for its outputs. */
         public static final int PromptInterval = 1;
+        /** The period of the internal clock, which is used to determine when to reset the clock. */
+        public static final int internalClockPeriod = 60 * 20;
 
         /** The length of the input & output vector for the Neural Network. */
         private static final int inputNum = 35, outputNum = 11;

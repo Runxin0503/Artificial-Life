@@ -1,19 +1,23 @@
 package Entities.Creature;
 
 
+import java.awt.Rectangle;
+import java.awt.geom.Line2D;
+import java.util.ArrayList;
+
 import Entities.Entity;
-import Evolution.Constants;
 import Genome.NN;
 import Physics.Dynamic;
 import Physics.Position;
+import Utils.Constants.CreatureConstants;
 import Utils.Constants.CreatureConstants.Combat;
 import Utils.Constants.CreatureConstants.Energy;
+import Utils.Constants.NeuralNet;
+import Utils.Constants.Physics;
 import Utils.Constants.WorldConstants;
+import Utils.Equations;
+import Utils.Pair;
 import Utils.Vector2D;
-
-import java.awt.*;
-import java.awt.geom.Line2D;
-import java.util.ArrayList;
 
 /** A Creature Entity that harbors a brain, stomach, and vision system and is the main
  * living organism of this world.<br>
@@ -66,6 +70,14 @@ public class Creature extends Entity {
      * Modified and maintained with {@link #getStashedSeenEntities}, queried by {@linkplain #runBrain}. */
     private final ArrayList<Entity> stashedSeenEntities = new ArrayList<>();
 
+    /** Entity Objects that have intersected with this Creature's vision rays, organized by type.
+     * Modified and maintained by {@link Physics.GridWorld}, queried by {@linkplain #runBrain}. */
+    private final Pair<? extends Entity, ? extends Position>[] rayHits = new Pair[4];
+    
+    /** Count of entities that have intersected with this Creature's vision rays, organized by type.
+     * Modified and maintained by {@link Physics.GridWorld}, queried by {@linkplain #runBrain}. */
+    private final int[] rayHitCounts = new int[4];
+
     /** The Genome component of this Creature, stores all gene data when reproduction occurs. */
     final Genome genome = new Genome();
 
@@ -78,9 +90,11 @@ public class Creature extends Entity {
     /** Stores the latest output of the brain. */
     private double[] brainOutput;
 
-    public Creature(int id, Constants Constants) {
+    private double internalClockCountdown = 0;
+
+    public Creature(int id) {
         super(id);
-        reset(Constants);
+        reset();
     }
 
     public Creature(int id, Creature parentOne, Creature parentTwo) {
@@ -88,8 +102,8 @@ public class Creature extends Entity {
         reset(parentOne, parentTwo);
     }
 
-    public void reset(Constants Constants) {
-        this.brain = NN.getDefaultNeuralNet(Constants);//Math.random()<0.6?Genome.defaultGenome():
+    public void reset() {
+        this.brain = NN.getDefaultNeuralNet(NeuralNet.EvolutionConstants);//Math.random()<0.6?Genome.defaultGenome():
         this.genome.reset();
 
         this.size = genome.minSize;
@@ -135,9 +149,74 @@ public class Creature extends Entity {
      * even if {@code c}'s information stash changes after calling this function, the input
      * array (and hence output array) of this Creature's brain won't change.
      */
-    public static void runBrain(Creature c) {
-        // TODO implement
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void runBrain(Dynamic pos) {
+        // TODO check all this vvv
+        double[] input = new double[NeuralNet.EvolutionConstants.getInputNum()];
+        Pair<? extends Entity, ? extends Position> zero = rayHits[0], one = rayHits[1], two = rayHits[2], three = rayHits[3];
+
+        // Use pos to get x, y, direction
+        double x = pos.x;
+        double y = pos.y;
+        double direction = pos.dir.angle();
+
+        if (zero != null) {
+            Position zeroPos = zero.second();
+            input[0] = Equations.dist(pos.x, pos.y, zeroPos.x, zeroPos.y) - 1;
+            input[1] = ((Dynamic) zeroPos).velocity.length();
+            double objAngle = (Math.atan2((zeroPos.y - y), (zeroPos.x - x)) + Math.PI * 2) % (Math.PI * 2);
+            input[2] = (direction - objAngle) / (Math.PI * 2);
+            input[3] = (objAngle - direction) / (Math.PI * 2);
+            input[4] = zero.first().getEnergyIfConsumed();
+            input[5] = ((Creature) zero.first()).health / Math.max(0.01, ((Creature) zero.first()).getArmour() - getDamage());
+            input[6] = rayHitCounts[0];
+        }
+        if (one != null) {
+            Position onePos = rayHits[1].second();
+            input[7] = Equations.dist(pos.x, pos.y, onePos.x, onePos.y) - 1;
+            double objAngle = (Math.atan2((onePos.y - y), (onePos.x - x)) + Math.PI * 2) % (Math.PI * 2);
+            input[8] = (direction - objAngle) / (Math.PI * 2);
+            input[9] = (objAngle - direction) / (Math.PI * 2);
+            input[10] = one.first().getEnergyIfConsumed();
+            input[11] = one.second().boundingBox.width;
+            input[12] = rayHitCounts[1];
+        }
+        if (two != null) {
+            Position twoPos = rayHits[2].second();
+            input[13] = Equations.dist(pos.x, pos.y, twoPos.x, twoPos.y) - 1;
+            if (input[13] < size * 1.5) input[13] = -1;
+            double objAngle = (Math.atan2((twoPos.y - y), (twoPos.x - x)) + Math.PI * 2) % (Math.PI * 2);
+            input[14] = (direction - objAngle) / (Math.PI * 2);
+            input[15] = (objAngle - direction) / (Math.PI * 2);
+            input[16] = two.first().getEnergyIfConsumed();
+            input[17] = two.second().boundingBox.width;
+            input[18] = rayHitCounts[2];
+        }
+        if (three != null) {
+            Position threePos = rayHits[3].second();
+            input[19] = Equations.dist(pos.x, pos.y, threePos.x, threePos.y) - 1;
+            double objAngle = (Math.atan2((threePos.y - y), (threePos.x - x)) + Math.PI * 2) % (Math.PI * 2);
+            input[20] = (direction - objAngle) / (Math.PI * 2);
+            input[21] = (objAngle - direction) / (Math.PI * 2);
+            input[22] = three.first().getEnergyIfConsumed();
+            input[23] = ((Egg) three.first()).timeLeft;
+            input[24] = rayHitCounts[3];
+        }
+
+        input[25] = Math.min(1.0, pos.velocity.length() / genome.forceAvailable * (pos.getMass() * Physics.frictionParallel)) * 2 - 1;
+        input[26] = pos.angularSpeed / (Math.PI * 2);
+
+        input[27] = (energy / maxEnergy - 0.5) * 2;
+        input[28] = (health / maxHealth - 0.5) * 2;
+        input[29] = (size / genome.maxSize - 0.5) * 2;
+
+        input[30] = metabolism;
+        input[31] = genome.strengthAvailable;
+        input[32] = ((stomach.plantMass + stomach.meatMass) / stomach.stomachSize - 0.5) * 2;
+        input[33] = stomach.isStarving() ? 1 : -1;
+        input[34] = Math.sin(internalClockCountdown / NeuralNet.internalClockPeriod * Math.PI * 2); // internal clock sine wave
+
+        //output: Move Forward | Move Backward | Turn Left | Turn Right | Mate | Regenerate Health | Eat | Digestion Rate | Herd | Separate
+        this.brainOutput = brain.calculateWeightedOutput(input);
     }
 
     /** Allow this Creature to perform all actions in a tick,
@@ -186,11 +265,16 @@ public class Creature extends Entity {
 
         //check for death (Health 0?)
 //        if (!isPlayer)
-        if (health <= 0 || age >= Utils.Constants.CreatureConstants.Reproduce.maturityDeath)
+        if (health <= 0 || age >= CreatureConstants.Reproduce.maturityDeath)
             return true;
 
         //try to reproduce
         layingEgg = brainOutput[4] > 0.5;
+        
+        internalClockCountdown++;
+        if (internalClockCountdown >= NeuralNet.internalClockPeriod)
+            internalClockCountdown = 0;
+    
 
         return false;
     }
@@ -349,6 +433,16 @@ public class Creature extends Entity {
     /** Returns the reference to an ArrayList of the seen entities, can only be used by {@link Physics.GridWorld}. */
     public ArrayList<Entity> getStashedSeenEntities() {
         return stashedSeenEntities;
+    }
+
+    /** Returns the reference to the array storing ray hit entities, can only be used by {@link Physics.GridWorld}. */
+    public Pair<? extends Entity, ? extends Position>[] getRayHits() {
+        return rayHits;
+    }
+
+    /** Returns the reference to the array storing ray hit counts, can only be used by {@link Physics.GridWorld}. */
+    public int[] getRayHitCounts() {
+        return rayHitCounts;
     }
 
     /** Calculates the creature's muscle acceleration vector based on the last output of the brain

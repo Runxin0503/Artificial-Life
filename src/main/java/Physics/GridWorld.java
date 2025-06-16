@@ -22,7 +22,7 @@ import Utils.Pair;
  *  The main world object containing every entity existing in this world.
  * <br>A 2D world of grid cells where {@link Position} are stored and spatial partitioned
  * for more efficient collision processing. */
-public final class GridWorld {
+public class GridWorld {
 
     /** Keeps track of the total number of Creatures (and Eggs) in this world. */
     private int numCreatures;
@@ -104,7 +104,7 @@ public final class GridWorld {
             executor.submit(() -> {
                 try {
                     // 1. run brain
-                    Creature.runBrain(cd.first());
+                    cd.first().runBrain(cd.second());
                     // 2. Update velocity and Body tasks (both run parallel after runBrain())
                     executor.submit(() -> {
                         try {
@@ -368,7 +368,7 @@ public final class GridWorld {
                     ArrayList<Line2D> visionRays = new ArrayList<>();
                     cd.first().getVisionRays(visionRays, cd.second());
 
-                    addSeenEntities(visionRays, cd.first().getStashedSeenEntities(), cd.second());
+                    addSeenEntities(visionRays, cd.first().getStashedSeenEntities(), cd);
                 } finally {
                     latch.countDown();
                 }
@@ -376,7 +376,14 @@ public final class GridWorld {
     }
 
     /** Adds all entities intersecting with {@code visionRays} to it */
-    private void addSeenEntities(ArrayList<Line2D> visionRays, ArrayList<Entity> seenEntities, Position ignore) {
+    private void addSeenEntities(ArrayList<Line2D> visionRays, ArrayList<Entity> seenEntities, Pair<Creature, Dynamic> cd) {
+        // Initialize arrays for tracking potential hits for each type
+        double[] closestDistances = new double[4];
+        for (int i = 0; i < 4; i++) {
+            closestDistances[i] = Double.MAX_VALUE;
+        }
+
+        // Process each ray
         for (Line2D ray : visionRays) {
             Rectangle2D rayBounds = ray.getBounds2D();
 
@@ -386,17 +393,47 @@ public final class GridWorld {
             int minGridY = (int) (rayBounds.getMinY() / WorldConstants.GridHeight);
             int maxGridY = (int) (rayBounds.getMaxY() / WorldConstants.GridHeight);
 
+            // Check each grid cell the ray passes through
             for (int gx = minGridX; gx <= maxGridX; gx++) {
                 for (int gy = minGridY; gy <= maxGridY; gy++) {
                     if (!isValidGrid(gx, gy)) continue; // Out-of-bounds safety
 
                     ArrayList<Position> cell = Grids[gx][gy];
                     for (Position pos : cell) {
-                        Entity entity = positionToEntityPair.get(pos).first();
+                        if (pos == cd.second()) continue; // Skip self
+
+                        Pair<? extends Entity, ? extends Position> pair = positionToEntityPair.get(pos);
+                        Entity entity = pair.first();
                         if (seenEntities.contains(entity)) continue;
 
                         if (ray.intersects(pos.boundingBox)) {
+                            // Add to seen entities list
                             seenEntities.add(entity);
+
+                            // Calculate distance between centers
+                            double distance = Equations.dist(cd.second().x, cd.second().y, pos.x, pos.y);
+
+                            // Determine entity type and update appropriate counters
+                            int typeIndex;
+                            if (entity instanceof Creature) {
+                                typeIndex = 0;
+                            } else if (entity instanceof Bush) {
+                                typeIndex = 1;
+                            } else if (entity instanceof Corpse) {
+                                typeIndex = 2;
+                            } else if (entity instanceof Egg) {
+                                typeIndex = 3;
+                            } else {
+                                continue;
+                            }
+
+                            cd.first().getRayHitCounts()[typeIndex]++;
+
+                            // If this is the closest entity of its type seen so far, update it
+                            if (distance < closestDistances[typeIndex]) {
+                                closestDistances[typeIndex] = distance;
+                                cd.first().getRayHits()[typeIndex] = pair;
+                            }
                         }
                     }
                 }
@@ -538,7 +575,6 @@ public final class GridWorld {
          * @param maxY Maximum Y coordinate in world (exclusive)
          * @return An array of entity lists located in the specified bounding box.
          */
-        @SuppressWarnings("unchecked")
         public ArrayList<Entity.ReadOnlyEntity>[] getEntities(int minX, int minY, int maxX, int maxY) {
             ArrayList<ArrayList<Entity.ReadOnlyEntity>> result = new ArrayList<>();
 

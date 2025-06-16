@@ -1,21 +1,20 @@
 package Entities.Creature;
 
-import Utils.Constants.*;
-import Utils.Constants.CreatureConstants.*;
+import Utils.Constants.CreatureConstants.Digestion;
 
 class Stomach {
 
     /** TODO document */
-    private double stomachSize;
+    double stomachSize;
 
     /** TODO document */
-    private double plantMass;
+    double plantMass;
 
     /** TODO document */
-    private double meatMass;
+    double meatMass;
 
     /** TODO document */
-    private double stomachFluid;
+    double stomachFluid;
 
     Stomach(double size) {
         reset(size);
@@ -37,5 +36,9 @@ class Stomach {
     double digest(double deltaStomachFluid) {
         //TODO implement
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    boolean isStarving() {
+        return (plantMass + meatMass) / stomachSize < 0.1;
     }
 }
