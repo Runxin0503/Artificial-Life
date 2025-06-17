@@ -167,7 +167,7 @@ public class Creature extends Entity {
             input[2] = (direction - objAngle) / (Math.PI * 2);
             input[3] = (objAngle - direction) / (Math.PI * 2);
             input[4] = zero.first().getEnergyIfConsumed();
-            input[5] = ((Creature) zero.first()).health / Math.max(0.01, ((Creature) zero.first()).getArmour() - getDamage());
+            input[5] = ((Creature) zero.first()).health / Math.max(0.01, ((Creature) zero.first()).genome.armourAvailable - genome.strengthAvailable);
             input[6] = rayHitCounts[0];
         }
         if (one != null) {
