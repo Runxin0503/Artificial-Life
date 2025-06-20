@@ -176,7 +176,7 @@ class Genome implements Serializable {
         forceAvailable = force / Movement.sizeToMaxForce(maxSize) * Movement.sizeToMaxForce(size);
         armourAvailable = armour / Combat.sizeToMaxArmour(maxSize) * Combat.sizeToMaxArmour(size);
         strengthAvailable = strength / Combat.sizeToMaxStrength(maxSize) * Combat.sizeToMaxStrength(size);
-        visionAvailable = Math.round(Math.min(Vision.maxVisionDistance, visionDistance * Reproduce.scalesWithMaturity(minSize, maxSize, size) + size));
+        visionAvailable = Math.round(Math.min(Vision.maxVisionDistance, visionDistance * Reproduce.scalesWithMaturity(minSize, maxSize, size)));
         return size;
     }
 

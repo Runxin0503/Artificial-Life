@@ -40,7 +40,6 @@ public final class ControlPanel implements Initializable {
 
         speedSlider.setValue(100);
         speedSlider.setMax(1000);
-        speedSliderDisplay.setText("100 steps/sec");
 
         continuousStep.setOnAction(e -> {
             if (continuousStep.isSelected()) {

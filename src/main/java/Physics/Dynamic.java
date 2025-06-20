@@ -19,7 +19,7 @@ public final class Dynamic extends Position {
     final Rectangle prevBoundingBox = new Rectangle();
 
     /** A 2D Vector representing both the direction and magnitude of the velocity of this Dynamic Object. */
-    public Vector2D velocity;
+    public Vector2D velocity = new Vector2D(0,0);
 
     /** A 2D Unit Vector representing the direction this Dynamic Object is facing. */
     public final UnitVector2D dir = new UnitVector2D(0);
@@ -42,6 +42,8 @@ public final class Dynamic extends Position {
         this.x = x;
         this.y = y;
         this.sizeToMass = sizeToMass;
+        this.velocity.x = 0;
+        this.velocity.y = 0;
     }
 
     /** Constructs a new {@code Dynamic} object with assigned position. */

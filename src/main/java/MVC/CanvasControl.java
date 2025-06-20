@@ -102,7 +102,7 @@ public final class CanvasControl implements Initializable {
                     // Update FPS every 0.2 seconds
                     if (now - lastFrameTime >= 200_000_000) { // 0.5 seconds = 500,000,000 nanoseconds
                         double fps = frameCount / ((now - lastFrameTime) / 1_000_000_000.0);
-                        fpsCounter.setText(String.valueOf(((int) fps * 100) / 100.0));
+                        fpsCounter.setText(Double.toString(((int) fps * 100) / 100.0));
                         frameCount = 0;
                         lastFrameTime = now;
                     }

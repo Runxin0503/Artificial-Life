@@ -64,18 +64,22 @@ final class Controller implements Runnable {
 
             if (runContinuously) {
                 int simSpeed = view.pollSimSpeed();
-                if (simSpeed == 1000) {
-                    // step world without waiting
-                } else if (simSpeed == 0) {
-                    // don't step world at all, try to execute tasks
-                    continue;
-                } else {
-                    //wait for 1000/simSpeed - (time it took to execute tasks)
-                    try {
-                        Thread.sleep(Math.max(0, 1000 / simSpeed - (millis - System.currentTimeMillis())));
-                    } catch (InterruptedException ignored) {
+                switch (simSpeed) {
+                    case 1000 -> {
+                    }
+                    case 0 -> {
+                        // don't step world at all, try to execute tasks
+                        continue;
+                    }
+                    default -> {
+                        //wait for 1000/simSpeed - (time it took to execute tasks)
+                        try {
+                            Thread.sleep(Math.max(0, 1000 / simSpeed - (millis - System.currentTimeMillis())));
+                        } catch (InterruptedException ignored) {
+                        }
                     }
                 }
+                // step world without waiting
                 stepWorld();
                 stepsPerSecCatcher = System.currentTimeMillis();
                 if ((stepsPerSecCatcher - stepsPerSec) >= 1000) {

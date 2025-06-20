@@ -133,4 +133,14 @@ public class Vector2D {
     public Object clone() {
         return new Vector2D(this.x, this.y);
     }
+
+    /**
+     * Checks whether both components of the vector are finite values.
+     *
+     * @return {@code true} if both {@code x} and {@code y} are finite (not NaN or infinite),
+     *         {@code false} otherwise.
+     */
+    public boolean classInv() {
+        return Double.isFinite(x) && Double.isFinite(y);
+    }
 }

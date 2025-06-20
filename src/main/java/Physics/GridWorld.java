@@ -89,7 +89,7 @@ public class GridWorld {
     /** Completes all actions required of the world in one tick. */
     public void tick(ExecutorService executor) {
         // Count down latch for 1 & 2
-        CountDownLatch latch1 = new CountDownLatch(creatures.size() * 2), latch2 = new CountDownLatch(creatures.size() * 2), latch3 = new CountDownLatch(positionToEntityPair.size()), latch4 = new CountDownLatch(creatures.size()), latch5 = new CountDownLatch(positionToEntityPair.size()), latch6 = new CountDownLatch(positionToEntityPair.size());
+        CountDownLatch latch1 = new CountDownLatch(creatures.size() * 2), latch2 = new CountDownLatch(creatures.size() * 2), latch3 = new CountDownLatch(positionToEntityPair.size()), latch4 = new CountDownLatch(creatures.size()), latch5 = new CountDownLatch(positionToEntityPair.size());
 
         ArrayList<Pair<? extends Entity, ? extends Position>> newEntities = new ArrayList<>();
 
@@ -99,29 +99,42 @@ public class GridWorld {
                 newEntities.add(entityFactory.getEggPair());
 
         // 1. Neural Network (Brain)
+            System.out.println("1");
         ArrayList<Pair<Creature, Dynamic>> deadCreatures = new ArrayList<>((int) Math.ceil(creatures.size() * 0.01));
-        for (Pair<Creature, Dynamic> cd : creatures)
+        for (Pair<Creature, Dynamic> cd : creatures) {
+            // Builds the input array as a fixed value before running any multi-threading shit, in other words,
+            // even if {@code c}'s information stash changes after calling this function, the input
+            // array (and hence output array) of this Creature's brain won't change.
+
             executor.submit(() -> {
                 try {
                     // 1. run brain
+
+            System.out.println("thinking");
                     cd.first().runBrain(cd.second());
+            System.out.println("thinked");
                     // 2. Update velocity and Body tasks (both run parallel after runBrain())
                     executor.submit(() -> {
                         try {
-                            cd.second().addVelocity(cd.first().getAcceleration()).friction();
+            System.out.println("accelerating");
+                            cd.first().updateAcceleration(cd.second()).friction();
                         } finally {
+            System.out.println("accelerated");
                             latch2.countDown();
                         }
                     });
                     executor.submit(() -> {
                         try {
-                            if (cd.first().tick(cd.second())) {
+            System.out.println("ticking");
+                            if (cd.first().tick(cd.second())) 
                                 synchronized (deadCreatures) {
                                     deadCreatures.add(cd);
                                 }
-                            }
-                            // TODO check if Creature wants to lay an egg with cd.first().layingEgg boolean var
+                            else if (cd.first().tryReproduce()) 
+                                // check if Creature wants to lay an egg with cd.first().layingEgg boolean var
+                                newEntities.add(entityFactory.getEggPair(cd, cd));
                         } finally {
+            System.out.println("ticked");
                             latch2.countDown();
                         }
                     });
@@ -129,19 +142,23 @@ public class GridWorld {
                     latch1.countDown();
                 }
             });
-
+        }
         // 1. Vision (Body)
+            System.out.println("2");
         updateVision(executor, latch1);
+            System.out.println("2.5");
 
         // await latch 1 & 2
         try {
             latch1.await();
+            System.out.println("2.9?? " + creatures.size());
             latch2.await();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
         // 3. Update Position (Dynamic)
+            System.out.println("3");
         for (Position p : positionToEntityPair.keySet()) {
             if (p instanceof Dynamic d && d.isMoving()) executor.submit(() -> {
                 try {
@@ -162,6 +179,7 @@ public class GridWorld {
             throw new RuntimeException(e);
         }
 
+            System.out.println("4");
         // 4. CreatureInteract
         interact(executor, latch4);
 
@@ -172,6 +190,7 @@ public class GridWorld {
             throw new RuntimeException(e);
         }
 
+            System.out.println("5");
         // 5. Tick all entities EXCEPT creature, remove
         ArrayList<Position> removedPositions = new ArrayList<>();
         for (Pair<? extends Entity, ? extends Position> value : positionToEntityPair.values())
@@ -186,6 +205,7 @@ public class GridWorld {
             });
             else latch5.countDown();
 
+            System.out.println("6");
         // await latch 5
         try {
             latch5.await();
@@ -225,18 +245,21 @@ public class GridWorld {
             for (Pair<Creature, Dynamic> cd : deadCreatures) {
                 numCreatures--;
                 creatures.remove(cd);
-                entityFactory.recycle(cd);
                 if (positionToEntityPair.remove(cd.second()).first() != cd.first())
                     throw new RuntimeException("positionToEntity in GridWorld doesn't match up with expected Pairing.");
                 newEntities.add(entityFactory.getCorpsePair(cd));
                 removePosition(cd.second());
+                entityFactory.recycle(cd);
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
+            System.out.println("7");
+        CountDownLatch latch6 = new CountDownLatch(positionToEntityPair.size());
         // 6. Collision (Dynamic, Body? Genome?)
         handleCollision(executor, latch6);
+            System.out.println("8");
 
         // await latch 6
         try {
@@ -244,7 +267,9 @@ public class GridWorld {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+            System.out.println("9");
 
+            System.out.println("10");
         // spawn in all Entities in queue
         for (Pair<? extends Entity, ? extends Position> pair : newEntities) {
             addPosition(pair.second());

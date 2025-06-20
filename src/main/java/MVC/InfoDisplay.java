@@ -11,6 +11,7 @@ import Entities.Creature.Egg;
 import Entities.Entity;
 import Physics.GridWorld;
 import Utils.Ref;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -83,8 +84,6 @@ public final class InfoDisplay implements Initializable {
     @FXML
     private ScrollPane creatureInfoScrollPane;
 
-    private Ref<GridWorld.ReadOnlyWorld> model;
-
     private Ref<Entity.ReadOnlyEntity> selectedEntity;
 
     /** Initializer automatically called by JavaFX right after FXML injected all dependencies. */
@@ -104,7 +103,6 @@ public final class InfoDisplay implements Initializable {
 
     /** Custom initializer called by {@linkplain MainView}. */
     public void init(Ref<GridWorld.ReadOnlyWorld> model, Ref<Entity.ReadOnlyEntity> selectedEntity) {
-        this.model = model;
         this.selectedEntity = selectedEntity;
 
         // set worldInfoToggle and entityInfoToggle to only be enabled when !selectedEntity.isEmpty()
@@ -122,7 +120,7 @@ public final class InfoDisplay implements Initializable {
             }
         });
 
-        model.onUpdate(this::updateWorldInfo);
+        model.onUpdate(newModel->Platform.runLater(()->updateWorldInfo(newModel)));
     }
 
     /** Binds the various width and height properties of the JavaFX FXML components correspondent
@@ -135,15 +133,23 @@ public final class InfoDisplay implements Initializable {
                 Set<Node> nodeSet = infoTab.lookupAll(selector);
                 for (Node node : nodeSet) {
                     ((Text) node).setWrappingWidth(0);
-                    ((Text) node).textProperty().addListener((observable, oldValue, newValue) -> {
-                        bindTextResize(((Text) node), node.getParent().getLayoutBounds().getWidth() * 0.9);
-                    });
+                    ((Text) node).textProperty().addListener((observable, oldValue, newValue) -> resizeTextToFit(((Text) node), node.getParent().getLayoutBounds().getWidth() * 0.9));
                 }
             }
         }
     }
 
-    private void bindTextResize(Text text, double maxWidth) {
+    /**
+     * Dynamically resizes the font size of a {@link Text} node so that its rendered width
+     * does not exceed a specified maximum width.
+     * <p>
+     * Starts from an initial font size and gradually reduces it until the text fits within
+     * the allowed space or the font size reaches a lower bound.
+     *
+     * @param text     The {@link Text} node whose font size is to be adjusted.
+     * @param maxWidth The maximum allowed width (in pixels) that the text should occupy.
+     */
+    private void resizeTextToFit(Text text, double maxWidth) {
         double fontSize = 18;
         text.setFont(Font.font("System", FontWeight.BOLD, fontSize));
 

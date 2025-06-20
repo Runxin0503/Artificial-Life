@@ -1,11 +1,5 @@
 package MVC;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.ResourceBundle;
-
 import Entities.Entity;
 import Physics.GridWorld;
 import Utils.Constants;
@@ -24,6 +18,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.ResourceBundle;
 
 public final class MainView extends Application implements Initializable {
 
@@ -233,7 +233,7 @@ public final class MainView extends Application implements Initializable {
 
     /** Allows the MVC Controller to update text field */
     public void updateStepsPerSec(double stepsPerSec) {
-        canvasControl.stepsPerSecCounter.setText(Double.toString(stepsPerSec));
+        Platform.runLater(() -> canvasControl.stepsPerSecCounter.setText(Double.toString(stepsPerSec)));
     }
 
     /**
@@ -260,10 +260,10 @@ public final class MainView extends Application implements Initializable {
      * Loads a completely new Model into the GUI.
      * <br>generates all Hex rendering and is a lot more resource intensive than {@link #updateViewModel}
      */
-    public synchronized void loadNewViewModel(GridWorld.ReadOnlyWorld newModel) {
+    public void loadNewViewModel(GridWorld.ReadOnlyWorld newModel) {
         assert newModel != null;
 
-        controlPanel.unselectContinuousStep();
+        Platform.runLater(() -> controlPanel.unselectContinuousStep());
 
         updateViewModel(newModel);
 

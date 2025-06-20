@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import Entities.Entity;
 import Genome.NN;
 import Physics.Dynamic;
+import Physics.GridWorld;
 import Physics.Position;
 import Utils.Constants.CreatureConstants;
 import Utils.Constants.CreatureConstants.Combat;
@@ -71,11 +72,11 @@ public class Creature extends Entity {
     private final ArrayList<Entity> stashedSeenEntities = new ArrayList<>();
 
     /** Entity Objects that have intersected with this Creature's vision rays, organized by type.
-     * Modified and maintained by {@link Physics.GridWorld}, queried by {@linkplain #runBrain}. */
+     * Modified and maintained by {@link GridWorld}, queried by {@linkplain #runBrain}. */
     private final Pair<? extends Entity, ? extends Position>[] rayHits = new Pair[4];
     
     /** Count of entities that have intersected with this Creature's vision rays, organized by type.
-     * Modified and maintained by {@link Physics.GridWorld}, queried by {@linkplain #runBrain}. */
+     * Modified and maintained by {@link GridWorld}, queried by {@linkplain #runBrain}. */
     private final int[] rayHitCounts = new int[4];
 
     /** The Genome component of this Creature, stores all gene data when reproduction occurs. */
@@ -106,11 +107,11 @@ public class Creature extends Entity {
         this.brain = NN.getDefaultNeuralNet(NeuralNet.EvolutionConstants);//Math.random()<0.6?Genome.defaultGenome():
         this.genome.reset();
 
-        this.size = genome.minSize;
+        this.age = 0;
+        this.size = genome.updateCreatureSize(age);
         this.maxHealth = Combat.sizeToMaxHealth(size);
         this.maxEnergy = Energy.sizeToMaxEnergyFormula(size);
         this.metabolism = Energy.energyCostFormula(maxHealth, size, genome.strength, brain.getComplexity());
-        this.age = 0;
         this.energy = maxEnergy;
         this.health = maxHealth;
 
@@ -127,10 +128,10 @@ public class Creature extends Entity {
         else this.genome.reset(parentTwo.genome, parentOne.genome);
         this.brain.mutate();
 
-        this.size = genome.minSize;
+        this.age = 0;
+        this.size = genome.updateCreatureSize(age);
         this.maxHealth = Combat.sizeToMaxHealth(size);
         this.maxEnergy = Energy.sizeToMaxEnergyFormula(size);
-        this.age = 0;
         this.metabolism = Energy.energyCostFormula(maxHealth, size, genome.strength, brain.getComplexity());
 
         this.layingEgg = false;
@@ -144,10 +145,7 @@ public class Creature extends Entity {
     }
 
     /**
-     * Once called, runs the Creature's brain with the Creature {@code c}'s current information stash.
-     * <br>Builds the input array as a fixed value before returning the Runnable object, in other words,
-     * even if {@code c}'s information stash changes after calling this function, the input
-     * array (and hence output array) of this Creature's brain won't change.
+     * Once called, builds the Creature's brain input array with the Creature {@code c}'s current information stash.
      */
     public void runBrain(Dynamic pos) {
         // TODO check all this vvv
@@ -215,6 +213,7 @@ public class Creature extends Entity {
         input[33] = stomach.isStarving() ? 1 : -1;
         input[34] = Math.sin(internalClockCountdown / NeuralNet.internalClockPeriod * Math.PI * 2); // internal clock sine wave
 
+            System.out.println("composed");
         //output: Move Forward | Move Backward | Turn Left | Turn Right | Mate | Regenerate Health | Eat | Digestion Rate | Herd | Separate
         this.brainOutput = brain.calculateWeightedOutput(input);
     }
@@ -230,12 +229,20 @@ public class Creature extends Entity {
         age++;
         double deltaEnergy = -metabolism;
 
-        //see
-//        stashedSeenEntities
-
         //run this parallel with brain calculation
         //change speed & boid herding
-        deltaEnergy -= updateVel(brainOutput[0], brainOutput[1], brainOutput[2], brainOutput[3], brainOutput[8], brainOutput[9], (Dynamic) pos);
+        double mass = pos.getMass();
+
+        double deltaVelocity = (brainOutput[1] > 0.5 || brainOutput[0] > 0.5)
+            ? genome.forceAvailable / mass / 2
+            : 0;
+
+        double deltaOmega = (brainOutput[2] > 0.5 || brainOutput[3] > 0.5)
+            ? genome.forceAvailable * (Math.PI / 180) / mass
+            : 0;
+
+        deltaEnergy -= 0.5 * mass * (deltaVelocity * deltaVelocity + deltaOmega * deltaOmega);
+
 
         if (health < maxHealth && brainOutput[5] > 0.5) deltaEnergy -= regenHealth();
 
@@ -277,72 +284,6 @@ public class Creature extends Entity {
     
 
         return false;
-    }
-
-    /**
-     * Updates the creature's linear and angular velocity based on the neural network outputs.
-     *
-     * <p>This method interprets brain output signals to adjust the creature's movement:
-     * forward/backward movement, turning left/right, and herding behavior.
-     * Depending on the values passed, it modifies the velocity vector and angular speed
-     * of the {@link Dynamic} position object.</p>
-     *
-     * @param moveForward Brain output signal for moving forward.
-     * @param moveBackward Brain output signal for moving backward.
-     * @param turnLeft Brain output signal for turning left.
-     * @param turnRight Brain output signal for turning right.
-     * @param herdYes Brain output signal for initiating herding behavior.
-     * @param herdNo Brain output signal for resisting herding behavior.
-     * @param pos The dynamic position and motion state of the creature to be updated.
-     * @return The kinetic energy cost incurred from the applied movement update.
-     */
-    private double updateVel(double moveForward, double moveBackward, double turnLeft, double turnRight, double herdYes, double herdNo, Dynamic pos) {
-        double mass = pos.getMass();
-
-        double deltaVelocity = genome.forceAvailable / mass;
-        double deltaOmega = genome.forceAvailable * (Math.PI / 180) / mass;
-
-//        if (((herdNo > 0.5 && !boids.isEmpty()) || herdYes > 0.5)) {
-//            Vector2D herdingVector = getHerdingVector(boids, (herdYes > 0.5 && herdNo > 0.5) ? (herdYes > herdNo) : (herdYes > 0.5));
-//            double deltaTheta = Equations.angleDistance(pos.dir.angle(), herdingVector.angle());
-//            //if deltaTheta is far away from angularSpeed, adjust angularSpeed towards deltaTheta
-//            if (deltaTheta < 0 != pos.angularSpeed < 0 || Math.abs(deltaTheta) > Boids.angleAdjustmentThreshold) {
-//                //turns to the direction of the herding vector
-//                if (deltaTheta > 0 && pos.angularSpeed < deltaTheta) {
-//                }//keep accelerating positive
-//                else if (deltaTheta < 0 && pos.angularSpeed > deltaTheta) deltaOmega *= -1;
-//            } else {
-//                deltaOmega = 0;
-//            }
-//
-//            //decelerate when velocity vector length is bigger than herding vector length
-//            if (getVelocity() > herdingVector.length() && Math.abs(Equations.angleDistance(speed.angle(), herdingVector.angle())) < Math.toRadians(10))
-//                deltaVelocity *= -1;
-//                //decelerate when velocity vector and herding vector are too far apart
-//            else if (Math.abs(deltaTheta) > Math.toRadians(90) && Math.abs(Equations.angleDistance(direction, speed.angle())) < Math.toRadians(10))
-//                deltaVelocity *= -1;
-//                //stop accelerating when velocity vector and herding velocity vector are close to the same
-//            else if (Math.abs(herdingVector.length() - speed.length()) < deltaVelocity) {
-//                deltaVelocity = 0;
-//            }
-//        } else
-        {
-            if (moveForward > 0.5 && moveBackward > 0.5) {
-                if (moveForward < moveBackward)
-                    deltaVelocity = -deltaVelocity / 2;
-            } else if (moveBackward > 0.5) deltaVelocity = -deltaVelocity / 2;
-            else if (moveForward <= 0.5) deltaVelocity = 0;
-
-            if (turnLeft > 0.5 && turnRight > 0.5) {
-                if (turnRight < turnLeft)
-                    deltaOmega = -deltaOmega;
-            } else if (turnLeft > 0.5) deltaOmega = -deltaOmega;
-            else if (turnRight <= 0.5) deltaOmega = 0;
-        }
-
-        pos.velocity.add(pos.dir.multiplied(deltaVelocity));
-        pos.angularSpeed += deltaOmega;
-        return 0.5 * mass * (deltaVelocity * deltaVelocity + deltaOmega * deltaOmega);
     }
 
     /**
@@ -400,6 +341,8 @@ public class Creature extends Entity {
         updateRelativeRay(pos);
         for (Vector2D ray : relativeRays) {
             rays.add(new Line2D.Double(pos.x, pos.y, pos.x + ray.x, pos.y + ray.y));
+            if (!Double.isFinite(pos.x) || !Double.isFinite(pos.y) || !Double.isFinite(ray.x) || !Double.isFinite(ray.y))
+                System.out.println(pos.x + "," + pos.y + ". " + ray.x + "," + ray.y);
             while (!WorldConstants.worldBorder.contains(rays.getLast().getP2())) {
                 Line2D lineBefore = rays.getLast();
                 if (WorldConstants.leftVisionBox.contains(lineBefore.getP2())) {
@@ -412,6 +355,9 @@ public class Creature extends Entity {
                     rays.add(new Line2D.Double(lineBefore.getX1(), lineBefore.getY1() - WorldConstants.yBound, lineBefore.getX2(), lineBefore.getY2() - WorldConstants.yBound));
                 } else {
                     System.out.println("Exception Occurred. Raycasting end point at " + lineBefore.getX2() + "," + lineBefore.getY2());
+                    relativeRays.forEach(r -> System.out.println(r));
+                    System.out.println("genome.visionAvailable:" +genome.visionAvailable);
+                    break;
                 }
             }
         }
@@ -426,30 +372,92 @@ public class Creature extends Entity {
         //change the angle of each ray by angleDiff to update, also change the length of each ray
         for (Vector2D ray : relativeRays) {
             ray.rotate(angleDiff);
-            ray.multiply(ray.length() / genome.visionAvailable);
+            ray.multiply(genome.visionAvailable / ray.length());
         }
     }
 
-    /** Returns the reference to an ArrayList of the seen entities, can only be used by {@link Physics.GridWorld}. */
+    /**
+     * Attempts to reproduce if the creature is currently laying an egg and has enough energy.
+     * @return true if reproduction occurs (energy is deducted and layingEgg is reset), false otherwise.
+     */
+    public boolean tryReproduce() {
+        if (layingEgg) {
+            double cost = genome.getReproductionCost();
+            if (energy < cost * 1.1) {
+                this.energy -= cost;
+                this.layingEgg = false;
+                return true;
+            } return false;
+        } else return false;
+    }
+
+    /** Returns the reference to an ArrayList of the seen entities, can only be used by {@link GridWorld}. */
     public ArrayList<Entity> getStashedSeenEntities() {
         return stashedSeenEntities;
     }
 
-    /** Returns the reference to the array storing ray hit entities, can only be used by {@link Physics.GridWorld}. */
+    /** Returns the reference to the array storing ray hit entities, can only be used by {@link GridWorld}. */
     public Pair<? extends Entity, ? extends Position>[] getRayHits() {
         return rayHits;
     }
 
-    /** Returns the reference to the array storing ray hit counts, can only be used by {@link Physics.GridWorld}. */
+    /** Returns the reference to the array storing ray hit counts, can only be used by {@link GridWorld}. */
     public int[] getRayHitCounts() {
         return rayHitCounts;
     }
 
-    /** Calculates the creature's muscle acceleration vector based on the last output of the brain
-     * and the last BOID information stored in this Creature's buffer. Returns a Vector2D representing
-     * the combined deltaVelocities of both vectors. */
-    public Vector2D getAcceleration() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    /** Calculates the creature's muscle acceleration based on the last output of the brain
+     * and the last BOID information stored in this Creature's buffer. Updates {@code pos} based on
+     * this muscle acceleration and returns a reference to {@code pos}. */
+    public Dynamic updateAcceleration(Dynamic pos) {
+        double mass = pos.getMass();
+
+        double deltaVelocity = genome.forceAvailable / mass;
+        double deltaOmega = genome.forceAvailable * (Math.PI / 180) / mass;
+
+//        if (((herdNo > 0.5 && !boids.isEmpty()) || herdYes > 0.5)) {
+//            Vector2D herdingVector = getHerdingVector(boids, (herdYes > 0.5 && herdNo > 0.5) ? (herdYes > herdNo) : (herdYes > 0.5));
+//            double deltaTheta = Equations.angleDistance(pos.dir.angle(), herdingVector.angle());
+//            //if deltaTheta is far away from angularSpeed, adjust angularSpeed towards deltaTheta
+//            if (deltaTheta < 0 != pos.angularSpeed < 0 || Math.abs(deltaTheta) > Boids.angleAdjustmentThreshold) {
+//                //turns to the direction of the herding vector
+//                if (deltaTheta > 0 && pos.angularSpeed < deltaTheta) {
+//                }//keep accelerating positive
+//                else if (deltaTheta < 0 && pos.angularSpeed > deltaTheta) deltaOmega *= -1;
+//            } else {
+//                deltaOmega = 0;
+//            }
+//
+//            //decelerate when velocity vector length is bigger than herding vector length
+//            if (getVelocity() > herdingVector.length() && Math.abs(Equations.angleDistance(speed.angle(), herdingVector.angle())) < Math.toRadians(10))
+//                deltaVelocity *= -1;
+//                //decelerate when velocity vector and herding vector are too far apart
+//            else if (Math.abs(deltaTheta) > Math.toRadians(90) && Math.abs(Equations.angleDistance(direction, speed.angle())) < Math.toRadians(10))
+//                deltaVelocity *= -1;
+//                //stop accelerating when velocity vector and herding velocity vector are close to the same
+//            else if (Math.abs(herdingVector.length() - speed.length()) < deltaVelocity) {
+//                deltaVelocity = 0;
+//            }
+//        } else
+        // brainOutput[0], brainOutput[1], brainOutput[2], brainOutput[3], brainOutput[8], brainOutput[9]
+        {
+            if (brainOutput[0] > 0.5 && brainOutput[1] > 0.5) {
+                if (brainOutput[0] < brainOutput[1])
+                    deltaVelocity = -deltaVelocity / 2;
+            } else if (brainOutput[1] > 0.5) deltaVelocity = -deltaVelocity / 2;
+            else if (brainOutput[0] <= 0.5) deltaVelocity = 0;
+
+            if (brainOutput[2] > 0.5 && brainOutput[3] > 0.5) {
+                if (brainOutput[3] < brainOutput[2])
+                    deltaOmega = -deltaOmega;
+            } else if (brainOutput[2] > 0.5) deltaOmega = -deltaOmega;
+            else if (brainOutput[3] <= 0.5) deltaOmega = 0;
+        }
+
+        pos.velocity.add(pos.dir.multiplied(deltaVelocity));
+        pos.angularSpeed += deltaOmega;
+
+        return pos;
     }
 
     /** Returns a bounding box of the size and position of this Creature's mouth, or
@@ -461,8 +469,7 @@ public class Creature extends Entity {
 
     @Override
     public double getEnergyIfConsumed() {
-        // TODO implement
-        throw new UnsupportedOperationException("Not supported yet.");
+        return health + energy + size * genome.armourMultiplier + stomach.plantMass * CreatureConstants.Digestion.plantMassToEnergy + stomach.meatMass * CreatureConstants.Digestion.meatMassToEnergy;
     }
 
     public double getSize() {
@@ -498,10 +505,12 @@ public class Creature extends Entity {
             return width;
         }
 
+        @Override
         public int getX() {
             return x + width / 2;
         }
 
+        @Override
         public int getY() {
             return y + height / 2;
         }
